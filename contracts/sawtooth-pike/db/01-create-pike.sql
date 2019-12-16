@@ -16,8 +16,8 @@ CREATE TABLE agents (
     public_key VARCHAR(70) PRIMARY KEY NOT NULL,
     org_id VARCHAR(256) NOT NULL,
     active BOOLEAN NOT NULL,
-    roles VARCHAR(256) [] NOT NULL,
-    metadata JSON [] NOT NULL
+    roles VARCHAR(256) NOT NULL,
+    metadata JSON NOT NULL
 );
 
 CREATE TABLE organizations (
