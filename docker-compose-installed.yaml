@@ -42,8 +42,7 @@ services:
           --endpoint tcp://validator:9705 \
           --bind component:tcp://eth0:9704 \
           --bind network:tcp://eth0:9705 \
-          --bind consensus:tcp://eth0:5050
-        "
+          --bind consensus:tcp://eth0:5050"
 
   rest-api:
     image: hyperledger/sawtooth-rest-api:latest
@@ -60,8 +59,7 @@ services:
     entrypoint: |
         bash -c "
         sawtooth keygen &&
-        tail -f /dev/null
-        "
+        tail -f /dev/null"
 
   settings-tp:
     image: hyperledger/sawtooth-settings-tp:latest
