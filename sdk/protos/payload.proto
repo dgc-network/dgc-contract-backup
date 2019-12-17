@@ -20,6 +20,12 @@ message SabrePayload {
     CREATE_SMART_PERMISSION = 12;
     UPDATE_SMART_PERMISSION= 13;
     DELETE_SMART_PERMISSION = 14;
+  
+    CREATE_PARTICPANT = 21;
+    UPDATE_PARTICPANT = 22;
+
+    CREATE_ORGANIZATION = 23;
+    UPDATE_ORGANIZATION = 24;
   }
 
   Action action = 1;
@@ -41,6 +47,12 @@ message SabrePayload {
   CreateSmartPermissionAction create_smart_permission = 13;
   UpdateSmartPermissionAction update_smart_permission = 14;
   DeleteSmartPermissionAction delete_smart_permission = 15;
+
+  CreateParticpantAction create_particpant = 22;
+  UpdateParticpantAction update_particpant = 23;
+
+  CreateOrganizationAction create_organization = 24;
+  UpdateOrganizationAction update_organization = 25;
 }
 
 // creates a Contract and updates ContractRegistry with a version entry
@@ -134,9 +146,41 @@ message UpdateSmartPermissionAction {
   bytes function = 3;
 }
 
-// Deletes  a smart permission
+// Deletes a smart permission
 message DeleteSmartPermissionAction {
   string name = 1;
   // ID of organization that owns the smart permission
   string org_id = 2;
+}
+
+// Creates a particpant
+message CreateParticpantAction {
+  string org_id = 1;
+  string public_key = 2;
+  bool active = 3;
+  repeated string roles = 4;
+  repeated KeyValueEntry metadata = 5;
+}
+
+// Updates a particpant
+message UpdateParticpantAction {
+  string org_id = 1;
+  string public_key = 2;
+  bool active = 3;
+  repeated string roles = 4;
+  repeated KeyValueEntry metadata = 5;
+}
+
+// Creates an organization
+message CreateOrganizationAction {
+  string id = 1;
+  string name = 2;
+  string address = 3;
+}
+
+// Updates an organization
+message UpdateOrganizationAction {
+  string id = 1;
+  string name = 2;
+  string address = 3;
 }

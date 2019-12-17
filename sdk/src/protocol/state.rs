@@ -1455,6 +1455,722 @@ impl SmartPermissionListBuilder {
     }
 }
 
+/// Native implementation for KeyValueEntry
+#[derive(Debug, Clone, PartialEq)]
+pub struct KeyValueEntry {
+    key: String,
+    value: String,
+}
+
+impl KeyValueEntry {
+    pub fn key(&self) -> &str {
+        &self.key
+    }
+
+    pub fn value(&self) -> &str {
+        &self.value
+    }
+}
+
+impl FromProto<protos::particpant::KeyValueEntry> for KeyValueEntry {
+    fn from_proto(
+        key_value: protos::particpant::KeyValueEntry,
+    ) -> Result<Self, ProtoConversionError> {
+        Ok(KeyValueEntry {
+            key: key_value.get_key().to_string(),
+            value: key_value.get_value().to_string(),
+        })
+    }
+}
+
+impl FromNative<KeyValueEntry> for protos::particpant::KeyValueEntry {
+    fn from_native(key_value: KeyValueEntry) -> Result<Self, ProtoConversionError> {
+        let mut key_value_proto = protos::particpant::KeyValueEntry::new();
+
+        key_value_proto.set_key(key_value.key().to_string());
+        key_value_proto.set_value(key_value.value().to_string());
+
+        Ok(key_value_proto)
+    }
+}
+
+impl FromBytes<KeyValueEntry> for KeyValueEntry {
+    fn from_bytes(bytes: &[u8]) -> Result<KeyValueEntry, ProtoConversionError> {
+        let proto: protos::particpant::KeyValueEntry =
+            protobuf::parse_from_bytes(bytes).map_err(|_| {
+                ProtoConversionError::SerializationError(
+                    "Unable to get KeyValueEntry from bytes".to_string(),
+                )
+            })?;
+        proto.into_native()
+    }
+}
+
+impl IntoBytes for KeyValueEntry {
+    fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
+        let proto = self.into_proto()?;
+        let bytes = proto.write_to_bytes().map_err(|_| {
+            ProtoConversionError::SerializationError(
+                "Unable to get bytes from KeyValueEntry".to_string(),
+            )
+        })?;
+        Ok(bytes)
+    }
+}
+
+impl IntoProto<protos::particpant::KeyValueEntry> for KeyValueEntry {}
+impl IntoNative<KeyValueEntry> for protos::particpant::KeyValueEntry {}
+
+#[derive(Debug)]
+pub enum KeyValueEntryBuildError {
+    MissingField(String),
+}
+
+impl StdError for KeyValueEntryBuildError {
+    fn description(&self) -> &str {
+        match *self {
+            KeyValueEntryBuildError::MissingField(ref msg) => msg,
+        }
+    }
+}
+
+impl std::fmt::Display for KeyValueEntryBuildError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            KeyValueEntryBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
+        }
+    }
+}
+
+/// Builder used to create a KeyValueEntry
+#[derive(Default, Clone)]
+pub struct KeyValueEntryBuilder {
+    pub key: Option<String>,
+    pub value: Option<String>,
+}
+
+impl KeyValueEntryBuilder {
+    pub fn new() -> Self {
+        KeyValueEntryBuilder::default()
+    }
+
+    pub fn with_key(mut self, key: String) -> KeyValueEntryBuilder {
+        self.key = Some(key);
+        self
+    }
+
+    pub fn with_value(mut self, value: String) -> KeyValueEntryBuilder {
+        self.value = Some(value);
+        self
+    }
+
+    pub fn build(self) -> Result<KeyValueEntry, KeyValueEntryBuildError> {
+        let key = self.key.ok_or_else(|| {
+            KeyValueEntryBuildError::MissingField("'key' field is required".to_string())
+        })?;
+
+        let value = self.value.ok_or_else(|| {
+            KeyValueEntryBuildError::MissingField("'value' field is required".to_string())
+        })?;
+
+        Ok(KeyValueEntry { key, value })
+    }
+}
+
+/// Native implementation of Particpant
+#[derive(Debug, Clone, PartialEq)]
+pub struct Particpant {
+    org_id: String,
+    public_key: String,
+    active: bool,
+    roles: Vec<String>,
+    metadata: Vec<KeyValueEntry>,
+}
+
+impl Particpant {
+    pub fn org_id(&self) -> &str {
+        &self.org_id
+    }
+
+    pub fn public_key(&self) -> &str {
+        &self.public_key
+    }
+
+    pub fn active(&self) -> &bool {
+        &self.active
+    }
+
+    pub fn roles(&self) -> &[String] {
+        &self.roles
+    }
+
+    pub fn metadata(&self) -> &[KeyValueEntry] {
+        &self.metadata
+    }
+}
+
+impl FromProto<protos::particpant::Particpant> for Particpant {
+    fn from_proto(particpant: protos::particpant::Particpant) -> Result<Self, ProtoConversionError> {
+        Ok(Particpant {
+            org_id: particpant.get_org_id().to_string(),
+            public_key: particpant.get_public_key().to_string(),
+            active: particpant.get_active(),
+            roles: particpant.get_roles().to_vec(),
+            metadata: particpant
+                .get_metadata()
+                .to_vec()
+                .into_iter()
+                .map(KeyValueEntry::from_proto)
+                .collect::<Result<Vec<KeyValueEntry>, ProtoConversionError>>()?,
+        })
+    }
+}
+
+impl FromNative<Particpant> for protos::particpant::Particpant {
+    fn from_native(particpant: Particpant) -> Result<Self, ProtoConversionError> {
+        let mut particpant_proto = protos::particpant::Particpant::new();
+
+        particpant_proto.set_org_id(particpant.org_id().to_string());
+        particpant_proto.set_public_key(particpant.public_key().to_string());
+        particpant_proto.set_active(particpant.active().clone());
+        particpant_proto.set_org_id(particpant.org_id().to_string());
+        particpant_proto.set_roles(RepeatedField::from_vec(particpant.roles().to_vec()));
+        particpant_proto.set_metadata(RepeatedField::from_vec(
+            particpant
+                .metadata()
+                .to_vec()
+                .into_iter()
+                .map(KeyValueEntry::into_proto)
+                .collect::<Result<Vec<protos::particpant::KeyValueEntry>, ProtoConversionError>>(
+                )?,
+        ));
+
+        Ok(particpant_proto)
+    }
+}
+
+impl FromBytes<Particpant> for Particpant {
+    fn from_bytes(bytes: &[u8]) -> Result<Particpant, ProtoConversionError> {
+        let proto: protos::particpant::Particpant = protobuf::parse_from_bytes(bytes).map_err(|_| {
+            ProtoConversionError::SerializationError("Unable to get Particpant from bytes".to_string())
+        })?;
+        proto.into_native()
+    }
+}
+
+impl IntoBytes for Particpant {
+    fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
+        let proto = self.into_proto()?;
+        let bytes = proto.write_to_bytes().map_err(|_| {
+            ProtoConversionError::SerializationError("Unable to get bytes from Particpant".to_string())
+        })?;
+        Ok(bytes)
+    }
+}
+
+impl IntoProto<protos::particpant::Particpant> for Particpant {}
+impl IntoNative<Particpant> for protos::particpant::Particpant {}
+
+#[derive(Debug)]
+pub enum ParticpantBuildError {
+    MissingField(String),
+}
+
+impl StdError for ParticpantBuildError {
+    fn description(&self) -> &str {
+        match *self {
+            ParticpantBuildError::MissingField(ref msg) => msg,
+        }
+    }
+}
+
+impl std::fmt::Display for ParticpantBuildError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            ParticpantBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
+        }
+    }
+}
+
+/// Builder used to create a Particpant
+#[derive(Default, Clone)]
+pub struct ParticpantBuilder {
+    pub org_id: Option<String>,
+    pub public_key: Option<String>,
+    pub active: Option<bool>,
+    pub roles: Vec<String>,
+    pub metadata: Vec<KeyValueEntry>,
+}
+
+impl ParticpantBuilder {
+    pub fn new() -> Self {
+        ParticpantBuilder::default()
+    }
+
+    pub fn with_org_id(mut self, org_id: String) -> ParticpantBuilder {
+        self.org_id = Some(org_id);
+        self
+    }
+
+    pub fn with_public_key(mut self, public_key: String) -> ParticpantBuilder {
+        self.public_key = Some(public_key);
+        self
+    }
+
+    pub fn with_active(mut self, active: bool) -> ParticpantBuilder {
+        self.active = Some(active);
+        self
+    }
+
+    pub fn with_roles(mut self, roles: Vec<String>) -> ParticpantBuilder {
+        self.roles = roles;
+        self
+    }
+
+    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> ParticpantBuilder {
+        self.metadata = metadata;
+        self
+    }
+
+    pub fn build(self) -> Result<Particpant, ParticpantBuildError> {
+        let org_id = self.org_id.ok_or_else(|| {
+            ParticpantBuildError::MissingField("'org_id' field is required".to_string())
+        })?;
+
+        let public_key = self.public_key.ok_or_else(|| {
+            ParticpantBuildError::MissingField("'public_key' field is required".to_string())
+        })?;
+
+        let active = self.active.unwrap_or_default();
+        let roles = self.roles;
+        let metadata = self.metadata;
+
+        Ok(Particpant {
+            org_id,
+            public_key,
+            active,
+            roles,
+            metadata,
+        })
+    }
+}
+
+/// Native implementation of ParticpantList
+#[derive(Debug, Clone, PartialEq)]
+pub struct ParticpantList {
+    particpants: Vec<Particpant>,
+}
+
+impl ParticpantList {
+    pub fn particpants(&self) -> &[Particpant] {
+        &self.particpants
+    }
+}
+
+impl FromProto<protos::particpant::ParticpantList> for ParticpantList {
+    fn from_proto(particpant_list: protos::particpant::ParticpantList) -> Result<Self, ProtoConversionError> {
+        Ok(ParticpantList {
+            particpants: particpant_list
+                .get_particpants()
+                .to_vec()
+                .into_iter()
+                .map(Particpant::from_proto)
+                .collect::<Result<Vec<Particpant>, ProtoConversionError>>()?,
+        })
+    }
+}
+
+impl FromNative<ParticpantList> for protos::particpant::ParticpantList {
+    fn from_native(particpant_list: ParticpantList) -> Result<Self, ProtoConversionError> {
+        let mut particpant_list_proto = protos::particpant::ParticpantList::new();
+
+        particpant_list_proto.set_particpants(RepeatedField::from_vec(
+            particpant_list
+                .particpants()
+                .to_vec()
+                .into_iter()
+                .map(Particpant::into_proto)
+                .collect::<Result<Vec<protos::particpant::Particpant>, ProtoConversionError>>()?,
+        ));
+
+        Ok(particpant_list_proto)
+    }
+}
+
+impl FromBytes<ParticpantList> for ParticpantList {
+    fn from_bytes(bytes: &[u8]) -> Result<ParticpantList, ProtoConversionError> {
+        let proto: protos::particpant::ParticpantList =
+            protobuf::parse_from_bytes(bytes).map_err(|_| {
+                ProtoConversionError::SerializationError(
+                    "Unable to get ParticpantList from bytes".to_string(),
+                )
+            })?;
+        proto.into_native()
+    }
+}
+
+impl IntoBytes for ParticpantList {
+    fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
+        let proto = self.into_proto()?;
+        let bytes = proto.write_to_bytes().map_err(|_| {
+            ProtoConversionError::SerializationError(
+                "Unable to get bytes from ParticpantList".to_string(),
+            )
+        })?;
+        Ok(bytes)
+    }
+}
+
+impl IntoProto<protos::particpant::ParticpantList> for ParticpantList {}
+impl IntoNative<ParticpantList> for protos::particpant::ParticpantList {}
+
+#[derive(Debug)]
+pub enum ParticpantListBuildError {
+    MissingField(String),
+}
+
+impl StdError for ParticpantListBuildError {
+    fn description(&self) -> &str {
+        match *self {
+            ParticpantListBuildError::MissingField(ref msg) => msg,
+        }
+    }
+}
+
+impl std::fmt::Display for ParticpantListBuildError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            ParticpantListBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
+        }
+    }
+}
+
+/// Builder used to create a ParticpantList
+#[derive(Default, Clone)]
+pub struct ParticpantListBuilder {
+    pub particpants: Vec<Particpant>,
+}
+
+impl ParticpantListBuilder {
+    pub fn new() -> Self {
+        ParticpantListBuilder::default()
+    }
+
+    pub fn with_particpants(mut self, particpants: Vec<Particpant>) -> ParticpantListBuilder {
+        self.particpants = particpants;
+        self
+    }
+
+    pub fn build(self) -> Result<ParticpantList, ParticpantListBuildError> {
+        let particpants = {
+            if self.particpants.is_empty() {
+                return Err(ParticpantListBuildError::MissingField(
+                    "'particpants' cannot be empty".to_string(),
+                ));
+            } else {
+                self.particpants
+            }
+        };
+
+        Ok(ParticpantList { particpants })
+    }
+}
+
+/// Native implementation for Organization
+#[derive(Debug, Clone, PartialEq)]
+pub struct Organization {
+    org_id: String,
+    name: String,
+    address: String,
+    metadata: Vec<KeyValueEntry>,
+}
+
+impl Organization {
+    pub fn org_id(&self) -> &str {
+        &self.org_id
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn address(&self) -> &str {
+        &self.address
+    }
+
+    pub fn metadata(&self) -> &[KeyValueEntry] {
+        &self.metadata
+    }
+}
+
+impl FromProto<protos::particpant::Organization> for Organization {
+    fn from_proto(org: protos::particpant::Organization) -> Result<Self, ProtoConversionError> {
+        Ok(Organization {
+            org_id: org.get_org_id().to_string(),
+            name: org.get_name().to_string(),
+            address: org.get_address().to_string(),
+            metadata: org
+                .get_metadata()
+                .to_vec()
+                .into_iter()
+                .map(KeyValueEntry::from_proto)
+                .collect::<Result<Vec<KeyValueEntry>, ProtoConversionError>>()?,
+        })
+    }
+}
+
+impl FromNative<Organization> for protos::particpant::Organization {
+    fn from_native(org: Organization) -> Result<Self, ProtoConversionError> {
+        let mut org_proto = protos::particpant::Organization::new();
+
+        org_proto.set_org_id(org.org_id().to_string());
+        org_proto.set_name(org.name().to_string());
+        org_proto.set_address(org.address().to_string());
+        org_proto.set_metadata(RepeatedField::from_vec(
+            org.metadata()
+                .to_vec()
+                .into_iter()
+                .map(KeyValueEntry::into_proto)
+                .collect::<Result<Vec<protos::particpant::KeyValueEntry>, ProtoConversionError>>(
+                )?,
+        ));
+
+        Ok(org_proto)
+    }
+}
+
+impl FromBytes<Organization> for Organization {
+    fn from_bytes(bytes: &[u8]) -> Result<Organization, ProtoConversionError> {
+        let proto: protos::particpant::Organization =
+            protobuf::parse_from_bytes(bytes).map_err(|_| {
+                ProtoConversionError::SerializationError(
+                    "Unable to get Organization from bytes".to_string(),
+                )
+            })?;
+        proto.into_native()
+    }
+}
+
+impl IntoBytes for Organization {
+    fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
+        let proto = self.into_proto()?;
+        let bytes = proto.write_to_bytes().map_err(|_| {
+            ProtoConversionError::SerializationError(
+                "Unable to get bytes from Organization".to_string(),
+            )
+        })?;
+        Ok(bytes)
+    }
+}
+
+impl IntoProto<protos::particpant::Organization> for Organization {}
+impl IntoNative<Organization> for protos::particpant::Organization {}
+
+#[derive(Debug)]
+pub enum OrganizationBuildError {
+    MissingField(String),
+}
+
+impl StdError for OrganizationBuildError {
+    fn description(&self) -> &str {
+        match *self {
+            OrganizationBuildError::MissingField(ref msg) => msg,
+        }
+    }
+}
+
+impl std::fmt::Display for OrganizationBuildError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            OrganizationBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
+        }
+    }
+}
+
+/// Builder used to create a Organization
+#[derive(Default, Clone)]
+pub struct OrganizationBuilder {
+    pub org_id: Option<String>,
+    pub name: Option<String>,
+    pub address: Option<String>,
+    pub metadata: Vec<KeyValueEntry>,
+}
+
+impl OrganizationBuilder {
+    pub fn new() -> Self {
+        OrganizationBuilder::default()
+    }
+
+    pub fn with_org_id(mut self, org_id: String) -> OrganizationBuilder {
+        self.org_id = Some(org_id);
+        self
+    }
+
+    pub fn with_name(mut self, name: String) -> OrganizationBuilder {
+        self.name = Some(name);
+        self
+    }
+
+    pub fn with_address(mut self, name: String) -> OrganizationBuilder {
+        self.address = Some(name);
+        self
+    }
+
+    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> OrganizationBuilder {
+        self.metadata = metadata;
+        self
+    }
+
+    pub fn build(self) -> Result<Organization, OrganizationBuildError> {
+        let org_id = self.org_id.ok_or_else(|| {
+            OrganizationBuildError::MissingField("'org_id' field is required".to_string())
+        })?;
+
+        let name = self.name.ok_or_else(|| {
+            OrganizationBuildError::MissingField("'name' field is required".to_string())
+        })?;
+
+        let address = self.address.ok_or_else(|| {
+            OrganizationBuildError::MissingField("'address' field is required".to_string())
+        })?;
+
+        let metadata = self.metadata;
+
+        Ok(Organization {
+            org_id,
+            name,
+            address,
+            metadata,
+        })
+    }
+}
+
+/// Native implementation of OrganizationList
+#[derive(Debug, Clone, PartialEq)]
+pub struct OrganizationList {
+    organizations: Vec<Organization>,
+}
+
+impl OrganizationList {
+    pub fn organizations(&self) -> &[Organization] {
+        &self.organizations
+    }
+}
+
+impl FromProto<protos::particpant::OrganizationList> for OrganizationList {
+    fn from_proto(
+        organization_list: protos::particpant::OrganizationList,
+    ) -> Result<Self, ProtoConversionError> {
+        Ok(OrganizationList {
+            organizations: organization_list
+                .get_organizations()
+                .to_vec()
+                .into_iter()
+                .map(Organization::from_proto)
+                .collect::<Result<Vec<Organization>, ProtoConversionError>>()?,
+        })
+    }
+}
+
+impl FromNative<OrganizationList> for protos::particpant::OrganizationList {
+    fn from_native(org_list: OrganizationList) -> Result<Self, ProtoConversionError> {
+        let mut org_list_proto = protos::particpant::OrganizationList::new();
+
+        org_list_proto.set_organizations(RepeatedField::from_vec(
+            org_list
+                .organizations()
+                .to_vec()
+                .into_iter()
+                .map(Organization::into_proto)
+                .collect::<Result<Vec<protos::particpant::Organization>, ProtoConversionError>>()?,
+        ));
+
+        Ok(org_list_proto)
+    }
+}
+
+impl FromBytes<OrganizationList> for OrganizationList {
+    fn from_bytes(bytes: &[u8]) -> Result<OrganizationList, ProtoConversionError> {
+        let proto: protos::particpant::OrganizationList = protobuf::parse_from_bytes(bytes)
+            .map_err(|_| {
+                ProtoConversionError::SerializationError(
+                    "Unable to get OrganizationList from bytes".to_string(),
+                )
+            })?;
+        proto.into_native()
+    }
+}
+
+impl IntoBytes for OrganizationList {
+    fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
+        let proto = self.into_proto()?;
+        let bytes = proto.write_to_bytes().map_err(|_| {
+            ProtoConversionError::SerializationError(
+                "Unable to get bytes from OrganizationList".to_string(),
+            )
+        })?;
+        Ok(bytes)
+    }
+}
+
+impl IntoProto<protos::particpant::OrganizationList> for OrganizationList {}
+impl IntoNative<OrganizationList> for protos::particpant::OrganizationList {}
+
+#[derive(Debug)]
+pub enum OrganizationListBuildError {
+    MissingField(String),
+}
+
+impl StdError for OrganizationListBuildError {
+    fn description(&self) -> &str {
+        match *self {
+            OrganizationListBuildError::MissingField(ref msg) => msg,
+        }
+    }
+}
+
+impl std::fmt::Display for OrganizationListBuildError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            OrganizationListBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
+        }
+    }
+}
+
+/// Builder used to create an OrganizationList
+#[derive(Default, Clone)]
+pub struct OrganizationListBuilder {
+    pub organizations: Vec<Organization>,
+}
+
+impl OrganizationListBuilder {
+    pub fn new() -> Self {
+        OrganizationListBuilder::default()
+    }
+
+    pub fn with_organizations(
+        mut self,
+        organizations: Vec<Organization>,
+    ) -> OrganizationListBuilder {
+        self.organizations = organizations;
+        self
+    }
+
+    pub fn build(self) -> Result<OrganizationList, OrganizationListBuildError> {
+        let organizations = {
+            if self.organizations.is_empty() {
+                return Err(OrganizationListBuildError::MissingField(
+                    "'organization' cannot be empty".to_string(),
+                ));
+            } else {
+                self.organizations
+            }
+        };
+
+        Ok(OrganizationList { organizations })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1946,5 +2662,247 @@ mod tests {
 
         let smart_permission_list = SmartPermissionList::from_bytes(&bytes).unwrap();
         assert_eq!(smart_permission_list, original);
+    }
+
+    #[test]
+    // check that a KeyValueEntry is built correctly
+    fn check_key_value_entry_builder() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        assert_eq!(key_value.key(), "Key");
+        assert_eq!(key_value.value(), "Value");
+    }
+
+    #[test]
+    // check that a KeyValueEntry can be converted to bytes and back
+    fn check_key_value_entry_bytes() {
+        let builder = KeyValueEntryBuilder::new();
+        let original = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let bytes = original.clone().into_bytes().unwrap();
+        let key_value = KeyValueEntry::from_bytes(&bytes).unwrap();
+        assert_eq!(key_value, original);
+    }
+
+    #[test]
+    // check that a Particpant is built correctly
+    fn check_particpant_builder() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = ParticpantBuilder::new();
+        let particpant = builder
+            .with_org_id("organization".to_string())
+            .with_public_key("public_key".to_string())
+            .with_active(true)
+            .with_roles(vec!["Role".to_string()])
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        assert_eq!(particpant.org_id(), "organization");
+        assert_eq!(particpant.public_key(), "public_key");
+        assert!(particpant.active());
+        assert_eq!(particpant.roles(), ["Role".to_string()]);
+        assert_eq!(particpant.metadata(), [key_value]);
+    }
+
+    #[test]
+    // check that a Particpant can be converted to bytes and back
+    fn check_particpant_bytes() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = ParticpantBuilder::new();
+        let original = builder
+            .with_org_id("organization".to_string())
+            .with_public_key("public_key".to_string())
+            .with_active(true)
+            .with_roles(vec!["Role".to_string()])
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        let bytes = original.clone().into_bytes().unwrap();
+        let particpant = Particpant::from_bytes(&bytes).unwrap();
+        assert_eq!(particpant, original);
+    }
+
+    #[test]
+    // check that a ParticpantList is built correctly
+    fn check_particpant_list_builder() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = ParticpantBuilder::new();
+        let particpant = builder
+            .with_org_id("organization".to_string())
+            .with_public_key("public_key".to_string())
+            .with_active(true)
+            .with_roles(vec!["Role".to_string()])
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        let builder = ParticpantListBuilder::new();
+        let particpant_list = builder.with_particpants(vec![particpant.clone()]).build().unwrap();
+
+        assert_eq!(particpant_list.particpants(), [particpant])
+    }
+
+    #[test]
+    // check that a ParticpantList can be converted to bytes and back
+    fn check_particpant_list_bytes() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = ParticpantBuilder::new();
+        let particpant = builder
+            .with_org_id("organization".to_string())
+            .with_public_key("public_key".to_string())
+            .with_active(true)
+            .with_roles(vec!["Role".to_string()])
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        let builder = ParticpantListBuilder::new();
+        let original = builder.with_particpants(vec![particpant.clone()]).build().unwrap();
+
+        let bytes = original.clone().into_bytes().unwrap();
+        let particpant_list = ParticpantList::from_bytes(&bytes).unwrap();
+        assert_eq!(particpant_list, original);
+    }
+
+    #[test]
+    // check that an Organization is built correctly
+    fn check_organization_builder() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = OrganizationBuilder::new();
+        let organization = builder
+            .with_org_id("organization".to_string())
+            .with_name("name".to_string())
+            .with_address("address".to_string())
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        assert_eq!(organization.org_id(), "organization");
+        assert_eq!(organization.name(), "name");
+        assert_eq!(organization.address(), "address");
+        assert_eq!(organization.metadata(), [key_value]);
+    }
+
+    #[test]
+    // check that an Organization can be converted to bytes and back
+    fn check_organization_bytes() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = OrganizationBuilder::new();
+        let original = builder
+            .with_org_id("organization".to_string())
+            .with_name("name".to_string())
+            .with_address("address".to_string())
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        let bytes = original.clone().into_bytes().unwrap();
+        let org = Organization::from_bytes(&bytes).unwrap();
+        assert_eq!(org, original);
+    }
+
+    #[test]
+    // check that an OrganizationList is built correctly
+    fn check_organization_lists_builder() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = OrganizationBuilder::new();
+        let organization = builder
+            .with_org_id("organization".to_string())
+            .with_name("name".to_string())
+            .with_address("address".to_string())
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        let builder = OrganizationListBuilder::new();
+        let organization_list = builder
+            .with_organizations(vec![organization.clone()])
+            .build()
+            .unwrap();
+
+        assert_eq!(organization_list.organizations(), [organization])
+    }
+
+    #[test]
+    // check that an OrganizationList can be converted to bytes and back
+    fn check_organization_list_bytes() {
+        let builder = KeyValueEntryBuilder::new();
+        let key_value = builder
+            .with_key("Key".to_string())
+            .with_value("Value".to_string())
+            .build()
+            .unwrap();
+
+        let builder = OrganizationBuilder::new();
+        let organization = builder
+            .with_org_id("organization".to_string())
+            .with_name("name".to_string())
+            .with_address("address".to_string())
+            .with_metadata(vec![key_value.clone()])
+            .build()
+            .unwrap();
+
+        let builder = OrganizationListBuilder::new();
+        let original = builder
+            .with_organizations(vec![organization.clone()])
+            .build()
+            .unwrap();
+
+        let bytes = original.clone().into_bytes().unwrap();
+        let org_list = OrganizationList::from_bytes(&bytes).unwrap();
+        assert_eq!(org_list, original);
     }
 }
