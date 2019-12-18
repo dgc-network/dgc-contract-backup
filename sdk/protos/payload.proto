@@ -19,13 +19,11 @@ message SabrePayload {
     DELETE_NAMESPACE_REGISTRY_PERMISSION = 11;
     CREATE_SMART_PERMISSION = 12;
     UPDATE_SMART_PERMISSION= 13;
-    DELETE_SMART_PERMISSION = 14;
-  
-    CREATE_PARTICPANT = 21;
-    UPDATE_PARTICPANT = 22;
-
-    CREATE_ORGANIZATION = 23;
-    UPDATE_ORGANIZATION = 24;
+    DELETE_SMART_PERMISSION = 14;  
+    CREATE_ACCOUNT = 15;
+    UPDATE_ACCOUNT = 16;
+    CREATE_ORGANIZATION = 17;
+    UPDATE_ORGANIZATION = 18;
   }
 
   Action action = 1;
@@ -48,11 +46,11 @@ message SabrePayload {
   UpdateSmartPermissionAction update_smart_permission = 14;
   DeleteSmartPermissionAction delete_smart_permission = 15;
 
-  CreateParticpantAction create_particpant = 22;
-  UpdateParticpantAction update_particpant = 23;
+  CreateAccountAction create_account = 16;
+  UpdateAccountAction update_account = 17;
 
-  CreateOrganizationAction create_organization = 24;
-  UpdateOrganizationAction update_organization = 25;
+  CreateOrganizationAction create_organization = 18;
+  UpdateOrganizationAction update_organization = 19;
 }
 
 // creates a Contract and updates ContractRegistry with a version entry
@@ -174,8 +172,8 @@ message DeleteSmartPermissionAction {
   string org_id = 2;
 }
 
-// Creates a particpant
-message CreateParticpantAction {
+// Creates a account
+message CreateAccountAction {
   string org_id = 1;
   string public_key = 2;
   bool active = 3;
@@ -183,8 +181,8 @@ message CreateParticpantAction {
   repeated KeyValueEntry metadata = 5;
 }
 
-// Updates a particpant
-message UpdateParticpantAction {
+// Updates a account
+message UpdateAccountAction {
   string org_id = 1;
   string public_key = 2;
   bool active = 3;
