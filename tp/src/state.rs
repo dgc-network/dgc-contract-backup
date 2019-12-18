@@ -1,14 +1,19 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-use sabre_sdk::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
-use sabre_sdk::protocol::state::{
+//use sabre_sdk::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
+//use crate::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
+use crate::protocol::state::{
+//use sabre_sdk::protocol::state::{
     Contract, ContractList, ContractListBuilder, ContractRegistry, ContractRegistryList,
     ContractRegistryListBuilder, NamespaceRegistry, NamespaceRegistryList,
     NamespaceRegistryListBuilder, SmartPermission, SmartPermissionList, SmartPermissionListBuilder,
+    Particpant, ParticpantList, Organization, OrganizationList,
 };
-use sabre_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
-use sabre_sdk::protos::{FromBytes, IntoBytes};
+//use sabre_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
+//use sabre_sdk::protos::{FromBytes, IntoBytes};
+use crate::protocol::ADMINISTRATORS_SETTING_ADDRESS;
+use crate::protos::{FromBytes, IntoBytes};
 use sawtooth_sdk::messages::setting::Setting;
 use sawtooth_sdk::processor::handler::ApplyError;
 use sawtooth_sdk::processor::handler::TransactionContext;
@@ -468,6 +473,28 @@ impl<'a> SabreState<'a> {
                     .organizations()
                     .iter()
                     .find(|org| org.org_id() == id)
+                    .cloned())
+            }
+            None => Ok(None),
+        }
+    }
+
+    pub fn get_particpant(&mut self, public_key: &str) -> Result<Option<Particpant>, ApplyError> {
+        let address = compute_particpant_address(public_key);
+        let d = self.context.get_state_entry(&address)?;
+        match d {
+            Some(packed) => {
+                let particpants = ParticpantList::from_bytes(packed.as_slice()).map_err(|err| {
+                    ApplyError::InvalidTransaction(format!(
+                        "Cannot deserialize particpant list: {:?}",
+                        err,
+                    ))
+                })?;
+
+                Ok(particpants
+                    .particpants()
+                    .iter()
+                    .find(|particpant| particpant.public_key() == public_key)
                     .cloned())
             }
             None => Ok(None),

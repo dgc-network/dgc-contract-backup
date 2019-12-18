@@ -1,0 +1,28 @@
+// Copyright (c) The dgc.network
+// SPDX-License-Identifier: Apache-2.0
+
+syntax = "proto3";
+
+// A contract is stored using its name and version, with the following
+// address:
+//
+//   00ec02 + hash(name + "," + version)
+//
+// The stored contents are a serialized ContractList message to handle
+// hash collisions.
+//
+// To retrieve the latest contract with a given name, first look up the
+// contract in the contract registry and sort to determine the latest.
+
+message Contract {
+  string name = 1;
+  string version = 2;
+  repeated string inputs = 3;
+  repeated string outputs = 4;
+  string creator = 5;
+  bytes contract = 6;
+}
+
+message ContractList {
+  repeated Contract contracts = 1;
+}

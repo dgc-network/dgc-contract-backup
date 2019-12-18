@@ -5,10 +5,6 @@
 
 use crypto::digest::Digest;
 use crypto::sha2::Sha512;
-use sabre_sdk::protocol::state::{
-    ContractBuilder, ContractRegistry, ContractRegistryBuilder, NamespaceRegistry,
-    NamespaceRegistryBuilder, PermissionBuilder, SmartPermissionBuilder, VersionBuilder,
-};
 use sawtooth_sdk::messages::processor::TpProcessRequest;
 use sawtooth_sdk::processor::handler::ApplyError;
 use sawtooth_sdk::processor::handler::TransactionContext;
@@ -17,7 +13,13 @@ use sawtooth_sdk::processor::handler::TransactionHandler;
 use crate::payload::SabreRequestPayload;
 use crate::state::SabreState;
 use crate::wasm_executor::wasm_module::WasmModule;
-use sabre_sdk::protocol::payload::{
+use crate::protocol::state::{
+//use sabre_sdk::protocol::state::{
+    ContractBuilder, ContractRegistry, ContractRegistryBuilder, NamespaceRegistry,
+    NamespaceRegistryBuilder, PermissionBuilder, SmartPermissionBuilder, VersionBuilder,
+};
+use crate::protocol::payload::{
+//use sabre_sdk::protocol::payload::{
     Action, CreateContractAction, CreateContractRegistryAction, CreateNamespaceRegistryAction,
     CreateNamespaceRegistryPermissionAction, CreateSmartPermissionAction, DeleteContractAction,
     DeleteContractRegistryAction, DeleteNamespaceRegistryAction,
@@ -25,7 +27,8 @@ use sabre_sdk::protocol::payload::{
     UpdateContractRegistryOwnersAction, UpdateNamespaceRegistryOwnersAction,
     UpdateSmartPermissionAction,
 };
-use sabre_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
+use crate::protocol::ADMINISTRATORS_SETTING_KEY;
+//use sabre_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
 
 /// The namespace registry prefix for global state (00ec00)
 const NAMESPACE_REGISTRY_PREFIX: &str = "00ec00";

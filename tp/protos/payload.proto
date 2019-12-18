@@ -1,0 +1,207 @@
+// Copyright (c) The dgc.network
+// SPDX-License-Identifier: Apache-2.0
+
+syntax = "proto3";
+
+message SabrePayload {
+  enum Action {
+    ACTION_UNSET = 0;
+    CREATE_CONTRACT = 1;
+    DELETE_CONTRACT = 2;
+    EXECUTE_CONTRACT = 3;
+    CREATE_CONTRACT_REGISTRY = 4;
+    DELETE_CONTRACT_REGISTRY = 5;
+    UPDATE_CONTRACT_REGISTRY_OWNERS = 6;
+    CREATE_NAMESPACE_REGISTRY = 7;
+    DELETE_NAMESPACE_REGISTRY = 8;
+    UPDATE_NAMESPACE_REGISTRY_OWNERS = 9;
+    CREATE_NAMESPACE_REGISTRY_PERMISSION = 10;
+    DELETE_NAMESPACE_REGISTRY_PERMISSION = 11;
+    CREATE_SMART_PERMISSION = 12;
+    UPDATE_SMART_PERMISSION= 13;
+    DELETE_SMART_PERMISSION = 14;
+  
+    CREATE_PARTICPANT = 21;
+    UPDATE_PARTICPANT = 22;
+
+    CREATE_ORGANIZATION = 23;
+    UPDATE_ORGANIZATION = 24;
+  }
+
+  Action action = 1;
+
+  CreateContractAction create_contract = 2;
+  DeleteContractAction delete_contract = 3;
+  ExecuteContractAction execute_contract = 4;
+
+  CreateContractRegistryAction create_contract_registry = 5;
+  DeleteContractRegistryAction delete_contract_registry = 6;
+  UpdateContractRegistryOwnersAction update_contract_registry_owners = 7;
+
+  CreateNamespaceRegistryAction create_namespace_registry = 8;
+  DeleteNamespaceRegistryAction delete_namespace_registry = 9;
+  UpdateNamespaceRegistryOwnersAction update_namespace_registry_owners = 10;
+  CreateNamespaceRegistryPermissionAction create_namespace_registry_permission = 11;
+  DeleteNamespaceRegistryPermissionAction delete_namespace_registry_permission = 12;
+
+  CreateSmartPermissionAction create_smart_permission = 13;
+  UpdateSmartPermissionAction update_smart_permission = 14;
+  DeleteSmartPermissionAction delete_smart_permission = 15;
+
+  CreateParticpantAction create_particpant = 22;
+  UpdateParticpantAction update_particpant = 23;
+
+  CreateOrganizationAction create_organization = 24;
+  UpdateOrganizationAction update_organization = 25;
+}
+
+// creates a Contract and updates ContractRegistry with a version entry
+message CreateContractAction {
+  string name = 1;
+  string version = 2;
+  repeated string inputs = 3;
+  repeated string outputs = 4;
+  bytes contract = 5;
+}
+
+// removes a Contract and removes the version entry from ContractRegistry
+message DeleteContractAction {
+  string name = 1;
+  string version = 2;
+}
+
+// executes the contract
+message ExecuteContractAction {
+  string name = 1;
+  string version = 2;
+  repeated string inputs = 3;
+  repeated string outputs = 4;
+  bytes payload = 5;
+}
+/* Transactions
+Clients of the Libra Blockchain submit transactions to request updates to the ledger state. 
+A signed transaction on the blockchain contains:
+
+Sender address — Account address of the sender of the transaction.
+Sender public key — The public key that corresponds to the private key used to sign the transaction.
+Program — The program is comprised of the following:
+    A Move bytecode transaction script.
+    An optional list of inputs to the script. For a peer-to-peer transaction, 
+      the inputs contain the information about the recipient and the amount transferred to the recipient.
+    An optional list of Move bytecode modules to publish.
+Gas price (in microlibra/gas units) — The amount the sender is willing to pay per unit of gas 
+  to execute the transaction. Gas is a way to pay for computation and storage. A gas unit is 
+  an abstract measurement of computation with no inherent real-world value.
+Maximum gas amount — The maximum units of gas the transaction is allowed to consume.
+Sequence number — An unsigned integer that must be equal to the sequence number stored under the sender’s account.
+Expiration time — The time after which the transaction ceases to be valid.
+Signature — The digital signature of the sender.
+The transaction script is an arbitrary program that encodes the logic of a transaction and 
+  interacts with resources published in the distributed database of the Libra Blockchain.
+*/
+
+// creates the ContractRegistry in state with no Versions
+message CreateContractRegistryAction {
+  string name = 1;
+  repeated string owners = 2;
+}
+
+// deletes the ContractRegistry associated with 'name'
+// only if it contains no versions
+message DeleteContractRegistryAction {
+  string name = 1;
+}
+
+// updates the owners field in the ContractRegistry associated with 'name'
+message UpdateContractRegistryOwnersAction {
+  string name = 1;
+  repeated string owners = 2;
+}
+
+// creates the ContractRegistry in state with no Permissions
+message CreateNamespaceRegistryAction {
+  string namespace = 1;
+  repeated string owners = 2;
+}
+
+// deletes the NamespaceRegistry associated with 'namespace'
+// only if it contains no permissions
+message DeleteNamespaceRegistryAction {
+  string namespace = 1;
+}
+
+// updates the owners field in the NamespaceRegistry associated with 'namespace'
+message UpdateNamespaceRegistryOwnersAction {
+  string namespace = 1;
+  repeated string owners = 2;
+}
+
+// adds a permission entry to the NamespaceRegistry associated with 'namespace'
+message CreateNamespaceRegistryPermissionAction {
+  string namespace = 1;
+  string contract_name = 2;
+  bool read = 3;
+  bool write = 4;
+}
+
+// removes a permission entry to the NamespaceRegistry associated with
+// 'namespace'
+message DeleteNamespaceRegistryPermissionAction {
+  string namespace = 1;
+  string contract_name = 2;
+}
+
+// Creates a smart permission
+message CreateSmartPermissionAction {
+  string name = 1;
+  // ID of organization that owns the smart permission
+  string org_id = 2;
+  bytes function = 3;
+}
+
+// Updates a smart permission
+message UpdateSmartPermissionAction {
+  string name = 1;
+  // ID of organization that owns the smart permission
+  string org_id = 2;
+  bytes function = 3;
+}
+
+// Deletes a smart permission
+message DeleteSmartPermissionAction {
+  string name = 1;
+  // ID of organization that owns the smart permission
+  string org_id = 2;
+}
+
+// Creates a particpant
+message CreateParticpantAction {
+  string org_id = 1;
+  string public_key = 2;
+  bool active = 3;
+  repeated string roles = 4;
+  repeated KeyValueEntry metadata = 5;
+}
+
+// Updates a particpant
+message UpdateParticpantAction {
+  string org_id = 1;
+  string public_key = 2;
+  bool active = 3;
+  repeated string roles = 4;
+  repeated KeyValueEntry metadata = 5;
+}
+
+// Creates an organization
+message CreateOrganizationAction {
+  string id = 1;
+  string name = 2;
+  string address = 3;
+}
+
+// Updates an organization
+message UpdateOrganizationAction {
+  string id = 1;
+  string name = 2;
+  string address = 3;
+}
