@@ -500,26 +500,4 @@ impl<'a> SabreState<'a> {
             None => Ok(None),
         }
     }
-
-    pub fn get_agent(&mut self, public_key: &str) -> Result<Option<Agent>, ApplyError> {
-        let address = compute_agent_address(public_key);
-        let d = self.context.get_state_entry(&address)?;
-        match d {
-            Some(packed) => {
-                let agents = AgentList::from_bytes(packed.as_slice()).map_err(|err| {
-                    ApplyError::InvalidTransaction(format!(
-                        "Cannot deserialize agent list: {:?}",
-                        err,
-                    ))
-                })?;
-
-                Ok(agents
-                    .agents()
-                    .iter()
-                    .find(|agent| agent.public_key() == public_key)
-                    .cloned())
-            }
-            None => Ok(None),
-        }
-    }
 }

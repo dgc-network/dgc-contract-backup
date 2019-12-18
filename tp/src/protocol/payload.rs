@@ -99,6 +99,7 @@ impl CreateContractAction {
     }
 }
 
+
 impl FromProto<protos::payload::CreateContractAction> for CreateContractAction {
     fn from_proto(
         proto: protos::payload::CreateContractAction,
