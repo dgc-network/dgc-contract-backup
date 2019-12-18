@@ -28,8 +28,8 @@ pub enum Action {
     CreateSmartPermission(CreateSmartPermissionAction),
     UpdateSmartPermission(UpdateSmartPermissionAction),
     DeleteSmartPermission(DeleteSmartPermissionAction),
-    CreateParticpant(CreateParticpantAction),
-    UpdateParticpant(UpdateParticpantAction),
+    CreateAccount(CreateAccountAction),
+    UpdateAccount(UpdateAccountAction),
     CreateOrganization(CreateOrganizationAction),
     UpdateOrganization(UpdateOrganizationAction),
 }
@@ -59,8 +59,8 @@ impl std::fmt::Display for Action {
             Action::CreateSmartPermission(_) => write!(f, "Create smart permission"),
             Action::UpdateSmartPermission(_) => write!(f, "Update smart permission"),
             Action::DeleteSmartPermission(_) => write!(f, "Delete smart permission"),
-            Action::CreateParticpant(_) => write!(f, "Action: Create Particpant"),
-            Action::UpdateParticpant(_) => write!(f, "Action: Update Particpant"),
+            Action::CreateAccount(_) => write!(f, "Action: Create Account"),
+            Action::UpdateAccount(_) => write!(f, "Action: Update Account"),
             Action::CreateOrganization(_) => write!(f, "Action: Create Organization"),
             Action::UpdateOrganization(_) => write!(f, "Action: Update Organization"),
         }
@@ -2151,16 +2151,16 @@ impl DeleteSmartPermissionActionBuilder {
     }
 }
 
-/// Native implementation for CreateParticpantAction
+/// Native implementation for CreateAccountAction
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateParticpantAction {
+pub struct CreateAccountAction {
     org_id: String,
     public_key: String,
     roles: Vec<String>,
     metadata: Vec<KeyValueEntry>,
 }
 
-impl CreateParticpantAction {
+impl CreateAccountAction {
     pub fn org_id(&self) -> &str {
         &self.org_id
     }
@@ -2174,11 +2174,11 @@ impl CreateParticpantAction {
     }
 }
 
-impl FromProto<protos::payload::CreateParticpantAction> for CreateParticpantAction {
+impl FromProto<protos::payload::CreateAccountAction> for CreateAccountAction {
     fn from_proto(
-        proto: protos::payload::CreateParticpantAction,
+        proto: protos::payload::CreateAccountAction,
     ) -> Result<Self, ProtoConversionError> {
-        Ok(CreateParticpantAction {
+        Ok(CreateAccountAction {
             org_id: proto.get_org_id().to_string(),
             public_key: proto.get_public_key().to_string(),
             roles: proto.get_roles().to_vec(),
@@ -2186,114 +2186,114 @@ impl FromProto<protos::payload::CreateParticpantAction> for CreateParticpantActi
     }
 }
 
-impl FromNative<CreateParticpantAction> for protos::payload::CreateParticpantAction {
+impl FromNative<CreateAccountAction> for protos::payload::CreateAccountAction {
     fn from_native(
-        create_particpant_action: CreateParticpantAction,
+        create_account_action: CreateAccountAction,
     ) -> Result<Self, ProtoConversionError> {
-        let mut proto = protos::payload::CreateParticpantAction::new();
-        proto.set_org_id(create_particpant_action.org_id().to_string());
-        proto.set_public_key(create_particpant_action.public_key().to_string());
-        proto.set_roles(create_particpant_action.roles().to_vec());
+        let mut proto = protos::payload::CreateAccountAction::new();
+        proto.set_org_id(create_account_action.org_id().to_string());
+        proto.set_public_key(create_account_action.public_key().to_string());
+        proto.set_roles(create_account_action.roles().to_vec());
         Ok(proto)
     }
 }
 
-impl FromBytes<CreateParticpantAction> for CreateParticpantAction {
-    fn from_bytes(bytes: &[u8]) -> Result<CreateParticpantAction, ProtoConversionError> {
-        let proto: protos::payload::CreateParticpantAction = protobuf::parse_from_bytes(bytes)
+impl FromBytes<CreateAccountAction> for CreateAccountAction {
+    fn from_bytes(bytes: &[u8]) -> Result<CreateAccountAction, ProtoConversionError> {
+        let proto: protos::payload::CreateAccountAction = protobuf::parse_from_bytes(bytes)
             .map_err(|_| {
                 ProtoConversionError::SerializationError(
-                    "Unable to get CreateParticpantAction from bytes".to_string(),
+                    "Unable to get CreateAccountAction from bytes".to_string(),
                 )
             })?;
         proto.into_native()
     }
 }
 
-impl IntoBytes for CreateParticpantAction {
+impl IntoBytes for CreateAccountAction {
     fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
         let proto = self.into_proto()?;
         let bytes = proto.write_to_bytes().map_err(|_| {
             ProtoConversionError::SerializationError(
-                "Unable to get bytes from CreateParticpantAction".to_string(),
+                "Unable to get bytes from CreateAccountAction".to_string(),
             )
         })?;
         Ok(bytes)
     }
 }
 
-impl IntoProto<protos::payload::CreateParticpantAction> for CreateParticpantAction {}
-impl IntoNative<CreateParticpantAction> for protos::payload::CreateParticpantAction {}
+impl IntoProto<protos::payload::CreateAccountAction> for CreateAccountAction {}
+impl IntoNative<CreateAccountAction> for protos::payload::CreateAccountAction {}
 
 #[derive(Debug)]
-pub enum CreateParticpantActionBuildError {
+pub enum CreateAccountActionBuildError {
     MissingField(String),
 }
 
-impl StdError for CreateParticpantActionBuildError {
+impl StdError for CreateAccountActionBuildError {
     fn description(&self) -> &str {
         match *self {
-            CreateParticpantActionBuildError::MissingField(ref msg) => msg,
+            CreateAccountActionBuildError::MissingField(ref msg) => msg,
         }
     }
 }
 
-impl std::fmt::Display for CreateParticpantActionBuildError {
+impl std::fmt::Display for CreateAccountActionBuildError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match *self {
-            CreateParticpantActionBuildError::MissingField(ref s) => {
+            CreateAccountActionBuildError::MissingField(ref s) => {
                 write!(f, "MissingField: {}", s)
             }
         }
     }
 }
 
-/// Builder used to create CreateParticpantAction
+/// Builder used to create CreateAccountAction
 #[derive(Default, Clone)]
-pub struct CreateParticpantActionBuilder {
+pub struct CreateAccountActionBuilder {
     public_key: Option<String>,
     org_id: Option<String>,
     roles: Vec<String>,
 }
 
-impl CreateParticpantActionBuilder {
+impl CreateAccountActionBuilder {
     pub fn new() -> Self {
-        CreateParticpantActionBuilder::default()
+        CreateAccountActionBuilder::default()
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> CreateParticpantActionBuilder {
+    pub fn with_org_id(mut self, org_id: String) -> CreateAccountActionBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_public_key(mut self, public_key: String) -> CreateParticpantActionBuilder {
+    pub fn with_public_key(mut self, public_key: String) -> CreateAccountActionBuilder {
         self.public_key = Some(public_key);
         self
     }
 
-    pub fn with_roles(mut self, roles: Vec<u8>) -> CreateParticpantActionBuilder {
+    pub fn with_roles(mut self, roles: Vec<u8>) -> CreateAccountActionBuilder {
         self.roles = roles;
         self
     }
 
     pub fn build(
         self,
-    ) -> Result<CreateParticpantAction, CreateParticpantActionBuildError> {
+    ) -> Result<CreateAccountAction, CreateAccountActionBuildError> {
         let org_id = self.org_id.ok_or_else(|| {
-            CreateParticpantActionBuildError::MissingField(
+            CreateAccountActionBuildError::MissingField(
                 "'org_id' field is required".to_string(),
             )
         })?;
 
         let public_key = self.public_key.ok_or_else(|| {
-            CreateParticpantActionBuildError::MissingField(
+            CreateAccountActionBuildError::MissingField(
                 "'public_key' field is required".to_string(),
             )
         })?;
 
         let roles = {
             if self.roles.is_empty() {
-                return Err(CreateParticpantActionBuildError::MissingField(
+                return Err(CreateAccountActionBuildError::MissingField(
                     "'roles' field is required".to_string(),
                 ));
             } else {
@@ -2301,7 +2301,7 @@ impl CreateParticpantActionBuilder {
             }
         };
 
-        Ok(CreateParticpantAction {
+        Ok(CreateAccountAction {
             org_id,
             public_key,
             roles,
@@ -2309,15 +2309,15 @@ impl CreateParticpantActionBuilder {
     }
 }
 
-/// Native implementation for UpdateParticpantAction
+/// Native implementation for UpdateAccountAction
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateParticpantAction {
+pub struct UpdateAccountAction {
     org_id: String,
     public_key: String,
     roles: Vec<u8>,
 }
 
-impl UpdateParticpantAction {
+impl UpdateAccountAction {
     pub fn org_id(&self) -> &str {
         &self.org_id
     }
@@ -2331,11 +2331,11 @@ impl UpdateParticpantAction {
     }
 }
 
-impl FromProto<protos::payload::UpdateParticpantAction> for UpdateParticpantAction {
+impl FromProto<protos::payload::UpdateAccountAction> for UpdateAccountAction {
     fn from_proto(
-        proto: protos::payload::UpdateParticpantAction,
+        proto: protos::payload::UpdateAccountAction,
     ) -> Result<Self, ProtoConversionError> {
-        Ok(UpdateParticpantAction {
+        Ok(UpdateAccountAction {
             org_id: proto.get_org_id().to_string(),
             public_key: proto.get_public_key().to_string(),
             roles: proto.get_roles().to_vec(),
@@ -2343,114 +2343,114 @@ impl FromProto<protos::payload::UpdateParticpantAction> for UpdateParticpantActi
     }
 }
 
-impl FromNative<UpdateParticpantAction> for protos::payload::UpdateParticpantAction {
+impl FromNative<UpdateAccountAction> for protos::payload::UpdateAccountAction {
     fn from_native(
-        update_particpant_action: UpdateParticpantAction,
+        update_account_action: UpdateAccountAction,
     ) -> Result<Self, ProtoConversionError> {
-        let mut proto = protos::payload::UpdateParticpantAction::new();
-        proto.set_org_id(update_particpant_action.org_id().to_string());
-        proto.set_public_key(update_particpant_action.public_key().to_string());
-        proto.set_roles(update_particpant_action.roles().to_vec());
+        let mut proto = protos::payload::UpdateAccountAction::new();
+        proto.set_org_id(update_account_action.org_id().to_string());
+        proto.set_public_key(update_account_action.public_key().to_string());
+        proto.set_roles(update_account_action.roles().to_vec());
         Ok(proto)
     }
 }
 
-impl FromBytes<UpdateParticpantAction> for UpdateParticpantAction {
-    fn from_bytes(bytes: &[u8]) -> Result<UpdateParticpantAction, ProtoConversionError> {
-        let proto: protos::payload::UpdateParticpantAction = protobuf::parse_from_bytes(bytes)
+impl FromBytes<UpdateAccountAction> for UpdateAccountAction {
+    fn from_bytes(bytes: &[u8]) -> Result<UpdateAccountAction, ProtoConversionError> {
+        let proto: protos::payload::UpdateAccountAction = protobuf::parse_from_bytes(bytes)
             .map_err(|_| {
                 ProtoConversionError::SerializationError(
-                    "Unable to get UpdateParticpantAction from bytes".to_string(),
+                    "Unable to get UpdateAccountAction from bytes".to_string(),
                 )
             })?;
         proto.into_native()
     }
 }
 
-impl IntoBytes for UpdateParticpantAction {
+impl IntoBytes for UpdateAccountAction {
     fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
         let proto = self.into_proto()?;
         let bytes = proto.write_to_bytes().map_err(|_| {
             ProtoConversionError::SerializationError(
-                "Unable to get bytes from UpdateParticpantAction".to_string(),
+                "Unable to get bytes from UpdateAccountAction".to_string(),
             )
         })?;
         Ok(bytes)
     }
 }
 
-impl IntoProto<protos::payload::UpdateParticpantAction> for UpdateParticpantAction {}
-impl IntoNative<UpdateParticpantAction> for protos::payload::UpdateParticpantAction {}
+impl IntoProto<protos::payload::UpdateAccountAction> for UpdateAccountAction {}
+impl IntoNative<UpdateAccountAction> for protos::payload::UpdateAccountAction {}
 
 #[derive(Debug)]
-pub enum UpdateParticpantActionBuildError {
+pub enum UpdateAccountActionBuildError {
     MissingField(String),
 }
 
-impl StdError for UpdateParticpantActionBuildError {
+impl StdError for UpdateAccountActionBuildError {
     fn description(&self) -> &str {
         match *self {
-            UpdateParticpantActionBuildError::MissingField(ref msg) => msg,
+            UpdateAccountActionBuildError::MissingField(ref msg) => msg,
         }
     }
 }
 
-impl std::fmt::Display for UpdateParticpantActionBuildError {
+impl std::fmt::Display for UpdateAccountActionBuildError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match *self {
-            UpdateParticpantActionBuildError::MissingField(ref s) => {
+            UpdateAccountActionBuildError::MissingField(ref s) => {
                 write!(f, "MissingField: {}", s)
             }
         }
     }
 }
 
-/// Builder used to create UpdateParticpantAction
+/// Builder used to create UpdateAccountAction
 #[derive(Default, Clone)]
-pub struct UpdateParticpantActionBuilder {
+pub struct UpdateAccountActionBuilder {
     org_id: Option<String>,
     public_key: Option<String>,
     roles: Vec<String>,
 }
 
-impl UpdateParticpantActionBuilder {
+impl UpdateAccountActionBuilder {
     pub fn new() -> Self {
-        UpdateParticpantActionBuilder::default()
+        UpdateAccountActionBuilder::default()
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> UpdateParticpantActionBuilder {
+    pub fn with_org_id(mut self, org_id: String) -> UpdateAccountActionBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_public_key(mut self, public_key: String) -> UpdateParticpantActionBuilder {
+    pub fn with_public_key(mut self, public_key: String) -> UpdateAccountActionBuilder {
         self.public_key = Some(public_key);
         self
     }
 
-    pub fn with_roles(mut self, roles: Vec<String>) -> UpdateParticpantActionBuilder {
+    pub fn with_roles(mut self, roles: Vec<String>) -> UpdateAccountActionBuilder {
         self.roles = roles;
         self
     }
 
     pub fn build(
         self,
-    ) -> Result<UpdateParticpantAction, UpdateParticpantActionBuildError> {
+    ) -> Result<UpdateAccountAction, UpdateAccountActionBuildError> {
         let org_id = self.org_id.ok_or_else(|| {
-            UpdateParticpantActionBuildError::MissingField(
+            UpdateAccountActionBuildError::MissingField(
                 "'org_id' field is required".to_string(),
             )
         })?;
 
         let public_key = self.public_key.ok_or_else(|| {
-            UpdateParticpantActionBuildError::MissingField(
+            UpdateAccountActionBuildError::MissingField(
                 "'public_key' field is required".to_string(),
             )
         })?;
 
         let roles = {
             if self.roles.is_empty() {
-                return Err(UpdateParticpantActionBuildError::MissingField(
+                return Err(UpdateAccountActionBuildError::MissingField(
                     "'roles' field is required".to_string(),
                 ));
             } else {
@@ -2458,7 +2458,7 @@ impl UpdateParticpantActionBuilder {
             }
         };
 
-        Ok(UpdateParticpantAction {
+        Ok(UpdateAccountAction {
             org_id,
             public_key,
             roles,
@@ -2860,14 +2860,14 @@ impl FromProto<protos::payload::SabrePayload> for SabrePayload {
                     proto.get_delete_smart_permission().clone(),
                 )?)
             }
-            protos::payload::SabrePayload_Action::CREATE_PARTICPANT => {
-                Action::CreateParticpant(CreateParticpantAction::from_proto(
-                    proto.get_create_particpant().clone(),
+            protos::payload::SabrePayload_Action::CREATE_ACCOUNT => {
+                Action::CreateAccount(CreateAccountAction::from_proto(
+                    proto.get_create_account().clone(),
                 )?)
             }
-            protos::payload::SabrePayload_Action::UPDATE_PARTICPANT => {
-                Action::UpdateParticpant(UpdateParticpantAction::from_proto(
-                    proto.get_update_particpant().clone(),
+            protos::payload::SabrePayload_Action::UPDATE_ACCOUNT => {
+                Action::UpdateAccount(UpdateAccountAction::from_proto(
+                    proto.get_update_account().clone(),
                 )?)
             }
             protos::payload::SabrePayload_Action::CREATE_ORGANIZATION => {
@@ -2960,13 +2960,13 @@ impl FromNative<SabrePayload> for protos::payload::SabrePayload {
                 proto.set_action(protos::payload::SabrePayload_Action::DELETE_SMART_PERMISSION);
                 proto.set_delete_smart_permission(payload.clone().into_proto()?);
             }
-            Action::CreateParticpant(payload) => {
-                proto.set_action(protos::payload::SabrePayload_Action::CREATE_PARTICPANT);
-                proto.set_create_particpant(payload.clone().into_proto()?);
+            Action::CreateAccount(payload) => {
+                proto.set_action(protos::payload::SabrePayload_Action::CREATE_ACCOUNT);
+                proto.set_create_account(payload.clone().into_proto()?);
             }
-            Action::UpdateParticpant(payload) => {
-                proto.set_action(protos::payload::SabrePayload_Action::UPDATE_PARTICPANT);
-                proto.set_update_particpant(payload.clone().into_proto()?);
+            Action::UpdateAccount(payload) => {
+                proto.set_action(protos::payload::SabrePayload_Action::UPDATE_ACCOUNT);
+                proto.set_update_account(payload.clone().into_proto()?);
             }
             Action::CreateOrganization(payload) => {
                 proto.set_action(protos::payload::SabrePayload_Action::CREATE_ORGANIZATION);

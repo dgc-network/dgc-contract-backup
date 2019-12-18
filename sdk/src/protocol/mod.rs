@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pub mod payload;
-pub mod pike;
+//pub mod pike;
 pub mod state;
 
 pub const ADMINISTRATORS_SETTING_ADDRESS: &str =

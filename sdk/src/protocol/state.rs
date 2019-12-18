@@ -1472,9 +1472,9 @@ impl KeyValueEntry {
     }
 }
 
-impl FromProto<protos::particpant::KeyValueEntry> for KeyValueEntry {
+impl FromProto<protos::account::KeyValueEntry> for KeyValueEntry {
     fn from_proto(
-        key_value: protos::particpant::KeyValueEntry,
+        key_value: protos::account::KeyValueEntry,
     ) -> Result<Self, ProtoConversionError> {
         Ok(KeyValueEntry {
             key: key_value.get_key().to_string(),
@@ -1483,9 +1483,9 @@ impl FromProto<protos::particpant::KeyValueEntry> for KeyValueEntry {
     }
 }
 
-impl FromNative<KeyValueEntry> for protos::particpant::KeyValueEntry {
+impl FromNative<KeyValueEntry> for protos::account::KeyValueEntry {
     fn from_native(key_value: KeyValueEntry) -> Result<Self, ProtoConversionError> {
-        let mut key_value_proto = protos::particpant::KeyValueEntry::new();
+        let mut key_value_proto = protos::account::KeyValueEntry::new();
 
         key_value_proto.set_key(key_value.key().to_string());
         key_value_proto.set_value(key_value.value().to_string());
@@ -1496,7 +1496,7 @@ impl FromNative<KeyValueEntry> for protos::particpant::KeyValueEntry {
 
 impl FromBytes<KeyValueEntry> for KeyValueEntry {
     fn from_bytes(bytes: &[u8]) -> Result<KeyValueEntry, ProtoConversionError> {
-        let proto: protos::particpant::KeyValueEntry =
+        let proto: protos::account::KeyValueEntry =
             protobuf::parse_from_bytes(bytes).map_err(|_| {
                 ProtoConversionError::SerializationError(
                     "Unable to get KeyValueEntry from bytes".to_string(),
@@ -1518,8 +1518,8 @@ impl IntoBytes for KeyValueEntry {
     }
 }
 
-impl IntoProto<protos::particpant::KeyValueEntry> for KeyValueEntry {}
-impl IntoNative<KeyValueEntry> for protos::particpant::KeyValueEntry {}
+impl IntoProto<protos::account::KeyValueEntry> for KeyValueEntry {}
+impl IntoNative<KeyValueEntry> for protos::account::KeyValueEntry {}
 
 #[derive(Debug)]
 pub enum KeyValueEntryBuildError {
@@ -1577,9 +1577,9 @@ impl KeyValueEntryBuilder {
     }
 }
 
-/// Native implementation of Particpant
+/// Native implementation of Account
 #[derive(Debug, Clone, PartialEq)]
-pub struct Particpant {
+pub struct Account {
     org_id: String,
     public_key: String,
     active: bool,
@@ -1587,7 +1587,7 @@ pub struct Particpant {
     metadata: Vec<KeyValueEntry>,
 }
 
-impl Particpant {
+impl Account {
     pub fn org_id(&self) -> &str {
         &self.org_id
     }
@@ -1609,14 +1609,14 @@ impl Particpant {
     }
 }
 
-impl FromProto<protos::particpant::Particpant> for Particpant {
-    fn from_proto(particpant: protos::particpant::Particpant) -> Result<Self, ProtoConversionError> {
-        Ok(Particpant {
-            org_id: particpant.get_org_id().to_string(),
-            public_key: particpant.get_public_key().to_string(),
-            active: particpant.get_active(),
-            roles: particpant.get_roles().to_vec(),
-            metadata: particpant
+impl FromProto<protos::account::Account> for Account {
+    fn from_proto(account: protos::account::Account) -> Result<Self, ProtoConversionError> {
+        Ok(Account {
+            org_id: account.get_org_id().to_string(),
+            public_key: account.get_public_key().to_string(),
+            active: account.get_active(),
+            roles: account.get_roles().to_vec(),
+            metadata: account
                 .get_metadata()
                 .to_vec()
                 .into_iter()
@@ -1626,75 +1626,75 @@ impl FromProto<protos::particpant::Particpant> for Particpant {
     }
 }
 
-impl FromNative<Particpant> for protos::particpant::Particpant {
-    fn from_native(particpant: Particpant) -> Result<Self, ProtoConversionError> {
-        let mut particpant_proto = protos::particpant::Particpant::new();
+impl FromNative<Account> for protos::account::Account {
+    fn from_native(account: Account) -> Result<Self, ProtoConversionError> {
+        let mut account_proto = protos::account::Account::new();
 
-        particpant_proto.set_org_id(particpant.org_id().to_string());
-        particpant_proto.set_public_key(particpant.public_key().to_string());
-        particpant_proto.set_active(particpant.active().clone());
-        particpant_proto.set_org_id(particpant.org_id().to_string());
-        particpant_proto.set_roles(RepeatedField::from_vec(particpant.roles().to_vec()));
-        particpant_proto.set_metadata(RepeatedField::from_vec(
-            particpant
+        account_proto.set_org_id(account.org_id().to_string());
+        account_proto.set_public_key(account.public_key().to_string());
+        account_proto.set_active(account.active().clone());
+        account_proto.set_org_id(account.org_id().to_string());
+        account_proto.set_roles(RepeatedField::from_vec(account.roles().to_vec()));
+        account_proto.set_metadata(RepeatedField::from_vec(
+            account
                 .metadata()
                 .to_vec()
                 .into_iter()
                 .map(KeyValueEntry::into_proto)
-                .collect::<Result<Vec<protos::particpant::KeyValueEntry>, ProtoConversionError>>(
+                .collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
                 )?,
         ));
 
-        Ok(particpant_proto)
+        Ok(account_proto)
     }
 }
 
-impl FromBytes<Particpant> for Particpant {
-    fn from_bytes(bytes: &[u8]) -> Result<Particpant, ProtoConversionError> {
-        let proto: protos::particpant::Particpant = protobuf::parse_from_bytes(bytes).map_err(|_| {
-            ProtoConversionError::SerializationError("Unable to get Particpant from bytes".to_string())
+impl FromBytes<Account> for Account {
+    fn from_bytes(bytes: &[u8]) -> Result<Account, ProtoConversionError> {
+        let proto: protos::account::Account = protobuf::parse_from_bytes(bytes).map_err(|_| {
+            ProtoConversionError::SerializationError("Unable to get Account from bytes".to_string())
         })?;
         proto.into_native()
     }
 }
 
-impl IntoBytes for Particpant {
+impl IntoBytes for Account {
     fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
         let proto = self.into_proto()?;
         let bytes = proto.write_to_bytes().map_err(|_| {
-            ProtoConversionError::SerializationError("Unable to get bytes from Particpant".to_string())
+            ProtoConversionError::SerializationError("Unable to get bytes from Account".to_string())
         })?;
         Ok(bytes)
     }
 }
 
-impl IntoProto<protos::particpant::Particpant> for Particpant {}
-impl IntoNative<Particpant> for protos::particpant::Particpant {}
+impl IntoProto<protos::account::Account> for Account {}
+impl IntoNative<Account> for protos::account::Account {}
 
 #[derive(Debug)]
-pub enum ParticpantBuildError {
+pub enum AccountBuildError {
     MissingField(String),
 }
 
-impl StdError for ParticpantBuildError {
+impl StdError for AccountBuildError {
     fn description(&self) -> &str {
         match *self {
-            ParticpantBuildError::MissingField(ref msg) => msg,
+            AccountBuildError::MissingField(ref msg) => msg,
         }
     }
 }
 
-impl std::fmt::Display for ParticpantBuildError {
+impl std::fmt::Display for AccountBuildError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match *self {
-            ParticpantBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
+            AccountBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
         }
     }
 }
 
-/// Builder used to create a Particpant
+/// Builder used to create an Account
 #[derive(Default, Clone)]
-pub struct ParticpantBuilder {
+pub struct AccountBuilder {
     pub org_id: Option<String>,
     pub public_key: Option<String>,
     pub active: Option<bool>,
@@ -1702,50 +1702,50 @@ pub struct ParticpantBuilder {
     pub metadata: Vec<KeyValueEntry>,
 }
 
-impl ParticpantBuilder {
+impl AccountBuilder {
     pub fn new() -> Self {
-        ParticpantBuilder::default()
+        AccountBuilder::default()
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> ParticpantBuilder {
+    pub fn with_org_id(mut self, org_id: String) -> AccountBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_public_key(mut self, public_key: String) -> ParticpantBuilder {
+    pub fn with_public_key(mut self, public_key: String) -> AccountBuilder {
         self.public_key = Some(public_key);
         self
     }
 
-    pub fn with_active(mut self, active: bool) -> ParticpantBuilder {
+    pub fn with_active(mut self, active: bool) -> AccountBuilder {
         self.active = Some(active);
         self
     }
 
-    pub fn with_roles(mut self, roles: Vec<String>) -> ParticpantBuilder {
+    pub fn with_roles(mut self, roles: Vec<String>) -> AccountBuilder {
         self.roles = roles;
         self
     }
 
-    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> ParticpantBuilder {
+    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> AccountBuilder {
         self.metadata = metadata;
         self
     }
 
-    pub fn build(self) -> Result<Particpant, ParticpantBuildError> {
+    pub fn build(self) -> Result<Account, AccountBuildError> {
         let org_id = self.org_id.ok_or_else(|| {
-            ParticpantBuildError::MissingField("'org_id' field is required".to_string())
+            AccountBuildError::MissingField("'org_id' field is required".to_string())
         })?;
 
         let public_key = self.public_key.ok_or_else(|| {
-            ParticpantBuildError::MissingField("'public_key' field is required".to_string())
+            AccountBuildError::MissingField("'public_key' field is required".to_string())
         })?;
 
         let active = self.active.unwrap_or_default();
         let roles = self.roles;
         let metadata = self.metadata;
 
-        Ok(Particpant {
+        Ok(Account {
             org_id,
             public_key,
             active,
@@ -1755,124 +1755,124 @@ impl ParticpantBuilder {
     }
 }
 
-/// Native implementation of ParticpantList
+/// Native implementation of AccountList
 #[derive(Debug, Clone, PartialEq)]
-pub struct ParticpantList {
-    particpants: Vec<Particpant>,
+pub struct AccountList {
+    accounts: Vec<Account>,
 }
 
-impl ParticpantList {
-    pub fn particpants(&self) -> &[Particpant] {
-        &self.particpants
+impl AccountList {
+    pub fn accounts(&self) -> &[Account] {
+        &self.accounts
     }
 }
 
-impl FromProto<protos::particpant::ParticpantList> for ParticpantList {
-    fn from_proto(particpant_list: protos::particpant::ParticpantList) -> Result<Self, ProtoConversionError> {
-        Ok(ParticpantList {
-            particpants: particpant_list
-                .get_particpants()
+impl FromProto<protos::account::AccountList> for AccountList {
+    fn from_proto(account_list: protos::account::AccountList) -> Result<Self, ProtoConversionError> {
+        Ok(AccountList {
+            accounts: account_list
+                .get_accounts()
                 .to_vec()
                 .into_iter()
-                .map(Particpant::from_proto)
-                .collect::<Result<Vec<Particpant>, ProtoConversionError>>()?,
+                .map(Account::from_proto)
+                .collect::<Result<Vec<Account>, ProtoConversionError>>()?,
         })
     }
 }
 
-impl FromNative<ParticpantList> for protos::particpant::ParticpantList {
-    fn from_native(particpant_list: ParticpantList) -> Result<Self, ProtoConversionError> {
-        let mut particpant_list_proto = protos::particpant::ParticpantList::new();
+impl FromNative<AccountList> for protos::account::AccountList {
+    fn from_native(account_list: AccountList) -> Result<Self, ProtoConversionError> {
+        let mut account_list_proto = protos::account::AccountList::new();
 
-        particpant_list_proto.set_particpants(RepeatedField::from_vec(
-            particpant_list
-                .particpants()
+        account_list_proto.set_accounts(RepeatedField::from_vec(
+            account_list
+                .accounts()
                 .to_vec()
                 .into_iter()
-                .map(Particpant::into_proto)
-                .collect::<Result<Vec<protos::particpant::Particpant>, ProtoConversionError>>()?,
+                .map(Account::into_proto)
+                .collect::<Result<Vec<protos::account::Account>, ProtoConversionError>>()?,
         ));
 
-        Ok(particpant_list_proto)
+        Ok(account_list_proto)
     }
 }
 
-impl FromBytes<ParticpantList> for ParticpantList {
-    fn from_bytes(bytes: &[u8]) -> Result<ParticpantList, ProtoConversionError> {
-        let proto: protos::particpant::ParticpantList =
+impl FromBytes<AccountList> for AccountList {
+    fn from_bytes(bytes: &[u8]) -> Result<AccountList, ProtoConversionError> {
+        let proto: protos::account::AccountList =
             protobuf::parse_from_bytes(bytes).map_err(|_| {
                 ProtoConversionError::SerializationError(
-                    "Unable to get ParticpantList from bytes".to_string(),
+                    "Unable to get AccountList from bytes".to_string(),
                 )
             })?;
         proto.into_native()
     }
 }
 
-impl IntoBytes for ParticpantList {
+impl IntoBytes for AccountList {
     fn into_bytes(self) -> Result<Vec<u8>, ProtoConversionError> {
         let proto = self.into_proto()?;
         let bytes = proto.write_to_bytes().map_err(|_| {
             ProtoConversionError::SerializationError(
-                "Unable to get bytes from ParticpantList".to_string(),
+                "Unable to get bytes from AccountList".to_string(),
             )
         })?;
         Ok(bytes)
     }
 }
 
-impl IntoProto<protos::particpant::ParticpantList> for ParticpantList {}
-impl IntoNative<ParticpantList> for protos::particpant::ParticpantList {}
+impl IntoProto<protos::account::AccountList> for AccountList {}
+impl IntoNative<AccountList> for protos::account::AccountList {}
 
 #[derive(Debug)]
-pub enum ParticpantListBuildError {
+pub enum AccountListBuildError {
     MissingField(String),
 }
 
-impl StdError for ParticpantListBuildError {
+impl StdError for AccountListBuildError {
     fn description(&self) -> &str {
         match *self {
-            ParticpantListBuildError::MissingField(ref msg) => msg,
+            AccountListBuildError::MissingField(ref msg) => msg,
         }
     }
 }
 
-impl std::fmt::Display for ParticpantListBuildError {
+impl std::fmt::Display for AccountListBuildError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match *self {
-            ParticpantListBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
+            AccountListBuildError::MissingField(ref s) => write!(f, "MissingField: {}", s),
         }
     }
 }
 
-/// Builder used to create a ParticpantList
+/// Builder used to create an AccountList
 #[derive(Default, Clone)]
-pub struct ParticpantListBuilder {
-    pub particpants: Vec<Particpant>,
+pub struct AccountListBuilder {
+    pub accounts: Vec<Account>,
 }
 
-impl ParticpantListBuilder {
+impl AccountListBuilder {
     pub fn new() -> Self {
-        ParticpantListBuilder::default()
+        AccountListBuilder::default()
     }
 
-    pub fn with_particpants(mut self, particpants: Vec<Particpant>) -> ParticpantListBuilder {
-        self.particpants = particpants;
+    pub fn with_accounts(mut self, accounts: Vec<Account>) -> AccountListBuilder {
+        self.accounts = accounts;
         self
     }
 
-    pub fn build(self) -> Result<ParticpantList, ParticpantListBuildError> {
-        let particpants = {
-            if self.particpants.is_empty() {
-                return Err(ParticpantListBuildError::MissingField(
-                    "'particpants' cannot be empty".to_string(),
+    pub fn build(self) -> Result<AccountList, AccountListBuildError> {
+        let accounts = {
+            if self.accounts.is_empty() {
+                return Err(AccountListBuildError::MissingField(
+                    "'accounts' cannot be empty".to_string(),
                 ));
             } else {
-                self.particpants
+                self.accounts
             }
         };
 
-        Ok(ParticpantList { particpants })
+        Ok(AccountList { accounts })
     }
 }
 
@@ -1903,8 +1903,8 @@ impl Organization {
     }
 }
 
-impl FromProto<protos::particpant::Organization> for Organization {
-    fn from_proto(org: protos::particpant::Organization) -> Result<Self, ProtoConversionError> {
+impl FromProto<protos::account::Organization> for Organization {
+    fn from_proto(org: protos::account::Organization) -> Result<Self, ProtoConversionError> {
         Ok(Organization {
             org_id: org.get_org_id().to_string(),
             name: org.get_name().to_string(),
@@ -1919,9 +1919,9 @@ impl FromProto<protos::particpant::Organization> for Organization {
     }
 }
 
-impl FromNative<Organization> for protos::particpant::Organization {
+impl FromNative<Organization> for protos::account::Organization {
     fn from_native(org: Organization) -> Result<Self, ProtoConversionError> {
-        let mut org_proto = protos::particpant::Organization::new();
+        let mut org_proto = protos::account::Organization::new();
 
         org_proto.set_org_id(org.org_id().to_string());
         org_proto.set_name(org.name().to_string());
@@ -1931,7 +1931,7 @@ impl FromNative<Organization> for protos::particpant::Organization {
                 .to_vec()
                 .into_iter()
                 .map(KeyValueEntry::into_proto)
-                .collect::<Result<Vec<protos::particpant::KeyValueEntry>, ProtoConversionError>>(
+                .collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
                 )?,
         ));
 
@@ -1941,7 +1941,7 @@ impl FromNative<Organization> for protos::particpant::Organization {
 
 impl FromBytes<Organization> for Organization {
     fn from_bytes(bytes: &[u8]) -> Result<Organization, ProtoConversionError> {
-        let proto: protos::particpant::Organization =
+        let proto: protos::account::Organization =
             protobuf::parse_from_bytes(bytes).map_err(|_| {
                 ProtoConversionError::SerializationError(
                     "Unable to get Organization from bytes".to_string(),
@@ -1963,8 +1963,8 @@ impl IntoBytes for Organization {
     }
 }
 
-impl IntoProto<protos::particpant::Organization> for Organization {}
-impl IntoNative<Organization> for protos::particpant::Organization {}
+impl IntoProto<protos::account::Organization> for Organization {}
+impl IntoNative<Organization> for protos::account::Organization {}
 
 #[derive(Debug)]
 pub enum OrganizationBuildError {
@@ -1987,7 +1987,7 @@ impl std::fmt::Display for OrganizationBuildError {
     }
 }
 
-/// Builder used to create a Organization
+/// Builder used to create an Organization
 #[derive(Default, Clone)]
 pub struct OrganizationBuilder {
     pub org_id: Option<String>,
@@ -2057,9 +2057,9 @@ impl OrganizationList {
     }
 }
 
-impl FromProto<protos::particpant::OrganizationList> for OrganizationList {
+impl FromProto<protos::account::OrganizationList> for OrganizationList {
     fn from_proto(
-        organization_list: protos::particpant::OrganizationList,
+        organization_list: protos::account::OrganizationList,
     ) -> Result<Self, ProtoConversionError> {
         Ok(OrganizationList {
             organizations: organization_list
@@ -2072,9 +2072,9 @@ impl FromProto<protos::particpant::OrganizationList> for OrganizationList {
     }
 }
 
-impl FromNative<OrganizationList> for protos::particpant::OrganizationList {
+impl FromNative<OrganizationList> for protos::account::OrganizationList {
     fn from_native(org_list: OrganizationList) -> Result<Self, ProtoConversionError> {
-        let mut org_list_proto = protos::particpant::OrganizationList::new();
+        let mut org_list_proto = protos::account::OrganizationList::new();
 
         org_list_proto.set_organizations(RepeatedField::from_vec(
             org_list
@@ -2082,7 +2082,7 @@ impl FromNative<OrganizationList> for protos::particpant::OrganizationList {
                 .to_vec()
                 .into_iter()
                 .map(Organization::into_proto)
-                .collect::<Result<Vec<protos::particpant::Organization>, ProtoConversionError>>()?,
+                .collect::<Result<Vec<protos::account::Organization>, ProtoConversionError>>()?,
         ));
 
         Ok(org_list_proto)
@@ -2091,7 +2091,7 @@ impl FromNative<OrganizationList> for protos::particpant::OrganizationList {
 
 impl FromBytes<OrganizationList> for OrganizationList {
     fn from_bytes(bytes: &[u8]) -> Result<OrganizationList, ProtoConversionError> {
-        let proto: protos::particpant::OrganizationList = protobuf::parse_from_bytes(bytes)
+        let proto: protos::account::OrganizationList = protobuf::parse_from_bytes(bytes)
             .map_err(|_| {
                 ProtoConversionError::SerializationError(
                     "Unable to get OrganizationList from bytes".to_string(),
@@ -2113,8 +2113,8 @@ impl IntoBytes for OrganizationList {
     }
 }
 
-impl IntoProto<protos::particpant::OrganizationList> for OrganizationList {}
-impl IntoNative<OrganizationList> for protos::particpant::OrganizationList {}
+impl IntoProto<protos::account::OrganizationList> for OrganizationList {}
+impl IntoNative<OrganizationList> for protos::account::OrganizationList {}
 
 #[derive(Debug)]
 pub enum OrganizationListBuildError {

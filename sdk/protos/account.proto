@@ -3,7 +3,7 @@
 
 syntax = "proto3";
 
-message Particpant {
+message Account {
   string org_id = 1;
   string public_key = 2;
   bool active = 3;
@@ -11,8 +11,8 @@ message Particpant {
   repeated KeyValueEntry metadata = 5;
 }
 
-message ParticpantList {
-  repeated Particpant Particpants = 1;
+message AccountList {
+  repeated Account Accounts = 1;
 }
 
 message KeyValueEntry {
