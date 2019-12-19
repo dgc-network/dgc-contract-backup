@@ -40,9 +40,9 @@ const CONTRACT_PREFIX: &str = "00ec02";
 /// The smart permission prefix for global state (00ec03)
 const SMART_PERMISSION_PREFIX: &str = "00ec03";
 
-const PIKE_AGENT_PREFIX: &str = "cad11d00";
+const DGC_ACCOUNT_PREFIX: &str = "cad11d00";
 
-const PIKE_ORG_PREFIX: &str = "cad11d01";
+const DGC_ORGANIZATION_PREFIX: &str = "cad11d01";
 
 /// Creates a nonce appropriate for a TransactionHeader
 fn create_nonce() -> String {
@@ -166,6 +166,38 @@ fn compute_smart_permission_address(org_id: &str, name: &str) -> String {
     String::from(SMART_PERMISSION_PREFIX)
         + &sha_org_id.result_str()[..6].to_string()
         + &sha_name.result_str()[..58].to_string()
+}
+
+/// Returns a state address for a given account name
+///
+/// # Arguments
+///
+/// * `name` - the account's name
+fn compute_account_address(name: &str) -> String {
+    let hash: &mut [u8] = &mut [0; 64];
+
+    let mut sha = Sha512::new();
+    sha.input(name.as_bytes());
+    sha.result(hash);
+
+    String::from(DGC_ACCOUNT_PREFIX)
+        + &bytes_to_hex_str(hash)[..62]
+}
+
+/// Returns a state address for a given organization id
+///
+/// # Arguments
+///
+/// * `id` - the organization's id
+fn compute_org_address(id: &str) -> String {
+    let hash: &mut [u8] = &mut [0; 64];
+
+    let mut sha = Sha512::new();
+    sha.input(id.as_bytes());
+    sha.result(hash);
+
+    String::from(DGC_ORGANIZATION_PREFIX)
+        + &bytes_to_hex_str(hash)[..62]
 }
 
 /// Returns a Transaction for the given Payload and Signer
@@ -364,10 +396,10 @@ pub fn create_transaction(
         }
         Action::CreateAccount(create_account) => {
             let org_id = create_account.org_id();
-            let name = create_account.name();
+            let account_public_key = create_account.public_key();
             let addresses = vec![
-                //compute_smart_permission_address(org_id, name),
-                compute_org_address(org_id),
+                compute_account_address(org_id),
+                compute_account_address(account_public_key),
                 compute_account_address(public_key),
             ];
 
@@ -375,33 +407,29 @@ pub fn create_transaction(
         }
         Action::UpdateAccount(update_account) => {
             let org_id = update_account.org_id();
-            let name = update_account.name();
+            let account_public_key = update_account.public_key();
             let addresses = vec![
-                //compute_smart_permission_address(org_id, name),
-                compute_org_address(org_id),
+                compute_account_address(org_id),
+                compute_account_address(account_public_key),
                 compute_account_address(public_key),
             ];
 
             (addresses.clone(), addresses)
         }
         Action::CreateOrganization(create_organization) => {
-            let id = create_organization.id();
-            let name = create_organization.name();
+            let org_id = create_organization.org_id();
             let addresses = vec![
-                compute_organization_address(org_id, name),
                 compute_org_address(org_id),
-                compute_org_address(public_key),
+                compute_account_address(public_key),
             ];
 
             (addresses.clone(), addresses)
         }
         Action::UpdateOrganization(update_organization) => {
-            let id = update_organization.id();
-            let name = update_organization.name();
+            let org_id = update_organization.org_id();
             let addresses = vec![
-                compute_organization_address(org_id, name),
                 compute_org_address(org_id),
-                compute_org_address(public_key),
+                compute_account_address(public_key),
             ];
 
             (addresses.clone(), addresses)
