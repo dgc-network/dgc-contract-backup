@@ -233,6 +233,70 @@ impl SabreRequestPayload {
                     ));
                 }
             }
+            Action::CreateAccount(create_account) => {
+                if create_account.org_id().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization ID required".into(),
+                    ));
+                }
+
+                if create_account.public_key().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Account public_key required".into(),
+                    ));
+                }
+            }
+            Action::UpdateAccount(update_account) => {
+                if update_account.org_id().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization ID required".into(),
+                    ));
+                }
+
+                if update_account.public_key().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Account public_key required".into(),
+                    ));
+                }
+            }
+            Action::CreateOrganization(create_organization) => {
+                if create_organization.org_id().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization ID required".into(),
+                    ));
+                }
+
+                if create_organization.name().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization name required".into(),
+                    ));
+                }
+
+                if create_organization.address().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization address required".into(),
+                    ));
+                }
+            }
+            Action::UpdateOrganization(update_organization) => {
+                if update_organization.org_id().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization ID required".into(),
+                    ));
+                }
+
+                if update_organization.name().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization name required".into(),
+                    ));
+                }
+
+                if update_organization.address().is_empty() {
+                    return Err(ApplyError::InvalidTransaction(
+                        "Organization address required".into(),
+                    ));
+                }
+            }
         };
 
         Ok(Some(SabreRequestPayload {

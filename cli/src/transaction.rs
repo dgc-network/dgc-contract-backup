@@ -119,7 +119,7 @@ fn compute_contract_address(name: &str, version: &str) -> String {
 
     String::from(CONTRACT_PREFIX) + &bytes_to_hex_str(hash)[..64]
 }
-
+/*
 /// Returns a state address for a given agent name
 ///
 /// # Arguments
@@ -132,7 +132,7 @@ fn compute_agent_address(name: &str) -> String {
     sha.input(name.as_bytes());
     sha.result(hash);
 
-    String::from(PIKE_AGENT_PREFIX) + &bytes_to_hex_str(hash)[..62]
+    String::from(DGC_ACCOUNT_PREFIX) + &bytes_to_hex_str(hash)[..62]
 }
 
 /// Returns a state address for a given organization id
@@ -147,9 +147,9 @@ fn compute_org_address(id: &str) -> String {
     sha.input(id.as_bytes());
     sha.result(hash);
 
-    String::from(PIKE_ORG_PREFIX) + &bytes_to_hex_str(hash)[..62]
+    String::from(DGC_ORGANIZATION_PREFIX) + &bytes_to_hex_str(hash)[..62]
 }
-
+*/
 /// Returns a state address for a given smart permission
 ///
 /// # Arguments
@@ -417,7 +417,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::CreateOrganization(create_organization) => {
-            let org_id = create_organization.org_id();
+            let org_id = create_organization.id();
             let addresses = vec![
                 compute_org_address(org_id),
                 compute_account_address(public_key),
@@ -426,7 +426,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::UpdateOrganization(update_organization) => {
-            let org_id = update_organization.org_id();
+            let org_id = update_organization.id();
             let addresses = vec![
                 compute_org_address(org_id),
                 compute_account_address(public_key),

@@ -300,7 +300,7 @@ definitions:
         format: int32
       message:
         type: string
-  Agent:
+  Account:
     type: object
     properties:
       publicKey:
@@ -318,10 +318,10 @@ definitions:
         items:
           $ref: '#definitions/Metadata'
 
-  Agents:
+  Accounts:
     type: array
     items:
-      $ref: '#definitions/Agent'
+      $ref: '#definitions/Account'
 
   Organization:
     type: object

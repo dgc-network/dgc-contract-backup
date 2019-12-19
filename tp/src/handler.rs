@@ -176,6 +176,18 @@ impl TransactionHandler for SabreTransactionHandler {
             Action::DeleteSmartPermission(payload) => {
                 delete_smart_permission(payload, signer, &mut state)
             }
+            Action::CreateAccount(payload) => {
+                create_account(payload, signer, &mut state)
+            }
+            Action::UpdateAccount(payload) => {
+                update_account(payload, signer, &mut state)
+            }
+            Action::CreateOrganization(payload) => {
+                create_organization(payload, signer, &mut state)
+            }
+            Action::UpdateOrganization(payload) => {
+                update_organization(payload, signer, &mut state)
+            }
         }
     }
 }
