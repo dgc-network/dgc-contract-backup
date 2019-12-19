@@ -2209,7 +2209,7 @@ impl FromNative<CreateAccountAction> for protos::payload::CreateAccountAction {
                 .to_vec()
                 .into_iter()
                 //.map(KeyValueEntry::into_proto)
-                .collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
+                //.collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
                 )?,
         ));
         Ok(proto)
@@ -2400,7 +2400,7 @@ impl FromNative<UpdateAccountAction> for protos::payload::UpdateAccountAction {
                 .to_vec()
                 .into_iter()
                 //.map(KeyValueEntry::into_proto)
-                .collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
+                //.collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
                 )?,
         ));
         Ok(proto)

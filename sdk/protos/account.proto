@@ -12,7 +12,7 @@ message Account {
 }
 
 message AccountList {
-  repeated Account Accounts = 1;
+  repeated Account accounts = 1;
 }
 
 message KeyValueEntry {
