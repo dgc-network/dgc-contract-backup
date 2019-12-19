@@ -9,19 +9,19 @@ use guard::db_conn::DbConn;
 use pike_db as db;
 use pike_db::models::Agent;
 
-#[get("/agent/<publickey>")]
-fn get_agent(conn: DbConn, publickey: String) -> Option<Json<Agent>> {
-    if let Ok(agent) = db::get_agent(&conn, &publickey) {
-        Some(Json(agent))
+#[get("/account/<publickey>")]
+fn get_account(conn: DbConn, publickey: String) -> Option<Json<Agent>> {
+    if let Ok(account) = db::get_account(&conn, &publickey) {
+        Some(Json(account))
     } else {
         None
     }
 }
 
-#[get("/agent")]
-fn get_agents(conn: DbConn) -> Json<Vec<Agent>> {
-    if let Ok(agents) = db::get_agents(&conn) {
-        Json(agents)
+#[get("/account")]
+fn get_accounts(conn: DbConn) -> Json<Vec<Agent>> {
+    if let Ok(accounts) = db::get_accounts(&conn) {
+        Json(accounts)
     } else {
         Json(vec![])
     }
