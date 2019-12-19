@@ -7,10 +7,10 @@ use rocket_contrib::Json;
 use guard::db_conn::DbConn;
 
 use pike_db as db;
-use pike_db::models::Agent;
+use pike_db::models::Account;
 
 #[get("/account/<publickey>")]
-fn get_account(conn: DbConn, publickey: String) -> Option<Json<Agent>> {
+fn get_account(conn: DbConn, publickey: String) -> Option<Json<Account>> {
     if let Ok(account) = db::get_account(&conn, &publickey) {
         Some(Json(account))
     } else {
@@ -19,7 +19,7 @@ fn get_account(conn: DbConn, publickey: String) -> Option<Json<Agent>> {
 }
 
 #[get("/account")]
-fn get_accounts(conn: DbConn) -> Json<Vec<Agent>> {
+fn get_accounts(conn: DbConn) -> Json<Vec<Account>> {
     if let Ok(accounts) = db::get_accounts(&conn) {
         Json(accounts)
     } else {
