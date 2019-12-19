@@ -2202,8 +2202,16 @@ impl FromNative<CreateAccountAction> for protos::payload::CreateAccountAction {
         proto.set_public_key(create_account_action.public_key().to_string());
         //proto.set_roles(create_account_action.roles().to_vec());
         //proto.set_metadata(create_account_action.metadata().to_vec());
-        proto.set_roles(create_account_action.roles().from_vec());
-        proto.set_metadata(create_account_action.metadata().from_vec());
+        proto.set_roles(RepeatedField::from_vec(create_account_action.roles().to_vec()));
+        proto.set_metadata(RepeatedField::from_vec(
+            create_account_action
+                .metadata()
+                .to_vec()
+                .into_iter()
+                .map(KeyValueEntry::into_proto)
+                .collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
+                )?,
+        ));
         Ok(proto)
     }
 }
@@ -2385,8 +2393,16 @@ impl FromNative<UpdateAccountAction> for protos::payload::UpdateAccountAction {
         proto.set_public_key(update_account_action.public_key().to_string());
         //proto.set_roles(update_account_action.roles().to_vec());
         //proto.set_metadata(update_account_action.metadata().to_vec());
-        proto.set_roles(update_account_action.roles().from_vec());
-        proto.set_metadata(update_account_action.metadata().from_vec());
+        proto.set_roles(RepeatedField::from_vec(update_account_action.roles().to_vec()));
+        proto.set_metadata(RepeatedField::from_vec(
+            update_account_action
+                .metadata()
+                .to_vec()
+                .into_iter()
+                .map(KeyValueEntry::into_proto)
+                .collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
+                )?,
+        ));
         Ok(proto)
     }
 }
