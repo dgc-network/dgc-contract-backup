@@ -1771,7 +1771,8 @@ impl FromProto<protos::account::AccountList> for AccountList {
     fn from_proto(account_list: protos::account::AccountList) -> Result<Self, ProtoConversionError> {
         Ok(AccountList {
             accounts: account_list
-                .get_accounts()
+                //.get_accounts()
+                .accounts()
                 .to_vec()
                 .into_iter()
                 .map(Account::from_proto)
@@ -1783,7 +1784,7 @@ impl FromProto<protos::account::AccountList> for AccountList {
 impl FromNative<AccountList> for protos::account::AccountList {
     fn from_native(account_list: AccountList) -> Result<Self, ProtoConversionError> {
         let mut account_list_proto = protos::account::AccountList::new();
-
+/*
         account_list_proto.set_accounts(RepeatedField::from_vec(
             account_list
                 .accounts()
@@ -1792,7 +1793,7 @@ impl FromNative<AccountList> for protos::account::AccountList {
                 .map(Account::into_proto)
                 .collect::<Result<Vec<protos::account::Account>, ProtoConversionError>>()?,
         ));
-
+*/
         Ok(account_list_proto)
     }
 }
