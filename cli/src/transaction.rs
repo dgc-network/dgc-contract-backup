@@ -335,7 +335,7 @@ pub fn create_transaction(
             let addresses = vec![
                 compute_smart_permission_address(org_id, name),
                 compute_org_address(org_id),
-                compute_agent_address(public_key),
+                compute_account_address(public_key),
             ];
 
             (addresses.clone(), addresses)
@@ -346,7 +346,7 @@ pub fn create_transaction(
             let addresses = vec![
                 compute_smart_permission_address(org_id, name),
                 compute_org_address(org_id),
-                compute_agent_address(public_key),
+                compute_account_address(public_key),
             ];
 
             (addresses.clone(), addresses)
@@ -357,7 +357,7 @@ pub fn create_transaction(
             let addresses = vec![
                 compute_smart_permission_address(org_id, name),
                 compute_org_address(org_id),
-                compute_agent_address(public_key),
+                compute_account_address(public_key),
             ];
 
             (addresses.clone(), addresses)
