@@ -10,7 +10,7 @@ extern crate rocket_cors;
 #[macro_use] extern crate serde_derive;
 extern crate serde_yaml;
 extern crate serde_json;
-extern crate pike_db;
+//extern crate pike_db;
 extern crate sawtooth_sdk;
 extern crate protobuf;
 extern crate uuid;
@@ -26,7 +26,7 @@ use rocket::http::Method;
 use rocket_cors::{AllowedOrigins, AllowedHeaders};
 use rocket_contrib::Json;
 use routes::{accounts, organizations};
-use pike_db::pools;
+//use pike_db::pools;
 use routes::transactions;
 
 use sawtooth_sdk::messaging::zmq_stream::ZmqMessageConnection;
@@ -79,10 +79,10 @@ fn main() {
                hello,
                openapi::openapi_json,
                openapi::openapi_yaml,
-               accounts::get_account,
-               accounts::get_accounts,
-               organizations::get_org,
-               organizations::get_orgs,
+               //accounts::get_account,
+               //accounts::get_accounts,
+               //organizations::get_org,
+               //organizations::get_orgs,
                transactions::submit_txns,
                transactions::submit_txns_wait,
                transactions::get_batch_status])
