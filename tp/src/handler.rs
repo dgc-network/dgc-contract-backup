@@ -17,7 +17,7 @@ use crate::wasm_executor::wasm_module::WasmModule;
 use sabre_sdk::protocol::state::{
     ContractBuilder, ContractRegistry, ContractRegistryBuilder, NamespaceRegistry,
     NamespaceRegistryBuilder, PermissionBuilder, SmartPermissionBuilder, VersionBuilder,
-    Account, AccountList, Organization, OrganizationList,
+    //Account, AccountList, Organization, OrganizationList,
 };
 //use crate::protocol::payload::{
 use sabre_sdk::protocol::payload::{
@@ -895,7 +895,7 @@ pub(crate) fn is_admin(
     org_id: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let admin = match state.get_accountt(signer) {
+    let admin = match state.get_account(signer) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Signer is not an agent: {}",
