@@ -362,6 +362,50 @@ pub fn create_transaction(
 
             (addresses.clone(), addresses)
         }
+        Action::CreateAccount(create_account) => {
+            let org_id = create_account.org_id();
+            let name = create_account.name();
+            let addresses = vec![
+                //compute_smart_permission_address(org_id, name),
+                compute_org_address(org_id),
+                compute_account_address(public_key),
+            ];
+
+            (addresses.clone(), addresses)
+        }
+        Action::UpdateAccount(update_account) => {
+            let org_id = update_account.org_id();
+            let name = update_account.name();
+            let addresses = vec![
+                //compute_smart_permission_address(org_id, name),
+                compute_org_address(org_id),
+                compute_account_address(public_key),
+            ];
+
+            (addresses.clone(), addresses)
+        }
+        Action::CreateOrganization(create_organization) => {
+            let id = create_organization.id();
+            let name = create_organization.name();
+            let addresses = vec![
+                compute_organization_address(org_id, name),
+                compute_org_address(org_id),
+                compute_org_address(public_key),
+            ];
+
+            (addresses.clone(), addresses)
+        }
+        Action::UpdateOrganization(update_organization) => {
+            let org_id = update_account.org_id();
+            let name = update_account.name();
+            let addresses = vec![
+                compute_organization_address(org_id, name),
+                compute_org_address(org_id),
+                compute_org_address(public_key),
+            ];
+
+            (addresses.clone(), addresses)
+        }
     };
 
     txn_header.set_inputs(protobuf::RepeatedField::from_vec(input_addresses));
