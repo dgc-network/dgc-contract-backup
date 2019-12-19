@@ -10,6 +10,7 @@ use crate::protos;
 use crate::protos::{
     FromBytes, FromNative, FromProto, IntoBytes, IntoNative, IntoProto, ProtoConversionError,
 };
+use crate::protocol::state::KeyValueEntry
 
 /// Native implementation for SabrePayload_Action
 #[derive(Debug, Clone, PartialEq)]
@@ -2172,6 +2173,10 @@ impl CreateAccountAction {
     pub fn roles(&self) -> &[String] {
         &self.roles
     }
+
+    pub fn metadata(&self) -> &[KeyValueEntry] {
+        &self.metadata
+    }
 }
 
 impl FromProto<protos::payload::CreateAccountAction> for CreateAccountAction {
@@ -2182,6 +2187,7 @@ impl FromProto<protos::payload::CreateAccountAction> for CreateAccountAction {
             org_id: proto.get_org_id().to_string(),
             public_key: proto.get_public_key().to_string(),
             roles: proto.get_roles().to_vec(),
+            metadata: proto.get_metadata().to_vec(),
         })
     }
 }
@@ -2194,6 +2200,7 @@ impl FromNative<CreateAccountAction> for protos::payload::CreateAccountAction {
         proto.set_org_id(create_account_action.org_id().to_string());
         proto.set_public_key(create_account_action.public_key().to_string());
         proto.set_roles(create_account_action.roles().to_vec());
+        proto.set_metadata(create_account_action.metadata().to_vec());
         Ok(proto)
     }
 }
@@ -2254,6 +2261,7 @@ pub struct CreateAccountActionBuilder {
     public_key: Option<String>,
     org_id: Option<String>,
     roles: Vec<String>,
+    metadata: Vec<KeyValueEntry>,
 }
 
 impl CreateAccountActionBuilder {
@@ -2271,8 +2279,13 @@ impl CreateAccountActionBuilder {
         self
     }
 
-    pub fn with_roles(mut self, roles: Vec<u8>) -> CreateAccountActionBuilder {
+    pub fn with_roles(mut self, roles: Vec<String>) -> CreateAccountActionBuilder {
         self.roles = roles;
+        self
+    }
+
+    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> CreateAccountActionBuilder {
+        self.metadata = metadata;
         self
     }
 
@@ -2301,10 +2314,21 @@ impl CreateAccountActionBuilder {
             }
         };
 
+        let metadata = {
+            if self.metadata.is_empty() {
+                return Err(CreateAccountActionBuildError::MissingField(
+                    "'metadata' field is required".to_string(),
+                ));
+            } else {
+                self.metadata
+            }
+        };
+
         Ok(CreateAccountAction {
             org_id,
             public_key,
             roles,
+            metadata,
         })
     }
 }
@@ -2314,7 +2338,8 @@ impl CreateAccountActionBuilder {
 pub struct UpdateAccountAction {
     org_id: String,
     public_key: String,
-    roles: Vec<u8>,
+    roles: Vec<String>,
+    metadata: Vec<KeyValueEntry>,
 }
 
 impl UpdateAccountAction {
@@ -2329,6 +2354,10 @@ impl UpdateAccountAction {
     pub fn roles(&self) -> &[String] {
         &self.roles
     }
+
+    pub fn metadata(&self) -> &[KeyValueEntry] {
+        &self.metadata
+    }
 }
 
 impl FromProto<protos::payload::UpdateAccountAction> for UpdateAccountAction {
@@ -2339,6 +2368,7 @@ impl FromProto<protos::payload::UpdateAccountAction> for UpdateAccountAction {
             org_id: proto.get_org_id().to_string(),
             public_key: proto.get_public_key().to_string(),
             roles: proto.get_roles().to_vec(),
+            metadata: proto.get_metadata().to_vec(),
         })
     }
 }
@@ -2351,6 +2381,7 @@ impl FromNative<UpdateAccountAction> for protos::payload::UpdateAccountAction {
         proto.set_org_id(update_account_action.org_id().to_string());
         proto.set_public_key(update_account_action.public_key().to_string());
         proto.set_roles(update_account_action.roles().to_vec());
+        proto.set_metadata(update_account_action.metadata().to_vec());
         Ok(proto)
     }
 }
@@ -2411,6 +2442,7 @@ pub struct UpdateAccountActionBuilder {
     org_id: Option<String>,
     public_key: Option<String>,
     roles: Vec<String>,
+    metadata: Vec<KeyValueEntry>,
 }
 
 impl UpdateAccountActionBuilder {
@@ -2430,6 +2462,11 @@ impl UpdateAccountActionBuilder {
 
     pub fn with_roles(mut self, roles: Vec<String>) -> UpdateAccountActionBuilder {
         self.roles = roles;
+        self
+    }
+
+    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> UpdateAccountActionBuilder {
+        self.metadata = metadata;
         self
     }
 
@@ -2458,10 +2495,21 @@ impl UpdateAccountActionBuilder {
             }
         };
 
+        let metadata = {
+            if self.metadata.is_empty() {
+                return Err(UpdateAccountActionBuildError::MissingField(
+                    "'metadata' field is required".to_string(),
+                ));
+            } else {
+                self.metadata
+            }
+        };
+
         Ok(UpdateAccountAction {
             org_id,
             public_key,
             roles,
+            metadata,
         })
     }
 }

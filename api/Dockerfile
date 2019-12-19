@@ -22,6 +22,6 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
  && unzip protoc-3.5.1-linux-x86_64.zip -d protoc3 \
  && rm protoc-3.5.1-linux-x86_64.zip
 
-WORKDIR /project/contracts/sawtooth-pike/api
+WORKDIR /project/contracts/api
 
-ENV PATH=$PATH:/protoc3/bin:/root/.cargo/bin:/project/contracts/sawtooth-pike/api/target/debug/
+ENV PATH=$PATH:/protoc3/bin:/root/.cargo/bin:/project/contracts/api/target/debug/

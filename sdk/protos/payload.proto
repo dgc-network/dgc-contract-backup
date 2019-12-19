@@ -173,7 +173,7 @@ message DeleteSmartPermissionAction {
   string org_id = 2;
 }
 
-// Creates a account
+// Creates an account
 message CreateAccountAction {
   string org_id = 1;
   string public_key = 2;
@@ -182,7 +182,7 @@ message CreateAccountAction {
   repeated KeyValueEntry metadata = 5;
 }
 
-// Updates a account
+// Updates an account
 message UpdateAccountAction {
   string org_id = 1;
   string public_key = 2;
