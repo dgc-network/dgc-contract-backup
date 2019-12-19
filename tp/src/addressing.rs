@@ -88,12 +88,12 @@ pub fn compute_smart_permission_address(org_id: &str, name: &str) -> String {
         + &sha_name.result_str()[..58].to_string()
 }
 
-/// Returns a state address for a given agent name
+/// Returns a state address for a given account name
 ///
 /// # Arguments
 ///
-/// * `name` - the agent's name
-pub fn compute_agent_address(public_key: &str) -> String {
+/// * `name` - the account's name
+pub fn compute_account_address(public_key: &str) -> String {
     let hash: &mut [u8] = &mut [0; 64];
 
     let mut sha = Sha512::new();

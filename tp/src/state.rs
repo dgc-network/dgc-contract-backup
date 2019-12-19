@@ -1,14 +1,14 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-use sabre_sdk::protocol::pike::state::{Particpant, ParticpantList, Organization, OrganizationList};
+//use sabre_sdk::protocol::pike::state::{Particpant, ParticpantList, Organization, OrganizationList};
 //use crate::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
 //use crate::protocol::state::{
 use sabre_sdk::protocol::state::{
     Contract, ContractList, ContractListBuilder, ContractRegistry, ContractRegistryList,
     ContractRegistryListBuilder, NamespaceRegistry, NamespaceRegistryList,
     NamespaceRegistryListBuilder, SmartPermission, SmartPermissionList, SmartPermissionListBuilder,
-//    Particpant, ParticpantList, Organization, OrganizationList,
+    Account, AccountList, Organization, OrganizationList,
 };
 use sabre_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
 use sabre_sdk::protos::{FromBytes, IntoBytes};
@@ -19,7 +19,7 @@ use sawtooth_sdk::processor::handler::ApplyError;
 use sawtooth_sdk::processor::handler::TransactionContext;
 
 use crate::addressing::{
-    compute_agent_address, compute_org_address, compute_smart_permission_address,
+    compute_account_address, compute_org_address, compute_smart_permission_address,
     make_contract_address, make_contract_registry_address, make_namespace_registry_address,
 };
 
@@ -479,22 +479,22 @@ impl<'a> SabreState<'a> {
         }
     }
 
-    pub fn get_particpant(&mut self, public_key: &str) -> Result<Option<Particpant>, ApplyError> {
-        let address = compute_particpant_address(public_key);
+    pub fn get_account(&mut self, public_key: &str) -> Result<Option<Account>, ApplyError> {
+        let address = compute_account_address(public_key);
         let d = self.context.get_state_entry(&address)?;
         match d {
             Some(packed) => {
-                let particpants = ParticpantList::from_bytes(packed.as_slice()).map_err(|err| {
+                let accounts = AccountList::from_bytes(packed.as_slice()).map_err(|err| {
                     ApplyError::InvalidTransaction(format!(
-                        "Cannot deserialize particpant list: {:?}",
+                        "Cannot deserialize account list: {:?}",
                         err,
                     ))
                 })?;
 
-                Ok(particpants
-                    .particpants()
+                Ok(accounts
+                    .accounts()
                     .iter()
-                    .find(|particpant| particpant.public_key() == public_key)
+                    .find(|account| account.public_key() == public_key)
                     .cloned())
             }
             None => Ok(None),
