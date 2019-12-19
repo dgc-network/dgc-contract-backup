@@ -260,7 +260,7 @@ impl SabreRequestPayload {
                 }
             }
             Action::CreateOrganization(create_organization) => {
-                if create_organization.org_id().is_empty() {
+                if create_organization.id().is_empty() {
                     return Err(ApplyError::InvalidTransaction(
                         "Organization ID required".into(),
                     ));
@@ -279,7 +279,7 @@ impl SabreRequestPayload {
                 }
             }
             Action::UpdateOrganization(update_organization) => {
-                if update_organization.org_id().is_empty() {
+                if update_organization.id().is_empty() {
                     return Err(ApplyError::InvalidTransaction(
                         "Organization ID required".into(),
                     ));
