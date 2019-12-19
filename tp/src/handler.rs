@@ -27,6 +27,8 @@ use sabre_sdk::protocol::payload::{
     DeleteNamespaceRegistryPermissionAction, DeleteSmartPermissionAction, ExecuteContractAction,
     UpdateContractRegistryOwnersAction, UpdateNamespaceRegistryOwnersAction,
     UpdateSmartPermissionAction,
+    CreateAccountAction, UpdateAccountAction,
+    CreateOrganizationAction, UpdateOrganizationAction,
 };
 //use crate::protocol::ADMINISTRATORS_SETTING_KEY;
 use sabre_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
@@ -1060,6 +1062,170 @@ fn delete_smart_permission(
     };
 
     state.delete_smart_permission(payload.org_id(), payload.name())
+}
+
+fn create_account(
+    payload: CreateAccountAction,
+    signer: &str,
+    state: &mut SabreState,
+) -> Result<(), ApplyError> {
+    // verify the signer of the transaction is authorized to create account
+    is_admin(signer, payload.org_id(), state)?;
+
+    // Check if the account already exists
+    match state.get_account(payload.org_id(), payload.public_key()) {
+        Ok(None) => (),
+        Ok(Some(_)) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Account already exists: {} ",
+                payload.public_key(),
+            )));
+        }
+        Err(err) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Failed to retrieve state: {}",
+                err,
+            )));
+        }
+    };
+
+    // Check that organizations exists
+    match state.get_organization(payload.org_id()) {
+        Ok(None) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Organization does not exist exists: {}",
+                payload.org_id(),
+            )));
+        }
+        Ok(Some(_)) => (),
+        Err(err) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Failed to retrieve state: {}",
+                err,
+            )));
+        }
+    };
+
+    let account = AccountBuilder::new()
+        .with_public_key(payload.public_key().to_string())
+        .with_org_id(payload.org_id().to_string())
+        .with_roles(payload.roles().to_vec())
+        .with_metadata(payload.with_metadata().to_vec())
+        .build()
+        .map_err(|_| {
+            ApplyError::InvalidTransaction(String::from("Cannot build account"))
+        })?;
+
+    state.set_account(payload.org_id(), payload.public_key(), account)
+}
+
+fn update_account(
+    payload: UpdateAccountAction,
+    signer: &str,
+    state: &mut SabreState,
+) -> Result<(), ApplyError> {
+    // verify the signer of the transaction is authorized to update account
+    is_admin(signer, payload.org_id(), state)?;
+
+    // verify that the account exists
+    let account = match state.get_account(payload.org_id(), payload.public_key()) {
+        Ok(None) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Account does not exist: {} ",
+                payload.public_key(),
+            )));
+        }
+        Ok(Some(account)) => account,
+        Err(err) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Failed to retrieve state: {}",
+                err,
+            )));
+        }
+    };
+
+    let account = account
+        .into_builder()
+        .with_roles(payload.roles().to_vec())
+        .with_metadata(payload.metadata().to_vec())
+        .build()
+        .map_err(|_| {
+            ApplyError::InvalidTransaction(String::from("Cannot build account"))
+        })?;
+    state.set_account(payload.org_id(), payload.public_key(), account)
+}
+
+fn create_organization(
+    payload: CreateOrganizationAction,
+    signer: &str,
+    state: &mut SabreState,
+) -> Result<(), ApplyError> {
+    // verify the signer of the transaction is authorized to create organization
+    is_admin(signer, payload.org_id(), state)?;
+
+    // Check if the organization already exists
+    match state.get_organization(payload.org_id()) {
+        Ok(None) => (),
+        Ok(Some(_)) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Organization already exists: {} ",
+                payload.name(),
+            )));
+        }
+        Err(err) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Failed to retrieve state: {}",
+                err,
+            )));
+        }
+    };
+
+    let organization = OrganizationBuilder::new()
+        .with_org_id(payload.org_id().to_string())
+        .with_name(payload.name().to_string())
+        .with_address(payload.address().to_string())
+        .build()
+        .map_err(|_| {
+            ApplyError::InvalidTransaction(String::from("Cannot build organization"))
+        })?;
+
+    state.set_organization(payload.org_id(), organization)
+}
+
+fn update_organization(
+    payload: UpdateOrganizationAction,
+    signer: &str,
+    state: &mut SabreState,
+) -> Result<(), ApplyError> {
+    // verify the signer of the transaction is authorized to update organization
+    is_admin(signer, payload.org_id(), state)?;
+
+    // verify that the organization exists
+    let organization = match state.get_organization(payload.org_id()) {
+        Ok(None) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Organization does not exist: {} ",
+                payload.name(),
+            )));
+        }
+        Ok(Some(organization)) => organization,
+        Err(err) => {
+            return Err(ApplyError::InvalidTransaction(format!(
+                "Failed to retrieve state: {}",
+                err,
+            )));
+        }
+    };
+
+    let organization = organization
+        .into_builder()
+        .with_name(payload.name().to_string())
+        .with_address(payload.address().to_string())
+        .build()
+        .map_err(|_| {
+            ApplyError::InvalidTransaction(String::from("Cannot build organization"))
+        })?;
+    state.set_organization(payload.org_id(), organization)
 }
 
 // helper function to check if the signer is allowed to update a namespace_registry
