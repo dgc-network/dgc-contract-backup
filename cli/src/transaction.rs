@@ -396,8 +396,8 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::UpdateOrganization(update_organization) => {
-            let org_id = update_account.org_id();
-            let name = update_account.name();
+            let id = update_organization.id();
+            let name = update_organization.name();
             let addresses = vec![
                 compute_organization_address(org_id, name),
                 compute_org_address(org_id),
