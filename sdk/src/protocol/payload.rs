@@ -2200,8 +2200,10 @@ impl FromNative<CreateAccountAction> for protos::payload::CreateAccountAction {
         let mut proto = protos::payload::CreateAccountAction::new();
         proto.set_org_id(create_account_action.org_id().to_string());
         proto.set_public_key(create_account_action.public_key().to_string());
-        proto.set_roles(create_account_action.roles().to_vec());
-        proto.set_metadata(create_account_action.metadata().to_vec());
+        //proto.set_roles(create_account_action.roles().to_vec());
+        //proto.set_metadata(create_account_action.metadata().to_vec());
+        proto.set_roles(create_account_action.roles().from_vec());
+        proto.set_metadata(create_account_action.metadata().from_vec());
         Ok(proto)
     }
 }
@@ -2381,8 +2383,10 @@ impl FromNative<UpdateAccountAction> for protos::payload::UpdateAccountAction {
         let mut proto = protos::payload::UpdateAccountAction::new();
         proto.set_org_id(update_account_action.org_id().to_string());
         proto.set_public_key(update_account_action.public_key().to_string());
-        proto.set_roles(update_account_action.roles().to_vec());
-        proto.set_metadata(update_account_action.metadata().to_vec());
+        //proto.set_roles(update_account_action.roles().to_vec());
+        //proto.set_metadata(update_account_action.metadata().to_vec());
+        proto.set_roles(update_account_action.roles().from_vec());
+        proto.set_metadata(update_account_action.metadata().from_vec());
         Ok(proto)
     }
 }
@@ -2642,7 +2646,7 @@ impl CreateOrganizationActionBuilder {
     pub fn build(
         self,
     ) -> Result<CreateOrganizationAction, CreateOrganizationActionBuildError> {
-        let id = self.org_id.ok_or_else(|| {
+        let id = self.id.ok_or_else(|| {
             CreateOrganizationActionBuildError::MissingField(
                 "'id' field is required".to_string(),
             )
