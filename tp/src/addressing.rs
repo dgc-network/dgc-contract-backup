@@ -17,9 +17,9 @@ const CONTRACT_PREFIX: &str = "00ec02";
 /// The smart permission prefix for global state (00ec03)
 const SMART_PERMISSION_PREFIX: &str = "00ec03";
 
-const PIKE_AGENT_PREFIX: &str = "cad11d00";
+const SMART_ACCOUNT_PREFIX: &str = "cad11d00";
 
-const PIKE_ORG_PREFIX: &str = "cad11d01";
+const SMART_ORG_PREFIX: &str = "cad11d01";
 
 pub fn hash(to_hash: &str, num: usize) -> Result<String, ApplyError> {
     let mut sha = Sha512::new();
@@ -93,14 +93,14 @@ pub fn compute_smart_permission_address(org_id: &str, name: &str) -> String {
 /// # Arguments
 ///
 /// * `name` - the account's name
-pub fn compute_account_address(public_key: &str) -> String {
+pub fn compute_account_address(name: &str) -> String {
     let hash: &mut [u8] = &mut [0; 64];
 
     let mut sha = Sha512::new();
-    sha.input(public_key.as_bytes());
+    sha.input(name.as_bytes());
     sha.result(hash);
 
-    String::from(PIKE_AGENT_PREFIX) + &bytes_to_hex_str(hash)[..62]
+    String::from(SMART_ACCOUNT_PREFIX) + &bytes_to_hex_str(hash)[..62]
 }
 
 /// Returns a state address for a given organization id
@@ -108,12 +108,12 @@ pub fn compute_account_address(public_key: &str) -> String {
 /// # Arguments
 ///
 /// * `id` - the organization's id
-pub fn compute_org_address(id: &str) -> String {
+pub fn compute_org_address(name: &str) -> String {
     let hash: &mut [u8] = &mut [0; 64];
 
     let mut sha = Sha512::new();
-    sha.input(id.as_bytes());
+    sha.input(name.as_bytes());
     sha.result(hash);
 
-    String::from(PIKE_ORG_PREFIX) + &bytes_to_hex_str(hash)[..62]
+    String::from(SMART_ORG_PREFIX) + &bytes_to_hex_str(hash)[..62]
 }

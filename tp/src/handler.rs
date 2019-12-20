@@ -17,7 +17,7 @@ use crate::wasm_executor::wasm_module::WasmModule;
 use sabre_sdk::protocol::state::{
     ContractBuilder, ContractRegistry, ContractRegistryBuilder, NamespaceRegistry,
     NamespaceRegistryBuilder, PermissionBuilder, SmartPermissionBuilder, VersionBuilder,
-    //Account, AccountList, Organization, OrganizationList,
+    AccountBuilder, AccountListBuilder, OrganizationBuilder, OrganizationListBuilder,
 };
 //use crate::protocol::payload::{
 use sabre_sdk::protocol::payload::{

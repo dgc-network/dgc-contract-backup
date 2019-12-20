@@ -484,7 +484,7 @@ impl<'a> SabreState<'a> {
         public_key: &str,
         new_account: Account,
     ) -> Result<(), ApplyError> {
-        let address = compute_account_address(org_id, public_key);
+        let address = compute_account_address(public_key);
         let d = self.context.get_state_entry(&address)?;
         let mut accounts = match d {
             Some(packed) => match AccountList::from_bytes(packed.as_slice()) {
@@ -530,8 +530,8 @@ impl<'a> SabreState<'a> {
         Ok(())
     }
 
-    pub fn get_organization(&mut self, id: &str) -> Result<Option<Organization>, ApplyError> {
-        let address = compute_org_address(id);
+    pub fn get_organization(&mut self, org_id: &str) -> Result<Option<Organization>, ApplyError> {
+        let address = compute_org_address(org_id);
         let d = self.context.get_state_entry(&address)?;
         match d {
             Some(packed) => {
@@ -545,7 +545,7 @@ impl<'a> SabreState<'a> {
                 Ok(orgs
                     .organizations()
                     .iter()
-                    .find(|org| org.org_id() == id)
+                    .find(|org| org.org_id() == org_id)
                     .cloned())
             }
             None => Ok(None),
@@ -593,7 +593,7 @@ impl<'a> SabreState<'a> {
 
         let serialized = organization_list.into_bytes().map_err(|err| {
             ApplyError::InvalidTransaction(format!(
-                "Cannot serialize smart permission list: {:?}",
+                "Cannot serialize organization list: {:?}",
                 err,
             ))
         })?;

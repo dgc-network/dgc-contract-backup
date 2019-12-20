@@ -2694,8 +2694,8 @@ mod tests {
     }
 
     #[test]
-    // check that a Particpant is built correctly
-    fn check_particpant_builder() {
+    // check that an Account is built correctly
+    fn check_account_builder() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
             .with_key("Key".to_string())
@@ -2703,8 +2703,8 @@ mod tests {
             .build()
             .unwrap();
 
-        let builder = ParticpantBuilder::new();
-        let particpant = builder
+        let builder = AccountBuilder::new();
+        let account = builder
             .with_org_id("organization".to_string())
             .with_public_key("public_key".to_string())
             .with_active(true)
@@ -2713,16 +2713,16 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(particpant.org_id(), "organization");
-        assert_eq!(particpant.public_key(), "public_key");
-        assert!(particpant.active());
-        assert_eq!(particpant.roles(), ["Role".to_string()]);
-        assert_eq!(particpant.metadata(), [key_value]);
+        assert_eq!(account.org_id(), "organization");
+        assert_eq!(account.public_key(), "public_key");
+        assert!(account.active());
+        assert_eq!(account.roles(), ["Role".to_string()]);
+        assert_eq!(account.metadata(), [key_value]);
     }
 
     #[test]
-    // check that a Particpant can be converted to bytes and back
-    fn check_particpant_bytes() {
+    // check that an Account can be converted to bytes and back
+    fn check_account_bytes() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
             .with_key("Key".to_string())
@@ -2730,7 +2730,7 @@ mod tests {
             .build()
             .unwrap();
 
-        let builder = ParticpantBuilder::new();
+        let builder = AccountBuilder::new();
         let original = builder
             .with_org_id("organization".to_string())
             .with_public_key("public_key".to_string())
@@ -2741,13 +2741,13 @@ mod tests {
             .unwrap();
 
         let bytes = original.clone().into_bytes().unwrap();
-        let particpant = Particpant::from_bytes(&bytes).unwrap();
-        assert_eq!(particpant, original);
+        let account = Account::from_bytes(&bytes).unwrap();
+        assert_eq!(account, original);
     }
 
     #[test]
-    // check that a ParticpantList is built correctly
-    fn check_particpant_list_builder() {
+    // check that an AccountList is built correctly
+    fn check_account_list_builder() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
             .with_key("Key".to_string())
@@ -2755,8 +2755,8 @@ mod tests {
             .build()
             .unwrap();
 
-        let builder = ParticpantBuilder::new();
-        let particpant = builder
+        let builder = AccountBuilder::new();
+        let account = builder
             .with_org_id("organization".to_string())
             .with_public_key("public_key".to_string())
             .with_active(true)
@@ -2765,15 +2765,15 @@ mod tests {
             .build()
             .unwrap();
 
-        let builder = ParticpantListBuilder::new();
-        let particpant_list = builder.with_particpants(vec![particpant.clone()]).build().unwrap();
+        let builder = AccountListBuilder::new();
+        let account_list = builder.with_accounts(vec![account.clone()]).build().unwrap();
 
-        assert_eq!(particpant_list.particpants(), [particpant])
+        assert_eq!(account_list.accounts(), [account])
     }
 
     #[test]
-    // check that a ParticpantList can be converted to bytes and back
-    fn check_particpant_list_bytes() {
+    // check that an AccountList can be converted to bytes and back
+    fn check_account_list_bytes() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
             .with_key("Key".to_string())
@@ -2781,8 +2781,8 @@ mod tests {
             .build()
             .unwrap();
 
-        let builder = ParticpantBuilder::new();
-        let particpant = builder
+        let builder = AccountBuilder::new();
+        let account = builder
             .with_org_id("organization".to_string())
             .with_public_key("public_key".to_string())
             .with_active(true)
@@ -2791,12 +2791,12 @@ mod tests {
             .build()
             .unwrap();
 
-        let builder = ParticpantListBuilder::new();
-        let original = builder.with_particpants(vec![particpant.clone()]).build().unwrap();
+        let builder = AccountBuilder::new();
+        let original = builder.with_accounts(vec![account.clone()]).build().unwrap();
 
         let bytes = original.clone().into_bytes().unwrap();
-        let particpant_list = ParticpantList::from_bytes(&bytes).unwrap();
-        assert_eq!(particpant_list, original);
+        let account_list = AccountList::from_bytes(&bytes).unwrap();
+        assert_eq!(account_list, original);
     }
 
     #[test]
