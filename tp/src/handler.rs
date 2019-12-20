@@ -265,7 +265,7 @@ fn create_contract(
             ApplyError::InvalidTransaction(String::from("Cannot build contract version"))
         })?;
 
-    let mut versions = contract_registry.versions().to_vec();
+    let mut versions = contract_registry.get_versions().to_vec();
     versions.push(contract_registry_version);
 
     let contract_registry = contract_registry
@@ -326,7 +326,7 @@ fn delete_contract(
             signer,
         )));
     }
-    let mut versions = contract_registry.versions().to_vec();
+    let mut versions = contract_registry.get_versions().to_vec();
     for (index, contract_registry_version) in versions.iter().enumerate() {
         if contract_registry_version.get_version() == version {
             versions.remove(index);
@@ -398,7 +398,7 @@ fn execute_contract(
         };
 
         let mut namespace_registry = None;
-        for registry in registries.registries() {
+        for registry in registries.get_registries() {
             if input.starts_with(registry.get_namespace()) {
                 namespace_registry = Some(registry)
             }
@@ -456,7 +456,7 @@ fn execute_contract(
         };
 
         let mut namespace_registry = None;
-        for registry in registries.registries() {
+        for registry in registries.get_registries() {
             if output.starts_with(registry.get_namespace()) {
                 namespace_registry = Some(registry)
             }
@@ -595,7 +595,7 @@ fn delete_contract_registry(
         }
     };
 
-    if !contract_registry.versions().is_empty() {
+    if !contract_registry.get_versions().is_empty() {
         return Err(ApplyError::InvalidTransaction(format!(
             "Contract Registry can only be deleted if there are no versions: {}",
             name,
@@ -738,7 +738,7 @@ fn delete_namespace_registry(
     };
     can_update_namespace_registry(namespace_registry.clone(), signer, state)?;
 
-    if !namespace_registry.permissions().is_empty() {
+    if !namespace_registry.get_permissions().is_empty() {
         return Err(ApplyError::InvalidTransaction(format!(
             "Namespace Registry can only be deleted if there are no permissions: {}",
             namespace,
