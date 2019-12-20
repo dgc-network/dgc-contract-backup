@@ -13,13 +13,11 @@ use sawtooth_sdk::processor::handler::TransactionHandler;
 use crate::payload::SabreRequestPayload;
 use crate::state::SabreState;
 use crate::wasm_executor::wasm_module::WasmModule;
-//use crate::protocol::state::{
 use sabre_sdk::protocol::state::{
     ContractBuilder, ContractRegistry, ContractRegistryBuilder, NamespaceRegistry,
     NamespaceRegistryBuilder, PermissionBuilder, SmartPermissionBuilder, VersionBuilder,
     AccountBuilder, OrganizationBuilder,
 };
-//use crate::protocol::payload::{
 use sabre_sdk::protocol::payload::{
     Action, CreateContractAction, CreateContractRegistryAction, CreateNamespaceRegistryAction,
     CreateNamespaceRegistryPermissionAction, CreateSmartPermissionAction, DeleteContractAction,
@@ -30,7 +28,6 @@ use sabre_sdk::protocol::payload::{
     CreateAccountAction, UpdateAccountAction,
     CreateOrganizationAction, UpdateOrganizationAction,
 };
-//use crate::protocol::ADMINISTRATORS_SETTING_KEY;
 use sabre_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
 
 /// The namespace registry prefix for global state (00ec00)
@@ -407,7 +404,7 @@ fn execute_contract(
         let mut permissioned = false;
         match namespace_registry {
             Some(registry) => {
-                for permission in registry.permissions() {
+                for permission in registry.get_permissions() {
                     if name == permission.get_contract_name() && permission.get_read() {
                         permissioned = true;
                         break;
@@ -464,7 +461,7 @@ fn execute_contract(
         let mut permissioned = false;
         match namespace_registry {
             Some(registry) => {
-                for permission in registry.permissions() {
+                for permission in registry.get_permissions() {
                     if name == permission.get_contract_name() && permission.get_write() {
                         permissioned = true;
                         break;
@@ -1118,7 +1115,7 @@ fn create_account(
 
     state.set_account(payload.get_public_key(), account)
 }
-/*
+
 fn update_account(
     payload: UpdateAccountAction,
     signer: &str,
@@ -1145,8 +1142,9 @@ fn update_account(
     };
 
     let account = account
-        //.into_builder()
-        //.set_roles(payload.get_roles().to_vec())
+        .into_builder()
+        .set_org_id(payload.get_org_id().to_string())
+        .set_roles(payload.get_roles().to_vec())
         .set_metadata(payload.get_metadata().to_vec())
         .build()
         .map_err(|_| {
@@ -1154,7 +1152,7 @@ fn update_account(
         })?;
     state.set_account(payload.get_public_key(), account)
 }
-*/
+/*
 fn update_account(
     payload: UpdateAccountAction,
     signer: &str,
@@ -1214,7 +1212,7 @@ fn update_account(
         .set_account(payload.get_public_key(), account)
         .map_err(|e| ApplyError::InternalError(format!("Failed to create account: {:?}", e)))
 }
-
+*/
 fn create_organization(
     payload: CreateOrganizationAction,
     signer: &str,
