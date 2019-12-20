@@ -820,7 +820,7 @@ fn create_namespace_registry_permission(
         })?;
 
     // remove old permission for contract if one exists and replace with the new permission
-    let mut permissions = namespace_registry.permissions().to_vec();
+    let mut permissions = namespace_registry.get_permissions().to_vec();
     let mut index = None;
     for (count, permission) in permissions.iter().enumerate() {
         if permission.get_contract_name() == contract_name {
@@ -873,7 +873,7 @@ fn delete_namespace_registry_permission(
     can_update_namespace_registry(namespace_registry.clone(), signer, state)?;
 
     // remove old permission for contract
-    let mut permissions = namespace_registry.permissions().to_vec();
+    let mut permissions = namespace_registry.get_permissions().to_vec();
     let mut index = None;
     for (count, permission) in permissions.iter().enumerate() {
         if permission.get_contract_name() == contract_name {
@@ -938,7 +938,7 @@ pub(crate) fn is_admin(
         )));
     };
 
-    if !admin.active() {
+    if !admin.get_active() {
         return Err(ApplyError::InvalidTransaction(format!(
             "Admin is not currently an active agent: {}",
             signer,
@@ -1110,7 +1110,7 @@ fn create_account(
         .set_public_key(payload.get_public_key().to_string())
         .set_org_id(payload.get_org_id().to_string())
         .set_roles(payload.get_roles().to_vec())
-        //.set_metadata(payload.get_metadata().to_vec())
+        .set_metadata(payload.get_metadata().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
@@ -1201,14 +1201,14 @@ fn update_account(
         ));
     }
 
-    if payload.active() != account.get_active() {
+    if payload.get_active() != account.get_active() {
         if signer == payload.get_public_key() {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Admin may not deactivate themselves: {}",
                 signer,
             )));
         }
-        account.set_active(payload.active());
+        account.set_active(payload.get_active());
     }
     state
         .set_account(payload.get_public_key(), account)
