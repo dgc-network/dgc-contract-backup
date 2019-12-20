@@ -278,7 +278,7 @@ impl<'a> WasmExternals<'a> {
                 };
 
                 for smart_permission in smart_permissions.smart_permissions() {
-                    if smart_permission.name() == name {
+                    if smart_permission.get_name() == name {
                         return Ok(Some(smart_permission.clone()));
                     }
                 }
@@ -319,7 +319,7 @@ impl<'a> WasmExternals<'a> {
         };
 
         // Invoke Smart Permission
-        let mut module = SmartPermissionModule::new(contract.function(), self.context)
+        let mut module = SmartPermissionModule::new(contract.get_function(), self.context)
             .expect("Failed to create can_add module");
         let result = module
             .entrypoint(role_vec, org_id, public_key, payload.to_vec())
@@ -797,7 +797,7 @@ impl<'a> SmartPermissionModule<'a> {
 
         let instance = ModuleInstance::new(
             &self.module,
-            &ImportsBuilder::new().with_resolver("env", &env),
+            &ImportsBuilder::new().set_resolver("env", &env),
         )?
         .assert_no_start();
 

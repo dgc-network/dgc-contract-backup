@@ -80,23 +80,23 @@ pub struct CreateContractAction {
 }
 
 impl CreateContractAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn version(&self) -> &str {
+    pub fn get_version(&self) -> &str {
         &self.version
     }
 
-    pub fn inputs(&self) -> &[String] {
+    pub fn get_inputs(&self) -> &[String] {
         &self.inputs
     }
 
-    pub fn outputs(&self) -> &[String] {
+    pub fn get_outputs(&self) -> &[String] {
         &self.outputs
     }
 
-    pub fn contract(&self) -> &[u8] {
+    pub fn get_contract(&self) -> &[u8] {
         &self.contract
     }
 }
@@ -120,15 +120,15 @@ impl FromNative<CreateContractAction> for protos::payload::CreateContractAction 
         create_contract_action: CreateContractAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::CreateContractAction::new();
-        proto.set_name(create_contract_action.name().to_string());
-        proto.set_version(create_contract_action.version().to_string());
+        proto.set_name(create_contract_action.get_name().to_string());
+        proto.set_version(create_contract_action.get_version().to_string());
         proto.set_inputs(RepeatedField::from_vec(
-            create_contract_action.inputs().to_vec(),
+            create_contract_action.get_inputs().to_vec(),
         ));
         proto.set_outputs(RepeatedField::from_vec(
-            create_contract_action.outputs().to_vec(),
+            create_contract_action.get_outputs().to_vec(),
         ));
-        proto.set_contract(create_contract_action.contract().to_vec());
+        proto.set_contract(create_contract_action.get_contract().to_vec());
         Ok(proto)
     }
 }
@@ -196,27 +196,27 @@ impl CreateContractActionBuilder {
         CreateContractActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> CreateContractActionBuilder {
+    pub fn set_name(mut self, name: String) -> CreateContractActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_version(mut self, version: String) -> CreateContractActionBuilder {
+    pub fn set_version(mut self, version: String) -> CreateContractActionBuilder {
         self.version = Some(version);
         self
     }
 
-    pub fn with_inputs(mut self, inputs: Vec<String>) -> CreateContractActionBuilder {
+    pub fn set_inputs(mut self, inputs: Vec<String>) -> CreateContractActionBuilder {
         self.inputs = inputs;
         self
     }
 
-    pub fn with_outputs(mut self, outputs: Vec<String>) -> CreateContractActionBuilder {
+    pub fn set_outputs(mut self, outputs: Vec<String>) -> CreateContractActionBuilder {
         self.outputs = outputs;
         self
     }
 
-    pub fn with_contract(mut self, contract: Vec<u8>) -> CreateContractActionBuilder {
+    pub fn set_contract(mut self, contract: Vec<u8>) -> CreateContractActionBuilder {
         self.contract = contract;
         self
     }
@@ -261,11 +261,11 @@ pub struct DeleteContractAction {
 }
 
 impl DeleteContractAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn version(&self) -> &str {
+    pub fn get_version(&self) -> &str {
         &self.version
     }
 }
@@ -286,8 +286,8 @@ impl FromNative<DeleteContractAction> for protos::payload::DeleteContractAction 
         delete_contract_action: DeleteContractAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::DeleteContractAction::new();
-        proto.set_name(delete_contract_action.name().to_string());
-        proto.set_version(delete_contract_action.version().to_string());
+        proto.set_name(delete_contract_action.get_name().to_string());
+        proto.set_version(delete_contract_action.get_version().to_string());
         Ok(proto)
     }
 }
@@ -352,12 +352,12 @@ impl DeleteContractActionBuilder {
         DeleteContractActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> DeleteContractActionBuilder {
+    pub fn set_name(mut self, name: String) -> DeleteContractActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_version(mut self, version: String) -> DeleteContractActionBuilder {
+    pub fn set_version(mut self, version: String) -> DeleteContractActionBuilder {
         self.version = Some(version);
         self
     }
@@ -386,23 +386,23 @@ pub struct ExecuteContractAction {
 }
 
 impl ExecuteContractAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn version(&self) -> &str {
+    pub fn get_version(&self) -> &str {
         &self.version
     }
 
-    pub fn inputs(&self) -> &[String] {
+    pub fn get_inputs(&self) -> &[String] {
         &self.inputs
     }
 
-    pub fn outputs(&self) -> &[String] {
+    pub fn get_outputs(&self) -> &[String] {
         &self.outputs
     }
 
-    pub fn payload(&self) -> &[u8] {
+    pub fn get_payload(&self) -> &[u8] {
         &self.payload
     }
 }
@@ -426,15 +426,15 @@ impl FromNative<ExecuteContractAction> for protos::payload::ExecuteContractActio
         execute_contract_action: ExecuteContractAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::ExecuteContractAction::new();
-        proto.set_name(execute_contract_action.name().to_string());
-        proto.set_version(execute_contract_action.version().to_string());
+        proto.set_name(execute_contract_action.get_name().to_string());
+        proto.set_version(execute_contract_action.get_version().to_string());
         proto.set_inputs(RepeatedField::from_vec(
-            execute_contract_action.inputs().to_vec(),
+            execute_contract_action.get_inputs().to_vec(),
         ));
         proto.set_outputs(RepeatedField::from_vec(
-            execute_contract_action.outputs().to_vec(),
+            execute_contract_action.get_outputs().to_vec(),
         ));
-        proto.set_payload(execute_contract_action.payload().to_vec());
+        proto.set_payload(execute_contract_action.get_payload().to_vec());
         Ok(proto)
     }
 }
@@ -504,27 +504,27 @@ impl ExecuteContractActionBuilder {
         ExecuteContractActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> ExecuteContractActionBuilder {
+    pub fn set_name(mut self, name: String) -> ExecuteContractActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_version(mut self, version: String) -> ExecuteContractActionBuilder {
+    pub fn set_version(mut self, version: String) -> ExecuteContractActionBuilder {
         self.version = Some(version);
         self
     }
 
-    pub fn with_inputs(mut self, inputs: Vec<String>) -> ExecuteContractActionBuilder {
+    pub fn set_inputs(mut self, inputs: Vec<String>) -> ExecuteContractActionBuilder {
         self.inputs = inputs;
         self
     }
 
-    pub fn with_outputs(mut self, outputs: Vec<String>) -> ExecuteContractActionBuilder {
+    pub fn set_outputs(mut self, outputs: Vec<String>) -> ExecuteContractActionBuilder {
         self.outputs = outputs;
         self
     }
 
-    pub fn with_payload(mut self, payload: Vec<u8>) -> ExecuteContractActionBuilder {
+    pub fn set_payload(mut self, payload: Vec<u8>) -> ExecuteContractActionBuilder {
         self.payload = payload;
         self
     }
@@ -569,11 +569,11 @@ pub struct CreateContractRegistryAction {
 }
 
 impl CreateContractRegistryAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn owners(&self) -> &[String] {
+    pub fn get_owners(&self) -> &[String] {
         &self.owners
     }
 }
@@ -594,9 +594,9 @@ impl FromNative<CreateContractRegistryAction> for protos::payload::CreateContrac
         create_contract_registry_action: CreateContractRegistryAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::CreateContractRegistryAction::new();
-        proto.set_name(create_contract_registry_action.name().to_string());
+        proto.set_name(create_contract_registry_action.get_name().to_string());
         proto.set_owners(RepeatedField::from_vec(
-            create_contract_registry_action.owners().to_vec(),
+            create_contract_registry_action.get_owners().to_vec(),
         ));
         Ok(proto)
     }
@@ -664,12 +664,12 @@ impl CreateContractRegistryActionBuilder {
         CreateContractRegistryActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> CreateContractRegistryActionBuilder {
+    pub fn set_name(mut self, name: String) -> CreateContractRegistryActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_owners(mut self, owners: Vec<String>) -> CreateContractRegistryActionBuilder {
+    pub fn set_owners(mut self, owners: Vec<String>) -> CreateContractRegistryActionBuilder {
         self.owners = owners;
         self
     }
@@ -704,7 +704,7 @@ pub struct DeleteContractRegistryAction {
 }
 
 impl DeleteContractRegistryAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 }
@@ -724,7 +724,7 @@ impl FromNative<DeleteContractRegistryAction> for protos::payload::DeleteContrac
         delete_contract_registry_action: DeleteContractRegistryAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::DeleteContractRegistryAction::new();
-        proto.set_name(delete_contract_registry_action.name().to_string());
+        proto.set_name(delete_contract_registry_action.get_name().to_string());
         Ok(proto)
     }
 }
@@ -790,7 +790,7 @@ impl DeleteContractRegistryActionBuilder {
         DeleteContractRegistryActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> DeleteContractRegistryActionBuilder {
+    pub fn set_name(mut self, name: String) -> DeleteContractRegistryActionBuilder {
         self.name = Some(name);
         self
     }
@@ -816,11 +816,11 @@ pub struct UpdateContractRegistryOwnersAction {
 }
 
 impl UpdateContractRegistryOwnersAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn owners(&self) -> &[String] {
+    pub fn get_owners(&self) -> &[String] {
         &self.owners
     }
 }
@@ -845,9 +845,9 @@ impl FromNative<UpdateContractRegistryOwnersAction>
         update_contract_registry_action: UpdateContractRegistryOwnersAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::UpdateContractRegistryOwnersAction::new();
-        proto.set_name(update_contract_registry_action.name().to_string());
+        proto.set_name(update_contract_registry_action.get_name().to_string());
         proto.set_owners(RepeatedField::from_vec(
-            update_contract_registry_action.owners().to_vec(),
+            update_contract_registry_action.get_owners().to_vec(),
         ));
         Ok(proto)
     }
@@ -923,12 +923,12 @@ impl UpdateContractRegistryOwnersActionBuilder {
         UpdateContractRegistryOwnersActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> UpdateContractRegistryOwnersActionBuilder {
+    pub fn set_name(mut self, name: String) -> UpdateContractRegistryOwnersActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_owners(mut self, owners: Vec<String>) -> UpdateContractRegistryOwnersActionBuilder {
+    pub fn set_owners(mut self, owners: Vec<String>) -> UpdateContractRegistryOwnersActionBuilder {
         self.owners = owners;
         self
     }
@@ -965,11 +965,11 @@ pub struct CreateNamespaceRegistryAction {
 }
 
 impl CreateNamespaceRegistryAction {
-    pub fn namespace(&self) -> &str {
+    pub fn get_namespace(&self) -> &str {
         &self.namespace
     }
 
-    pub fn owners(&self) -> &[String] {
+    pub fn get_owners(&self) -> &[String] {
         &self.owners
     }
 }
@@ -990,9 +990,9 @@ impl FromNative<CreateNamespaceRegistryAction> for protos::payload::CreateNamesp
         create_namespace_registry_action: CreateNamespaceRegistryAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::CreateNamespaceRegistryAction::new();
-        proto.set_namespace(create_namespace_registry_action.namespace().to_string());
+        proto.set_namespace(create_namespace_registry_action.get_namespace().to_string());
         proto.set_owners(RepeatedField::from_vec(
-            create_namespace_registry_action.owners().to_vec(),
+            create_namespace_registry_action.get_owners().to_vec(),
         ));
         Ok(proto)
     }
@@ -1060,12 +1060,12 @@ impl CreateNamespaceRegistryActionBuilder {
         CreateNamespaceRegistryActionBuilder::default()
     }
 
-    pub fn with_namespace(mut self, namespace: String) -> CreateNamespaceRegistryActionBuilder {
+    pub fn set_namespace(mut self, namespace: String) -> CreateNamespaceRegistryActionBuilder {
         self.namespace = Some(namespace);
         self
     }
 
-    pub fn with_owners(mut self, owners: Vec<String>) -> CreateNamespaceRegistryActionBuilder {
+    pub fn set_owners(mut self, owners: Vec<String>) -> CreateNamespaceRegistryActionBuilder {
         self.owners = owners;
         self
     }
@@ -1100,7 +1100,7 @@ pub struct DeleteNamespaceRegistryAction {
 }
 
 impl DeleteNamespaceRegistryAction {
-    pub fn namespace(&self) -> &str {
+    pub fn get_namespace(&self) -> &str {
         &self.namespace
     }
 }
@@ -1119,7 +1119,7 @@ impl FromNative<DeleteNamespaceRegistryAction> for protos::payload::DeleteNamesp
         delete_namespace_registry_action: DeleteNamespaceRegistryAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::DeleteNamespaceRegistryAction::new();
-        proto.set_namespace(delete_namespace_registry_action.namespace().to_string());
+        proto.set_namespace(delete_namespace_registry_action.get_namespace().to_string());
         Ok(proto)
     }
 }
@@ -1185,7 +1185,7 @@ impl DeleteNamespaceRegistryActionBuilder {
         DeleteNamespaceRegistryActionBuilder::default()
     }
 
-    pub fn with_namespace(mut self, namespace: String) -> DeleteNamespaceRegistryActionBuilder {
+    pub fn set_namespace(mut self, namespace: String) -> DeleteNamespaceRegistryActionBuilder {
         self.namespace = Some(namespace);
         self
     }
@@ -1211,11 +1211,11 @@ pub struct UpdateNamespaceRegistryOwnersAction {
 }
 
 impl UpdateNamespaceRegistryOwnersAction {
-    pub fn namespace(&self) -> &str {
+    pub fn get_namespace(&self) -> &str {
         &self.namespace
     }
 
-    pub fn owners(&self) -> &[String] {
+    pub fn get_owners(&self) -> &[String] {
         &self.owners
     }
 }
@@ -1240,9 +1240,9 @@ impl FromNative<UpdateNamespaceRegistryOwnersAction>
         update_namespace_registry_action: UpdateNamespaceRegistryOwnersAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::UpdateNamespaceRegistryOwnersAction::new();
-        proto.set_namespace(update_namespace_registry_action.namespace().to_string());
+        proto.set_namespace(update_namespace_registry_action.get_namespace().to_string());
         proto.set_owners(RepeatedField::from_vec(
-            update_namespace_registry_action.owners().to_vec(),
+            update_namespace_registry_action.get_owners().to_vec(),
         ));
         Ok(proto)
     }
@@ -1318,7 +1318,7 @@ impl UpdateNamespaceRegistryOwnersActionBuilder {
         UpdateNamespaceRegistryOwnersActionBuilder::default()
     }
 
-    pub fn with_namespace(
+    pub fn set_namespace(
         mut self,
         namespace: String,
     ) -> UpdateNamespaceRegistryOwnersActionBuilder {
@@ -1326,7 +1326,7 @@ impl UpdateNamespaceRegistryOwnersActionBuilder {
         self
     }
 
-    pub fn with_owners(
+    pub fn set_owners(
         mut self,
         owners: Vec<String>,
     ) -> UpdateNamespaceRegistryOwnersActionBuilder {
@@ -1368,19 +1368,19 @@ pub struct CreateNamespaceRegistryPermissionAction {
 }
 
 impl CreateNamespaceRegistryPermissionAction {
-    pub fn namespace(&self) -> &str {
+    pub fn get_namespace(&self) -> &str {
         &self.namespace
     }
 
-    pub fn contract_name(&self) -> &str {
+    pub fn get_contract_name(&self) -> &str {
         &self.contract_name
     }
 
-    pub fn read(&self) -> bool {
+    pub fn get_read(&self) -> bool {
         self.read
     }
 
-    pub fn write(&self) -> bool {
+    pub fn get_write(&self) -> bool {
         self.write
     }
 }
@@ -1407,14 +1407,14 @@ impl FromNative<CreateNamespaceRegistryPermissionAction>
         create_namespace_permission_action: CreateNamespaceRegistryPermissionAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::CreateNamespaceRegistryPermissionAction::new();
-        proto.set_namespace(create_namespace_permission_action.namespace().to_string());
+        proto.set_namespace(create_namespace_permission_action.get_namespace().to_string());
         proto.set_contract_name(
             create_namespace_permission_action
-                .contract_name()
+                .get_contract_name()
                 .to_string(),
         );
-        proto.set_read(create_namespace_permission_action.read());
-        proto.set_write(create_namespace_permission_action.write());
+        proto.set_read(create_namespace_permission_action.get_read());
+        proto.set_write(create_namespace_permission_action.get_write());
         Ok(proto)
     }
 }
@@ -1493,7 +1493,7 @@ impl CreateNamespaceRegistryPermissionActionBuilder {
         CreateNamespaceRegistryPermissionActionBuilder::default()
     }
 
-    pub fn with_namespace(
+    pub fn set_namespace(
         mut self,
         namespace: String,
     ) -> CreateNamespaceRegistryPermissionActionBuilder {
@@ -1501,7 +1501,7 @@ impl CreateNamespaceRegistryPermissionActionBuilder {
         self
     }
 
-    pub fn with_contract_name(
+    pub fn set_contract_name(
         mut self,
         contract_name: String,
     ) -> CreateNamespaceRegistryPermissionActionBuilder {
@@ -1509,12 +1509,12 @@ impl CreateNamespaceRegistryPermissionActionBuilder {
         self
     }
 
-    pub fn with_read(mut self, read: bool) -> CreateNamespaceRegistryPermissionActionBuilder {
+    pub fn set_read(mut self, read: bool) -> CreateNamespaceRegistryPermissionActionBuilder {
         self.read = Some(read);
         self
     }
 
-    pub fn with_write(mut self, write: bool) -> CreateNamespaceRegistryPermissionActionBuilder {
+    pub fn set_write(mut self, write: bool) -> CreateNamespaceRegistryPermissionActionBuilder {
         self.write = Some(write);
         self
     }
@@ -1557,11 +1557,11 @@ pub struct DeleteNamespaceRegistryPermissionAction {
 }
 
 impl DeleteNamespaceRegistryPermissionAction {
-    pub fn namespace(&self) -> &str {
+    pub fn get_namespace(&self) -> &str {
         &self.namespace
     }
 
-    pub fn contract_name(&self) -> &str {
+    pub fn get_contract_name(&self) -> &str {
         &self.contract_name
     }
 }
@@ -1586,10 +1586,10 @@ impl FromNative<DeleteNamespaceRegistryPermissionAction>
         delete_namespace_permission_action: DeleteNamespaceRegistryPermissionAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::DeleteNamespaceRegistryPermissionAction::new();
-        proto.set_namespace(delete_namespace_permission_action.namespace().to_string());
+        proto.set_namespace(delete_namespace_permission_action.get_namespace().to_string());
         proto.set_contract_name(
             delete_namespace_permission_action
-                .contract_name()
+                .get_contract_name()
                 .to_string(),
         );
         Ok(proto)
@@ -1668,7 +1668,7 @@ impl DeleteNamespaceRegistryPermissionActionBuilder {
         DeleteNamespaceRegistryPermissionActionBuilder::default()
     }
 
-    pub fn with_namespace(
+    pub fn set_namespace(
         mut self,
         namespace: String,
     ) -> DeleteNamespaceRegistryPermissionActionBuilder {
@@ -1676,7 +1676,7 @@ impl DeleteNamespaceRegistryPermissionActionBuilder {
         self
     }
 
-    pub fn with_contract_name(
+    pub fn set_contract_name(
         mut self,
         contract_name: String,
     ) -> DeleteNamespaceRegistryPermissionActionBuilder {
@@ -1718,15 +1718,15 @@ pub struct CreateSmartPermissionAction {
 }
 
 impl CreateSmartPermissionAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn org_id(&self) -> &str {
+    pub fn get_org_id(&self) -> &str {
         &self.org_id
     }
 
-    pub fn function(&self) -> &[u8] {
+    pub fn get_function(&self) -> &[u8] {
         &self.function
     }
 }
@@ -1748,9 +1748,9 @@ impl FromNative<CreateSmartPermissionAction> for protos::payload::CreateSmartPer
         create_smart_permission_action: CreateSmartPermissionAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::CreateSmartPermissionAction::new();
-        proto.set_name(create_smart_permission_action.name().to_string());
-        proto.set_org_id(create_smart_permission_action.org_id().to_string());
-        proto.set_function(create_smart_permission_action.function().to_vec());
+        proto.set_name(create_smart_permission_action.get_name().to_string());
+        proto.set_org_id(create_smart_permission_action.get_org_id().to_string());
+        proto.set_function(create_smart_permission_action.get_function().to_vec());
         Ok(proto)
     }
 }
@@ -1818,17 +1818,17 @@ impl CreateSmartPermissionActionBuilder {
         CreateSmartPermissionActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> CreateSmartPermissionActionBuilder {
+    pub fn set_name(mut self, name: String) -> CreateSmartPermissionActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> CreateSmartPermissionActionBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> CreateSmartPermissionActionBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_function(mut self, function: Vec<u8>) -> CreateSmartPermissionActionBuilder {
+    pub fn set_function(mut self, function: Vec<u8>) -> CreateSmartPermissionActionBuilder {
         self.function = function;
         self
     }
@@ -1875,15 +1875,15 @@ pub struct UpdateSmartPermissionAction {
 }
 
 impl UpdateSmartPermissionAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn org_id(&self) -> &str {
+    pub fn get_org_id(&self) -> &str {
         &self.org_id
     }
 
-    pub fn function(&self) -> &[u8] {
+    pub fn get_function(&self) -> &[u8] {
         &self.function
     }
 }
@@ -1905,9 +1905,9 @@ impl FromNative<UpdateSmartPermissionAction> for protos::payload::UpdateSmartPer
         update_smart_permission_action: UpdateSmartPermissionAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::UpdateSmartPermissionAction::new();
-        proto.set_name(update_smart_permission_action.name().to_string());
-        proto.set_org_id(update_smart_permission_action.org_id().to_string());
-        proto.set_function(update_smart_permission_action.function().to_vec());
+        proto.set_name(update_smart_permission_action.get_name().to_string());
+        proto.set_org_id(update_smart_permission_action.get_org_id().to_string());
+        proto.set_function(update_smart_permission_action.get_function().to_vec());
         Ok(proto)
     }
 }
@@ -1975,17 +1975,17 @@ impl UpdateSmartPermissionActionBuilder {
         UpdateSmartPermissionActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> UpdateSmartPermissionActionBuilder {
+    pub fn set_name(mut self, name: String) -> UpdateSmartPermissionActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> UpdateSmartPermissionActionBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> UpdateSmartPermissionActionBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_function(mut self, function: Vec<u8>) -> UpdateSmartPermissionActionBuilder {
+    pub fn set_function(mut self, function: Vec<u8>) -> UpdateSmartPermissionActionBuilder {
         self.function = function;
         self
     }
@@ -2031,11 +2031,11 @@ pub struct DeleteSmartPermissionAction {
 }
 
 impl DeleteSmartPermissionAction {
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn org_id(&self) -> &str {
+    pub fn get_org_id(&self) -> &str {
         &self.org_id
     }
 }
@@ -2056,8 +2056,8 @@ impl FromNative<DeleteSmartPermissionAction> for protos::payload::DeleteSmartPer
         delete_smart_permission_action: DeleteSmartPermissionAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::DeleteSmartPermissionAction::new();
-        proto.set_name(delete_smart_permission_action.name().to_string());
-        proto.set_org_id(delete_smart_permission_action.org_id().to_string());
+        proto.set_name(delete_smart_permission_action.get_name().to_string());
+        proto.set_org_id(delete_smart_permission_action.get_org_id().to_string());
         Ok(proto)
     }
 }
@@ -2124,12 +2124,12 @@ impl DeleteSmartPermissionActionBuilder {
         DeleteSmartPermissionActionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> DeleteSmartPermissionActionBuilder {
+    pub fn set_name(mut self, name: String) -> DeleteSmartPermissionActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> DeleteSmartPermissionActionBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> DeleteSmartPermissionActionBuilder {
         self.org_id = Some(org_id);
         self
     }
@@ -2163,19 +2163,19 @@ pub struct CreateAccountAction {
 }
 
 impl CreateAccountAction {
-    pub fn org_id(&self) -> &str {
+    pub fn get_org_id(&self) -> &str {
         &self.org_id
     }
 
-    pub fn public_key(&self) -> &str {
+    pub fn get_public_key(&self) -> &str {
         &self.public_key
     }
 
-    pub fn roles(&self) -> &[String] {
+    pub fn get_roles(&self) -> &[String] {
         &self.roles
     }
 
-    pub fn metadata(&self) -> &[KeyValueEntry] {
+    pub fn get_metadata(&self) -> &[KeyValueEntry] {
         &self.metadata
     }
 }
@@ -2198,19 +2198,13 @@ impl FromNative<CreateAccountAction> for protos::payload::CreateAccountAction {
         create_account_action: CreateAccountAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::CreateAccountAction::new();
-        proto.set_org_id(create_account_action.org_id().to_string());
-        proto.set_public_key(create_account_action.public_key().to_string());
-        //proto.set_roles(create_account_action.roles().to_vec());
-        //proto.set_metadata(create_account_action.metadata().to_vec());
-        proto.set_roles(RepeatedField::from_vec(create_account_action.roles().to_vec()));
+        proto.set_org_id(create_account_action.get_org_id().to_string());
+        proto.set_public_key(create_account_action.get_public_key().to_string());
+        proto.set_roles(RepeatedField::from_vec(create_account_action.get_roles().to_vec()));
         proto.set_metadata(RepeatedField::from_vec(
             create_account_action
-                .metadata()
+                .get_metadata()
                 .to_vec()
-                //.into_iter()
-                //.map(KeyValueEntry::into_proto)
-                //.collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
-                //)?,
         ));
         Ok(proto)
     }
@@ -2280,22 +2274,22 @@ impl CreateAccountActionBuilder {
         CreateAccountActionBuilder::default()
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> CreateAccountActionBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> CreateAccountActionBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_public_key(mut self, public_key: String) -> CreateAccountActionBuilder {
+    pub fn set_public_key(mut self, public_key: String) -> CreateAccountActionBuilder {
         self.public_key = Some(public_key);
         self
     }
 
-    pub fn with_roles(mut self, roles: Vec<String>) -> CreateAccountActionBuilder {
+    pub fn set_roles(mut self, roles: Vec<String>) -> CreateAccountActionBuilder {
         self.roles = roles;
         self
     }
 
-    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> CreateAccountActionBuilder {
+    pub fn set_metadata(mut self, metadata: Vec<KeyValueEntry>) -> CreateAccountActionBuilder {
         self.metadata = metadata;
         self
     }
@@ -2354,19 +2348,19 @@ pub struct UpdateAccountAction {
 }
 
 impl UpdateAccountAction {
-    pub fn org_id(&self) -> &str {
+    pub fn get_org_id(&self) -> &str {
         &self.org_id
     }
 
-    pub fn public_key(&self) -> &str {
+    pub fn get_public_key(&self) -> &str {
         &self.public_key
     }
 
-    pub fn roles(&self) -> &[String] {
+    pub fn get_roles(&self) -> &[String] {
         &self.roles
     }
 
-    pub fn metadata(&self) -> &[KeyValueEntry] {
+    pub fn get_metadata(&self) -> &[KeyValueEntry] {
         &self.metadata
     }
 }
@@ -2389,19 +2383,13 @@ impl FromNative<UpdateAccountAction> for protos::payload::UpdateAccountAction {
         update_account_action: UpdateAccountAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::UpdateAccountAction::new();
-        proto.set_org_id(update_account_action.org_id().to_string());
-        proto.set_public_key(update_account_action.public_key().to_string());
-        //proto.set_roles(update_account_action.roles().to_vec());
-        //proto.set_metadata(update_account_action.metadata().to_vec());
-        proto.set_roles(RepeatedField::from_vec(update_account_action.roles().to_vec()));
+        proto.set_org_id(update_account_action.get_org_id().to_string());
+        proto.set_public_key(update_account_action.get_public_key().to_string());
+        proto.set_roles(RepeatedField::from_vec(update_account_action.get_roles().to_vec()));
         proto.set_metadata(RepeatedField::from_vec(
             update_account_action
-                .metadata()
+                .get_metadata()
                 .to_vec()
-                //.into_iter()
-                //.map(KeyValueEntry::into_proto)
-                //.collect::<Result<Vec<protos::account::KeyValueEntry>, ProtoConversionError>>(
-                //)?,
         ));
         Ok(proto)
     }
@@ -2471,22 +2459,22 @@ impl UpdateAccountActionBuilder {
         UpdateAccountActionBuilder::default()
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> UpdateAccountActionBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> UpdateAccountActionBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_public_key(mut self, public_key: String) -> UpdateAccountActionBuilder {
+    pub fn set_public_key(mut self, public_key: String) -> UpdateAccountActionBuilder {
         self.public_key = Some(public_key);
         self
     }
 
-    pub fn with_roles(mut self, roles: Vec<String>) -> UpdateAccountActionBuilder {
+    pub fn set_roles(mut self, roles: Vec<String>) -> UpdateAccountActionBuilder {
         self.roles = roles;
         self
     }
 
-    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> UpdateAccountActionBuilder {
+    pub fn set_metadata(mut self, metadata: Vec<KeyValueEntry>) -> UpdateAccountActionBuilder {
         self.metadata = metadata;
         self
     }
@@ -2544,15 +2532,15 @@ pub struct CreateOrganizationAction {
 }
 
 impl CreateOrganizationAction {
-    pub fn id(&self) -> &str {
+    pub fn get_id(&self) -> &str {
         &self.id
     }
 
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn address(&self) -> &str {
+    pub fn get_address(&self) -> &str {
         &self.address
     }
 }
@@ -2574,9 +2562,9 @@ impl FromNative<CreateOrganizationAction> for protos::payload::CreateOrganizatio
         create_organization_action: CreateOrganizationAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::CreateOrganizationAction::new();
-        proto.set_id(create_organization_action.id().to_string());
-        proto.set_name(create_organization_action.name().to_string());
-        proto.set_address(create_organization_action.address().to_string());
+        proto.set_id(create_organization_action.get_id().to_string());
+        proto.set_name(create_organization_action.get_name().to_string());
+        proto.set_address(create_organization_action.get_address().to_string());
         Ok(proto)
     }
 }
@@ -2644,17 +2632,17 @@ impl CreateOrganizationActionBuilder {
         CreateOrganizationActionBuilder::default()
     }
 
-    pub fn with_id(mut self, id: String) -> CreateOrganizationActionBuilder {
+    pub fn set_id(mut self, id: String) -> CreateOrganizationActionBuilder {
         self.id = Some(id);
         self
     }
 
-    pub fn with_name(mut self, name: String) -> CreateOrganizationActionBuilder {
+    pub fn set_name(mut self, name: String) -> CreateOrganizationActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_address(mut self, address: String) -> CreateOrganizationActionBuilder {
+    pub fn set_address(mut self, address: String) -> CreateOrganizationActionBuilder {
         self.address = Some(address);
         self
     }
@@ -2697,15 +2685,15 @@ pub struct UpdateOrganizationAction {
 }
 
 impl UpdateOrganizationAction {
-    pub fn id(&self) -> &str {
+    pub fn get_id(&self) -> &str {
         &self.id
     }
 
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn address(&self) -> &str {
+    pub fn get_address(&self) -> &str {
         &self.address
     }
 
@@ -2728,9 +2716,9 @@ impl FromNative<UpdateOrganizationAction> for protos::payload::UpdateOrganizatio
         update_organization_action: UpdateOrganizationAction,
     ) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::payload::UpdateOrganizationAction::new();
-        proto.set_id(update_organization_action.id().to_string());
-        proto.set_name(update_organization_action.name().to_string());
-        proto.set_address(update_organization_action.address().to_string());
+        proto.set_id(update_organization_action.get_id().to_string());
+        proto.set_name(update_organization_action.get_name().to_string());
+        proto.set_address(update_organization_action.get_address().to_string());
         Ok(proto)
     }
 }
@@ -2798,17 +2786,17 @@ impl UpdateOrganizationActionBuilder {
         UpdateOrganizationActionBuilder::default()
     }
 
-    pub fn with_id(mut self, id: String) -> UpdateOrganizationActionBuilder {
+    pub fn set_id(mut self, id: String) -> UpdateOrganizationActionBuilder {
         self.id = Some(id);
         self
     }
 
-    pub fn with_name(mut self, name: String) -> UpdateOrganizationActionBuilder {
+    pub fn set_name(mut self, name: String) -> UpdateOrganizationActionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_address(mut self, address: String) -> UpdateOrganizationActionBuilder {
+    pub fn set_address(mut self, address: String) -> UpdateOrganizationActionBuilder {
         self.address = Some(address);
         self
     }
@@ -3110,7 +3098,7 @@ impl SabrePayloadBuilder {
         SabrePayloadBuilder::default()
     }
 
-    pub fn with_action(mut self, action: Action) -> SabrePayloadBuilder {
+    pub fn set_action(mut self, action: Action) -> SabrePayloadBuilder {
         self.action = Some(action);
         self
     }
@@ -3133,19 +3121,19 @@ mod tests {
     fn check_create_contract_action() {
         let builder = CreateContractActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
-            .with_inputs(vec!["test".to_string(), "input".to_string()])
-            .with_outputs(vec!["test".to_string(), "output".to_string()])
-            .with_contract(b"test".to_vec())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
+            .set_inputs(vec!["test".to_string(), "input".to_string()])
+            .set_outputs(vec!["test".to_string(), "output".to_string()])
+            .set_contract(b"test".to_vec())
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "TestContract");
-        assert_eq!(action.version(), "0.1");
-        assert_eq!(action.inputs(), ["test".to_string(), "input".to_string()]);
-        assert_eq!(action.outputs(), ["test".to_string(), "output".to_string()]);
-        assert_eq!(action.contract(), b"test");
+        assert_eq!(action.get_name(), "TestContract");
+        assert_eq!(action.get_version(), "0.1");
+        assert_eq!(action.get_inputs(), ["test".to_string(), "input".to_string()]);
+        assert_eq!(action.get_outputs(), ["test".to_string(), "output".to_string()]);
+        assert_eq!(action.get_contract(), b"test");
     }
 
     #[test]
@@ -3153,11 +3141,11 @@ mod tests {
     fn check_create_contract_bytes() {
         let builder = CreateContractActionBuilder::new();
         let original = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
-            .with_inputs(vec!["test".to_string(), "input".to_string()])
-            .with_outputs(vec!["test".to_string(), "output".to_string()])
-            .with_contract(b"test".to_vec())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
+            .set_inputs(vec!["test".to_string(), "input".to_string()])
+            .set_outputs(vec!["test".to_string(), "output".to_string()])
+            .set_contract(b"test".to_vec())
             .build()
             .unwrap();
 
@@ -3172,13 +3160,13 @@ mod tests {
     fn check_delete_contract_action() {
         let builder = DeleteContractActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "TestContract");
-        assert_eq!(action.version(), "0.1");
+        assert_eq!(action.get_name(), "TestContract");
+        assert_eq!(action.get_version(), "0.1");
     }
 
     #[test]
@@ -3186,8 +3174,8 @@ mod tests {
     fn check_delete_contract_action_bytes() {
         let builder = DeleteContractActionBuilder::new();
         let original = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
             .build()
             .unwrap();
 
@@ -3202,19 +3190,19 @@ mod tests {
     fn check_execute_contract_action() {
         let builder = ExecuteContractActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
-            .with_inputs(vec!["test".to_string(), "input".to_string()])
-            .with_outputs(vec!["test".to_string(), "output".to_string()])
-            .with_payload(b"test_payload".to_vec())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
+            .set_inputs(vec!["test".to_string(), "input".to_string()])
+            .set_outputs(vec!["test".to_string(), "output".to_string()])
+            .set_payload(b"test_payload".to_vec())
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "TestContract");
-        assert_eq!(action.version(), "0.1");
-        assert_eq!(action.inputs(), ["test".to_string(), "input".to_string()]);
-        assert_eq!(action.outputs(), ["test".to_string(), "output".to_string()]);
-        assert_eq!(action.payload(), b"test_payload");
+        assert_eq!(action.get_name(), "TestContract");
+        assert_eq!(action.get_version(), "0.1");
+        assert_eq!(action.get_inputs(), ["test".to_string(), "input".to_string()]);
+        assert_eq!(action.get_outputs(), ["test".to_string(), "output".to_string()]);
+        assert_eq!(action.get_payload(), b"test_payload");
     }
 
     #[test]
@@ -3222,11 +3210,11 @@ mod tests {
     fn check_execute_contract_action_bytes() {
         let builder = ExecuteContractActionBuilder::new();
         let original = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
-            .with_inputs(vec!["test".to_string(), "input".to_string()])
-            .with_outputs(vec!["test".to_string(), "output".to_string()])
-            .with_payload(b"test_payload".to_vec())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
+            .set_inputs(vec!["test".to_string(), "input".to_string()])
+            .set_outputs(vec!["test".to_string(), "output".to_string()])
+            .set_payload(b"test_payload".to_vec())
             .build()
             .unwrap();
 
@@ -3241,13 +3229,13 @@ mod tests {
     fn check_create_contract_registry_action() {
         let builder = CreateContractRegistryActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_name("TestContract".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "TestContract");
-        assert_eq!(action.owners(), ["test".to_string(), "owner".to_string()]);
+        assert_eq!(action.get_name(), "TestContract");
+        assert_eq!(action.get_owners(), ["test".to_string(), "owner".to_string()]);
     }
 
     #[test]
@@ -3255,8 +3243,8 @@ mod tests {
     fn check_create_contract_registry_action_bytes() {
         let builder = CreateContractRegistryActionBuilder::new();
         let original = builder
-            .with_name("TestContract".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_name("TestContract".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
@@ -3271,11 +3259,11 @@ mod tests {
     fn check_delete_contract_registry_action() {
         let builder = DeleteContractRegistryActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
+            .set_name("TestContract".to_string())
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "TestContract");
+        assert_eq!(action.get_name(), "TestContract");
     }
 
     #[test]
@@ -3283,7 +3271,7 @@ mod tests {
     fn check_delete_contract_registry_action_bytes() {
         let builder = DeleteContractRegistryActionBuilder::new();
         let original = builder
-            .with_name("TestContract".to_string())
+            .set_name("TestContract".to_string())
             .build()
             .unwrap();
 
@@ -3298,13 +3286,13 @@ mod tests {
     fn check_update_contract_registry_owners_action() {
         let builder = UpdateContractRegistryOwnersActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_name("TestContract".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "TestContract");
-        assert_eq!(action.owners(), ["test".to_string(), "owner".to_string()]);
+        assert_eq!(action.get_name(), "TestContract");
+        assert_eq!(action.get_owners(), ["test".to_string(), "owner".to_string()]);
     }
 
     #[test]
@@ -3312,8 +3300,8 @@ mod tests {
     fn check_update_contract_registry_owners_action_bytes() {
         let builder = UpdateContractRegistryOwnersActionBuilder::new();
         let original = builder
-            .with_name("TestContract".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_name("TestContract".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
@@ -3328,13 +3316,13 @@ mod tests {
     fn check_create_namespace_registry_action() {
         let builder = CreateNamespaceRegistryActionBuilder::new();
         let action = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_namespace("TestNamespace".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
-        assert_eq!(action.namespace(), "TestNamespace");
-        assert_eq!(action.owners(), ["test".to_string(), "owner".to_string()]);
+        assert_eq!(action.get_namespace(), "TestNamespace");
+        assert_eq!(action.get_owners(), ["test".to_string(), "owner".to_string()]);
     }
 
     #[test]
@@ -3342,8 +3330,8 @@ mod tests {
     fn check_create_namespace_registry_action_bytes() {
         let builder = CreateNamespaceRegistryActionBuilder::new();
         let original = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_namespace("TestNamespace".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
@@ -3358,11 +3346,11 @@ mod tests {
     fn check_delete_namespace_registry_action() {
         let builder = DeleteNamespaceRegistryActionBuilder::new();
         let action = builder
-            .with_namespace("TestNamespace".to_string())
+            .set_namespace("TestNamespace".to_string())
             .build()
             .unwrap();
 
-        assert_eq!(action.namespace(), "TestNamespace");
+        assert_eq!(action.get_namespace(), "TestNamespace");
     }
 
     #[test]
@@ -3370,7 +3358,7 @@ mod tests {
     fn check_delete_namespace_registry_action_bytes() {
         let builder = DeleteNamespaceRegistryActionBuilder::new();
         let original = builder
-            .with_namespace("TestNamespace".to_string())
+            .set_namespace("TestNamespace".to_string())
             .build()
             .unwrap();
 
@@ -3385,13 +3373,13 @@ mod tests {
     fn check_update_namespace_registry_owners_action() {
         let builder = UpdateNamespaceRegistryOwnersActionBuilder::new();
         let action = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_namespace("TestNamespace".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
-        assert_eq!(action.namespace(), "TestNamespace");
-        assert_eq!(action.owners(), ["test".to_string(), "owner".to_string()]);
+        assert_eq!(action.get_namespace(), "TestNamespace");
+        assert_eq!(action.get_owners(), ["test".to_string(), "owner".to_string()]);
     }
 
     #[test]
@@ -3399,8 +3387,8 @@ mod tests {
     fn check_update_namespace_registry_owners_action_bytes() {
         let builder = UpdateNamespaceRegistryOwnersActionBuilder::new();
         let original = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_owners(vec!["test".to_string(), "owner".to_string()])
+            .set_namespace("TestNamespace".to_string())
+            .set_owners(vec!["test".to_string(), "owner".to_string()])
             .build()
             .unwrap();
 
@@ -3415,17 +3403,17 @@ mod tests {
     fn check_create_namespace_registry_permission_action() {
         let builder = CreateNamespaceRegistryPermissionActionBuilder::new();
         let action = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_contract_name("TestContract".to_string())
-            .with_read(true)
-            .with_write(true)
+            .set_namespace("TestNamespace".to_string())
+            .set_contract_name("TestContract".to_string())
+            .set_read(true)
+            .set_write(true)
             .build()
             .unwrap();
 
-        assert_eq!(action.namespace(), "TestNamespace");
-        assert_eq!(action.contract_name(), "TestContract");
-        assert_eq!(action.read(), true);
-        assert_eq!(action.write(), true);
+        assert_eq!(action.get_namespace(), "TestNamespace");
+        assert_eq!(action.get_contract_name(), "TestContract");
+        assert_eq!(action.get_read(), true);
+        assert_eq!(action.get_write(), true);
     }
 
     #[test]
@@ -3433,10 +3421,10 @@ mod tests {
     fn check_create_namespace_registry_permission_action_bytes() {
         let builder = CreateNamespaceRegistryPermissionActionBuilder::new();
         let original = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_contract_name("TestContract".to_string())
-            .with_read(true)
-            .with_write(true)
+            .set_namespace("TestNamespace".to_string())
+            .set_contract_name("TestContract".to_string())
+            .set_read(true)
+            .set_write(true)
             .build()
             .unwrap();
 
@@ -3451,13 +3439,13 @@ mod tests {
     fn check_delete_namespace_registry_permission_action() {
         let builder = DeleteNamespaceRegistryPermissionActionBuilder::new();
         let action = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_contract_name("TestContract".to_string())
+            .set_namespace("TestNamespace".to_string())
+            .set_contract_name("TestContract".to_string())
             .build()
             .unwrap();
 
-        assert_eq!(action.namespace(), "TestNamespace");
-        assert_eq!(action.contract_name(), "TestContract");
+        assert_eq!(action.get_namespace(), "TestNamespace");
+        assert_eq!(action.get_contract_name(), "TestContract");
     }
 
     #[test]
@@ -3465,8 +3453,8 @@ mod tests {
     fn check_delete_namespace_registry_permission_action_bytes() {
         let builder = DeleteNamespaceRegistryPermissionActionBuilder::new();
         let original = builder
-            .with_namespace("TestNamespace".to_string())
-            .with_contract_name("TestContract".to_string())
+            .set_namespace("TestNamespace".to_string())
+            .set_contract_name("TestContract".to_string())
             .build()
             .unwrap();
 
@@ -3481,15 +3469,15 @@ mod tests {
     fn check_create_smart_permission_action() {
         let builder = CreateSmartPermissionActionBuilder::new();
         let action = builder
-            .with_name("SmartPermission".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test".to_vec())
+            .set_name("SmartPermission".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test".to_vec())
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "SmartPermission");
-        assert_eq!(action.org_id(), "org_id");
-        assert_eq!(action.function(), b"test");
+        assert_eq!(action.get_name(), "SmartPermission");
+        assert_eq!(action.get_org_id(), "org_id");
+        assert_eq!(action.get_function(), b"test");
     }
 
     #[test]
@@ -3497,9 +3485,9 @@ mod tests {
     fn check_create_smart_permission_action_bytes() {
         let builder = CreateSmartPermissionActionBuilder::new();
         let original = builder
-            .with_name("SmartPermission".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test".to_vec())
+            .set_name("SmartPermission".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test".to_vec())
             .build()
             .unwrap();
 
@@ -3514,15 +3502,15 @@ mod tests {
     fn check_update_smart_permission_action() {
         let builder = UpdateSmartPermissionActionBuilder::new();
         let action = builder
-            .with_name("SmartPermission".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test".to_vec())
+            .set_name("SmartPermission".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test".to_vec())
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "SmartPermission");
-        assert_eq!(action.org_id(), "org_id");
-        assert_eq!(action.function(), b"test");
+        assert_eq!(action.get_name(), "SmartPermission");
+        assert_eq!(action.get_org_id(), "org_id");
+        assert_eq!(action.get_function(), b"test");
     }
 
     #[test]
@@ -3530,9 +3518,9 @@ mod tests {
     fn check_update_smart_permission_action_bytes() {
         let builder = UpdateSmartPermissionActionBuilder::new();
         let original = builder
-            .with_name("SmartPermission".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test".to_vec())
+            .set_name("SmartPermission".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test".to_vec())
             .build()
             .unwrap();
 
@@ -3547,13 +3535,13 @@ mod tests {
     fn check_delete_smart_permission_action() {
         let builder = DeleteSmartPermissionActionBuilder::new();
         let action = builder
-            .with_name("SmartPermission".to_string())
-            .with_org_id("org_id".to_string())
+            .set_name("SmartPermission".to_string())
+            .set_org_id("org_id".to_string())
             .build()
             .unwrap();
 
-        assert_eq!(action.name(), "SmartPermission");
-        assert_eq!(action.org_id(), "org_id");
+        assert_eq!(action.get_name(), "SmartPermission");
+        assert_eq!(action.get_org_id(), "org_id");
     }
 
     #[test]
@@ -3561,8 +3549,8 @@ mod tests {
     fn check_delete_smart_permission_action_bytes() {
         let builder = DeleteSmartPermissionActionBuilder::new();
         let original = builder
-            .with_name("SmartPermission".to_string())
-            .with_org_id("org_id".to_string())
+            .set_name("SmartPermission".to_string())
+            .set_org_id("org_id".to_string())
             .build()
             .unwrap();
 
@@ -3577,17 +3565,17 @@ mod tests {
     fn check_payload() {
         let builder = ExecuteContractActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
-            .with_inputs(vec!["test".to_string(), "input".to_string()])
-            .with_outputs(vec!["test".to_string(), "output".to_string()])
-            .with_payload(b"test_payload".to_vec())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
+            .set_inputs(vec!["test".to_string(), "input".to_string()])
+            .set_outputs(vec!["test".to_string(), "output".to_string()])
+            .set_payload(b"test_payload".to_vec())
             .build()
             .unwrap();
 
         let builder = SabrePayloadBuilder::new();
         let payload = builder
-            .with_action(Action::ExecuteContract(action.clone()))
+            .set_action(Action::ExecuteContract(action.clone()))
             .build()
             .unwrap();
 
@@ -3599,17 +3587,17 @@ mod tests {
     fn check_payload_bytes() {
         let builder = ExecuteContractActionBuilder::new();
         let action = builder
-            .with_name("TestContract".to_string())
-            .with_version("0.1".to_string())
-            .with_inputs(vec!["test".to_string(), "input".to_string()])
-            .with_outputs(vec!["test".to_string(), "output".to_string()])
-            .with_payload(b"test_payload".to_vec())
+            .set_name("TestContract".to_string())
+            .set_version("0.1".to_string())
+            .set_inputs(vec!["test".to_string(), "input".to_string()])
+            .set_outputs(vec!["test".to_string(), "output".to_string()])
+            .set_payload(b"test_payload".to_vec())
             .build()
             .unwrap();
 
         let builder = SabrePayloadBuilder::new();
         let original = builder
-            .with_action(Action::ExecuteContract(action))
+            .set_action(Action::ExecuteContract(action))
             .build()
             .unwrap();
         let bytes = original.clone().into_bytes().unwrap();

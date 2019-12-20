@@ -37,13 +37,13 @@ pub fn do_create(
     let function = load_smart_permission_file(smart_permission_path_buf.as_path())?;
 
     let action = CreateSmartPermissionActionBuilder::new()
-        .with_name(name.to_string())
-        .with_org_id(org_id.to_string())
-        .with_function(function)
+        .set_name(name.to_string())
+        .set_org_id(org_id.to_string())
+        .set_function(function)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::CreateSmartPermission(action))
+        .set_action(Action::CreateSmartPermission(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -72,13 +72,13 @@ pub fn do_update(
     let function = load_smart_permission_file(smart_permission_path_buf.as_path())?;
 
     let action = UpdateSmartPermissionActionBuilder::new()
-        .with_name(name.to_string())
-        .with_org_id(org_id.to_string())
-        .with_function(function)
+        .set_name(name.to_string())
+        .set_org_id(org_id.to_string())
+        .set_function(function)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::UpdateSmartPermission(action))
+        .set_action(Action::UpdateSmartPermission(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -101,12 +101,12 @@ pub fn do_delete(
     let signer = factory.new_signer(&private_key);
 
     let action = DeleteSmartPermissionActionBuilder::new()
-        .with_name(name.to_string())
-        .with_org_id(org_id.to_string())
+        .set_name(name.to_string())
+        .set_org_id(org_id.to_string())
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::DeleteSmartPermission(action))
+        .set_action(Action::DeleteSmartPermission(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;

@@ -231,8 +231,8 @@ pub fn create_transaction(
 
     let (input_addresses, output_addresses) = match payload.action() {
         Action::CreateContract(create_contract) => {
-            let name = create_contract.name();
-            let version = create_contract.version();
+            let name = create_contract.get_name();
+            let version = create_contract.get_version();
 
             let addresses = vec![
                 compute_contract_registry_address(name),
@@ -242,8 +242,8 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::DeleteContract(delete_contract) => {
-            let name = delete_contract.name();
-            let version = delete_contract.version();
+            let name = delete_contract.get_name();
+            let version = delete_contract.get_version();
 
             let addresses = vec![
                 compute_contract_registry_address(name),
@@ -253,14 +253,14 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::ExecuteContract(execute_contract) => {
-            let name = execute_contract.name();
-            let version = execute_contract.version();
+            let name = execute_contract.get_name();
+            let version = execute_contract.get_version();
 
             let mut input_addresses = vec![
                 compute_contract_registry_address(name),
                 compute_contract_address(name, version),
             ];
-            for input in execute_contract.inputs() {
+            for input in execute_contract.get_inputs() {
                 let namespace = match input.get(..6) {
                     Some(namespace) => namespace,
                     None => {
@@ -273,14 +273,14 @@ pub fn create_transaction(
 
                 input_addresses.push(compute_namespace_registry_address(namespace)?);
             }
-            input_addresses.append(&mut execute_contract.inputs().to_vec());
+            input_addresses.append(&mut execute_contract.get_inputs().to_vec());
 
             let mut output_addresses = vec![
                 compute_contract_registry_address(name),
                 compute_contract_address(name, version),
             ];
 
-            for output in execute_contract.outputs() {
+            for output in execute_contract.get_outputs() {
                 let namespace = match output.get(..6) {
                     Some(namespace) => namespace,
                     None => {
@@ -293,12 +293,12 @@ pub fn create_transaction(
 
                 output_addresses.push(compute_namespace_registry_address(namespace)?);
             }
-            output_addresses.append(&mut execute_contract.outputs().to_vec());
+            output_addresses.append(&mut execute_contract.get_outputs().to_vec());
 
             (input_addresses, output_addresses)
         }
         Action::CreateContractRegistry(create_contract_registry) => {
-            let name = create_contract_registry.name();
+            let name = create_contract_registry.get_name();
             let addresses = vec![
                 compute_contract_registry_address(name),
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -306,7 +306,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::DeleteContractRegistry(delete_contract_registry) => {
-            let name = delete_contract_registry.name();
+            let name = delete_contract_registry.get_name();
             let addresses = vec![
                 compute_contract_registry_address(name),
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -314,7 +314,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::UpdateContractRegistryOwners(update_contract_registry_owners) => {
-            let name = update_contract_registry_owners.name();
+            let name = update_contract_registry_owners.get_name();
             let addresses = vec![
                 compute_contract_registry_address(name),
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -322,7 +322,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::CreateNamespaceRegistry(create_namespace_registry) => {
-            let namespace = create_namespace_registry.namespace();
+            let namespace = create_namespace_registry.get_namespace();
             let addresses = vec![
                 compute_namespace_registry_address(namespace)?,
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -330,7 +330,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::DeleteNamespaceRegistry(delete_namespace_registry) => {
-            let namespace = delete_namespace_registry.namespace();
+            let namespace = delete_namespace_registry.get_namespace();
             let addresses = vec![
                 compute_namespace_registry_address(namespace)?,
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -338,7 +338,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::UpdateNamespaceRegistryOwners(update_namespace_registry_owners) => {
-            let namespace = update_namespace_registry_owners.namespace();
+            let namespace = update_namespace_registry_owners.get_namespace();
             let addresses = vec![
                 compute_namespace_registry_address(namespace)?,
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -346,7 +346,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::CreateNamespaceRegistryPermission(create_namespace_registry_permission) => {
-            let namespace = create_namespace_registry_permission.namespace();
+            let namespace = create_namespace_registry_permission.get_namespace();
             let addresses = vec![
                 compute_namespace_registry_address(namespace)?,
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -354,7 +354,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::DeleteNamespaceRegistryPermission(delete_namespace_registry_permission) => {
-            let namespace = delete_namespace_registry_permission.namespace();
+            let namespace = delete_namespace_registry_permission.get_namespace();
             let addresses = vec![
                 compute_namespace_registry_address(namespace)?,
                 ADMINISTRATORS_SETTING_ADDRESS.into(),
@@ -362,8 +362,8 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::CreateSmartPermission(create_smart_permission) => {
-            let org_id = create_smart_permission.org_id();
-            let name = create_smart_permission.name();
+            let org_id = create_smart_permission.get_org_id();
+            let name = create_smart_permission.get_name();
             let addresses = vec![
                 compute_smart_permission_address(org_id, name),
                 compute_org_address(org_id),
@@ -373,8 +373,8 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::UpdateSmartPermission(update_smart_permission) => {
-            let org_id = update_smart_permission.org_id();
-            let name = update_smart_permission.name();
+            let org_id = update_smart_permission.get_org_id();
+            let name = update_smart_permission.get_name();
             let addresses = vec![
                 compute_smart_permission_address(org_id, name),
                 compute_org_address(org_id),
@@ -384,8 +384,8 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::DeleteSmartPermission(delete_smart_permission) => {
-            let org_id = delete_smart_permission.org_id();
-            let name = delete_smart_permission.name();
+            let org_id = delete_smart_permission.get_org_id();
+            let name = delete_smart_permission.get_name();
             let addresses = vec![
                 compute_smart_permission_address(org_id, name),
                 compute_org_address(org_id),
@@ -395,8 +395,8 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::CreateAccount(create_account) => {
-            let org_id = create_account.org_id();
-            let account_public_key = create_account.public_key();
+            let org_id = create_account.get_org_id();
+            let account_public_key = create_account.get_public_key();
             let addresses = vec![
                 compute_account_address(org_id),
                 compute_account_address(account_public_key),
@@ -406,8 +406,8 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::UpdateAccount(update_account) => {
-            let org_id = update_account.org_id();
-            let account_public_key = update_account.public_key();
+            let org_id = update_account.get_org_id();
+            let account_public_key = update_account.get_public_key();
             let addresses = vec![
                 compute_account_address(org_id),
                 compute_account_address(account_public_key),
@@ -417,7 +417,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::CreateOrganization(create_organization) => {
-            let org_id = create_organization.id();
+            let org_id = create_organization.get_id();
             let addresses = vec![
                 compute_org_address(org_id),
                 compute_account_address(public_key),
@@ -426,7 +426,7 @@ pub fn create_transaction(
             (addresses.clone(), addresses)
         }
         Action::UpdateOrganization(update_organization) => {
-            let org_id = update_organization.id();
+            let org_id = update_organization.get_id();
             let addresses = vec![
                 compute_org_address(org_id),
                 compute_account_address(public_key),

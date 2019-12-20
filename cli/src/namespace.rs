@@ -26,12 +26,12 @@ pub fn do_ns_create(
     let signer = factory.new_signer(&private_key);
 
     let action = CreateNamespaceRegistryActionBuilder::new()
-        .with_namespace(namespace.into())
-        .with_owners(owners)
+        .set_namespace(namespace.into())
+        .set_owners(owners)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::CreateNamespaceRegistry(action))
+        .set_action(Action::CreateNamespaceRegistry(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -54,12 +54,12 @@ pub fn do_ns_update(
     let signer = factory.new_signer(&private_key);
 
     let action = UpdateNamespaceRegistryOwnersActionBuilder::new()
-        .with_namespace(namespace.into())
-        .with_owners(owners)
+        .set_namespace(namespace.into())
+        .set_owners(owners)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::UpdateNamespaceRegistryOwners(action))
+        .set_action(Action::UpdateNamespaceRegistryOwners(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -81,11 +81,11 @@ pub fn do_ns_delete(
     let signer = factory.new_signer(&private_key);
 
     let action = DeleteNamespaceRegistryActionBuilder::new()
-        .with_namespace(namespace.into())
+        .set_namespace(namespace.into())
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::DeleteNamespaceRegistry(action))
+        .set_action(Action::DeleteNamespaceRegistry(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -110,14 +110,14 @@ pub fn do_perm_create(
     let signer = factory.new_signer(&private_key);
 
     let action = CreateNamespaceRegistryPermissionActionBuilder::new()
-        .with_namespace(namespace.into())
-        .with_contract_name(contract.into())
-        .with_read(read)
-        .with_write(write)
+        .set_namespace(namespace.into())
+        .set_contract_name(contract.into())
+        .set_read(read)
+        .set_write(write)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::CreateNamespaceRegistryPermission(action))
+        .set_action(Action::CreateNamespaceRegistryPermission(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -138,11 +138,11 @@ pub fn do_perm_delete(
     let signer = factory.new_signer(&private_key);
 
     let action = DeleteNamespaceRegistryPermissionActionBuilder::new()
-        .with_namespace(namespace.into())
+        .set_namespace(namespace.into())
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::DeleteNamespaceRegistryPermission(action))
+        .set_action(Action::DeleteNamespaceRegistryPermission(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;

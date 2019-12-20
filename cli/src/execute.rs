@@ -49,15 +49,15 @@ fn create_exec_txn_payload(
     contract_payload: Vec<u8>,
 ) -> Result<SabrePayload, CliError> {
     let exec_contract = ExecuteContractActionBuilder::new()
-        .with_name(name.into())
-        .with_version(version.into())
-        .with_inputs(inputs)
-        .with_outputs(outputs)
-        .with_payload(contract_payload)
+        .set_name(name.into())
+        .set_version(version.into())
+        .set_inputs(inputs)
+        .set_outputs(outputs)
+        .set_payload(contract_payload)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::ExecuteContract(exec_contract))
+        .set_action(Action::ExecuteContract(exec_contract))
         .build()?;
 
     Ok(payload)

@@ -75,7 +75,7 @@ impl<'a> SabreState<'a> {
                 Ok(contracts
                     .contracts()
                     .iter()
-                    .find(|c| c.name() == name)
+                    .find(|c| c.get_name() == name)
                     .cloned())
             }
             None => Ok(None),
@@ -97,7 +97,7 @@ impl<'a> SabreState<'a> {
                     contracts
                         .contracts()
                         .iter()
-                        .filter(|c| c.name() != name)
+                        .filter(|c| c.get_name() != name)
                         .cloned()
                         .collect::<Vec<Contract>>()
                 }
@@ -112,11 +112,11 @@ impl<'a> SabreState<'a> {
         };
         contracts.push(new_contract);
         // sort the contracts by name
-        contracts.sort_by_key(|c| c.name().to_string());
+        contracts.sort_by_key(|c| c.get_name().to_string());
 
         // build new ContractList and set in state
         let contract_list = ContractListBuilder::new()
-            .with_contracts(contracts)
+            .set_contracts(contracts)
             .build()
             .map_err(|_| {
                 ApplyError::InvalidTransaction(String::from("Cannot build contract list"))
@@ -169,7 +169,7 @@ impl<'a> SabreState<'a> {
                 Ok(contract_registries
                     .registries()
                     .iter()
-                    .find(|reg| reg.name() == name)
+                    .find(|reg| reg.get_name() == name)
                     .cloned())
             }
             None => Ok(None),
@@ -190,7 +190,7 @@ impl<'a> SabreState<'a> {
                     contract_registries
                         .registries()
                         .iter()
-                        .filter(|c| c.name() != name)
+                        .filter(|c| c.get_name() != name)
                         .cloned()
                         .collect::<Vec<ContractRegistry>>()
                 }
@@ -206,9 +206,9 @@ impl<'a> SabreState<'a> {
 
         contract_registries.push(new_contract_registry);
         // sort the contract regisitries by name
-        contract_registries.sort_by_key(|c| c.name().to_string());
+        contract_registries.sort_by_key(|c| c.get_name().to_string());
         let contract_registry_list = ContractRegistryListBuilder::new()
-            .with_registries(contract_registries)
+            .set_registries(contract_registries)
             .build()
             .map_err(|_| {
                 ApplyError::InvalidTransaction(String::from("Cannot build contract registry list"))
@@ -264,7 +264,7 @@ impl<'a> SabreState<'a> {
                 Ok(namespace_registries
                     .registries()
                     .iter()
-                    .find(|reg| reg.namespace() == namespace)
+                    .find(|reg| reg.get_namespace() == namespace)
                     .cloned())
             }
             None => Ok(None),
@@ -306,7 +306,7 @@ impl<'a> SabreState<'a> {
                     namespace_registries
                         .registries()
                         .iter()
-                        .filter(|nr| nr.namespace() != namespace)
+                        .filter(|nr| nr.get_namespace() != namespace)
                         .cloned()
                         .collect::<Vec<NamespaceRegistry>>()
                 }
@@ -321,9 +321,9 @@ impl<'a> SabreState<'a> {
         };
         namespace_registries.push(new_namespace_registry);
         // sort the namespace registries by namespace
-        namespace_registries.sort_by_key(|nr| nr.namespace().to_string());
+        namespace_registries.sort_by_key(|nr| nr.get_namespace().to_string());
         let namespace_registry_list = NamespaceRegistryListBuilder::new()
-            .with_registries(namespace_registries)
+            .set_registries(namespace_registries)
             .build()
             .map_err(|_| {
                 ApplyError::InvalidTransaction(String::from("Cannot build namespace registry list"))
@@ -380,7 +380,7 @@ impl<'a> SabreState<'a> {
                 Ok(smart_permissions
                     .smart_permissions()
                     .iter()
-                    .find(|sp| sp.name() == name)
+                    .find(|sp| sp.get_name() == name)
                     .cloned())
             }
             None => Ok(None),
@@ -402,7 +402,7 @@ impl<'a> SabreState<'a> {
                     smart_permissions
                         .smart_permissions()
                         .iter()
-                        .filter(|sp| sp.name() != name)
+                        .filter(|sp| sp.get_name() != name)
                         .cloned()
                         .collect::<Vec<SmartPermission>>()
                 }
@@ -418,10 +418,10 @@ impl<'a> SabreState<'a> {
 
         smart_permissions.push(new_smart_permission);
         // sort the smart_permission by name
-        smart_permissions.sort_by_key(|sp| sp.name().to_string());
+        smart_permissions.sort_by_key(|sp| sp.get_name().to_string());
 
         let smart_permission_list = SmartPermissionListBuilder::new()
-            .with_smart_permissions(smart_permissions)
+            .set_smart_permissions(smart_permissions)
             .build()
             .map_err(|_| {
                 ApplyError::InvalidTransaction(String::from("Cannot build smart permission list"))
@@ -473,7 +473,7 @@ impl<'a> SabreState<'a> {
                 Ok(accounts
                     .accounts()
                     .iter()
-                    .find(|account| account.public_key() == public_key)
+                    .find(|account| account.get_public_key() == public_key)
                     .cloned())
             }
             None => Ok(None),
@@ -494,7 +494,7 @@ impl<'a> SabreState<'a> {
                     accounts
                         .accounts()
                         .iter()
-                        .filter(|sp| sp.public_key() != public_key)
+                        .filter(|sp| sp.get_public_key() != public_key)
                         .cloned()
                         .collect::<Vec<Account>>()
                 }
@@ -510,10 +510,10 @@ impl<'a> SabreState<'a> {
 
         accounts.push(new_account);
         // sort the account by public_key
-        accounts.sort_by_key(|sp| sp.public_key().to_string());
+        accounts.sort_by_key(|sp| sp.get_public_key().to_string());
 
         let account_list = AccountListBuilder::new()
-            .with_accounts(accounts)
+            .set_accounts(accounts)
             .build()
             .map_err(|_| {
                 ApplyError::InvalidTransaction(String::from("Cannot build account list"))
@@ -546,7 +546,7 @@ impl<'a> SabreState<'a> {
                 Ok(orgs
                     .organizations()
                     .iter()
-                    .find(|org| org.org_id() == org_id)
+                    .find(|org| org.get_org_id() == org_id)
                     .cloned())
             }
             None => Ok(None),
@@ -567,7 +567,7 @@ impl<'a> SabreState<'a> {
                     organizations
                         .organizations()
                         .iter()
-                        .filter(|sp| sp.org_id() != org_id)
+                        .filter(|sp| sp.get_org_id() != org_id)
                         .cloned()
                         .collect::<Vec<Organization>>()
                 }
@@ -583,10 +583,10 @@ impl<'a> SabreState<'a> {
 
         organizations.push(new_organization);
         // sort the organization by org_id
-        organizations.sort_by_key(|sp| sp.org_id().to_string());
+        organizations.sort_by_key(|sp| sp.get_org_id().to_string());
 
         let organization_list = OrganizationListBuilder::new()
-            .with_organizations(organizations)
+            .set_organizations(organizations)
             .build()
             .map_err(|_| {
                 ApplyError::InvalidTransaction(String::from("Cannot build organization list"))

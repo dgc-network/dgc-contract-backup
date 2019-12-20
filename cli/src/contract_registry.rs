@@ -25,12 +25,12 @@ pub fn do_cr_create(
     let signer = factory.new_signer(&private_key);
 
     let action = CreateContractRegistryActionBuilder::new()
-        .with_name(name.into())
-        .with_owners(owners)
+        .set_name(name.into())
+        .set_owners(owners)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::CreateContractRegistry(action))
+        .set_action(Action::CreateContractRegistry(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -53,12 +53,12 @@ pub fn do_cr_update(
     let signer = factory.new_signer(&private_key);
 
     let action = UpdateContractRegistryOwnersActionBuilder::new()
-        .with_name(name.into())
-        .with_owners(owners)
+        .set_name(name.into())
+        .set_owners(owners)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::UpdateContractRegistryOwners(action))
+        .set_action(Action::UpdateContractRegistryOwners(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;
@@ -76,11 +76,11 @@ pub fn do_cr_delete(key_name: Option<&str>, url: &str, name: &str) -> Result<Str
     let signer = factory.new_signer(&private_key);
 
     let action = DeleteContractRegistryActionBuilder::new()
-        .with_name(name.into())
+        .set_name(name.into())
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::DeleteContractRegistry(action))
+        .set_action(Action::DeleteContractRegistry(action))
         .build()?;
 
     let txn = create_transaction(payload, &signer, &public_key)?;

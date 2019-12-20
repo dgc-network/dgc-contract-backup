@@ -199,8 +199,8 @@ fn create_contract(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let name = payload.name();
-    let version = payload.version();
+    let name = payload.get_name();
+    let version = payload.get_version();
     match state.get_contract(name, version) {
         Ok(None) => (),
         Ok(Some(_)) => {
@@ -234,7 +234,7 @@ fn create_contract(
         }
     };
 
-    if !contract_registry.owners().contains(&signer.into()) {
+    if !contract_registry.get_owners().contains(&signer.into()) {
         return Err(ApplyError::InvalidTransaction(format!(
             "Only owners can submit new versions of contracts: {}",
             signer,
@@ -242,24 +242,24 @@ fn create_contract(
     }
 
     let contract = ContractBuilder::new()
-        .with_name(name.into())
-        .with_version(version.into())
-        .with_inputs(payload.inputs().to_vec())
-        .with_outputs(payload.outputs().to_vec())
-        .with_creator(signer.into())
-        .with_contract(payload.contract().to_vec())
+        .set_name(name.into())
+        .set_version(version.into())
+        .set_inputs(payload.get_inputs().to_vec())
+        .set_outputs(payload.get_outputs().to_vec())
+        .set_creator(signer.into())
+        .set_contract(payload.get_contract().to_vec())
         .build()
         .map_err(|_| ApplyError::InvalidTransaction(String::from("Cannot build contract")))?;
 
     state.set_contract(name, version, contract)?;
 
     let mut sha = Sha512::new();
-    sha.input(payload.contract());
+    sha.input(payload.get_contract());
 
     let contract_registry_version = VersionBuilder::new()
-        .with_version(version.into())
-        .with_contract_sha512(sha.result_str())
-        .with_creator(signer.into())
+        .set_version(version.into())
+        .set_contract_sha512(sha.result_str())
+        .set_creator(signer.into())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build contract version"))
@@ -270,7 +270,7 @@ fn create_contract(
 
     let contract_registry = contract_registry
         .into_builder()
-        .with_versions(versions)
+        .set_versions(versions)
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build contract registry"))
@@ -284,8 +284,8 @@ fn delete_contract(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let name = payload.name();
-    let version = payload.version();
+    let name = payload.get_name();
+    let version = payload.get_version();
 
     match state.get_contract(name, version) {
         Ok(Some(_)) => (),
@@ -320,7 +320,7 @@ fn delete_contract(
         }
     };
 
-    if !(contract_registry.owners().contains(&signer.into())) {
+    if !(contract_registry.get_owners().contains(&signer.into())) {
         return Err(ApplyError::InvalidTransaction(format!(
             "Signer is not an owner of this contract: {}",
             signer,
@@ -328,7 +328,7 @@ fn delete_contract(
     }
     let mut versions = contract_registry.versions().to_vec();
     for (index, contract_registry_version) in versions.iter().enumerate() {
-        if contract_registry_version.version() == version {
+        if contract_registry_version.get_version() == version {
             versions.remove(index);
             break;
         }
@@ -336,7 +336,7 @@ fn delete_contract(
 
     let contract_registry = contract_registry
         .into_builder()
-        .with_versions(versions)
+        .set_versions(versions)
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build contract registry"))
@@ -352,8 +352,8 @@ fn execute_contract(
     signature: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let name = payload.name();
-    let version = payload.version();
+    let name = payload.get_name();
+    let version = payload.get_version();
 
     let contract = match state.get_contract(name, version) {
         Ok(Some(contract)) => contract,
@@ -371,7 +371,7 @@ fn execute_contract(
         }
     };
 
-    for input in payload.inputs() {
+    for input in payload.get_inputs() {
         let namespace = match input.get(..6) {
             Some(namespace) => namespace,
             None => {
@@ -399,7 +399,7 @@ fn execute_contract(
 
         let mut namespace_registry = None;
         for registry in registries.registries() {
-            if input.starts_with(registry.namespace()) {
+            if input.starts_with(registry.get_namespace()) {
                 namespace_registry = Some(registry)
             }
         }
@@ -408,7 +408,7 @@ fn execute_contract(
         match namespace_registry {
             Some(registry) => {
                 for permission in registry.permissions() {
-                    if name == permission.contract_name() && permission.read() {
+                    if name == permission.get_contract_name() && permission.get_read() {
                         permissioned = true;
                         break;
                     }
@@ -429,7 +429,7 @@ fn execute_contract(
         }
     }
 
-    for output in payload.outputs() {
+    for output in payload.get_outputs() {
         let namespace = match output.get(..6) {
             Some(namespace) => namespace,
             None => {
@@ -457,7 +457,7 @@ fn execute_contract(
 
         let mut namespace_registry = None;
         for registry in registries.registries() {
-            if output.starts_with(registry.namespace()) {
+            if output.starts_with(registry.get_namespace()) {
                 namespace_registry = Some(registry)
             }
         }
@@ -465,7 +465,7 @@ fn execute_contract(
         match namespace_registry {
             Some(registry) => {
                 for permission in registry.permissions() {
-                    if name == permission.contract_name() && permission.write() {
+                    if name == permission.get_contract_name() && permission.get_write() {
                         permissioned = true;
                         break;
                     }
@@ -486,11 +486,11 @@ fn execute_contract(
         }
     }
 
-    let mut module = WasmModule::new(contract.contract(), state.context())
+    let mut module = WasmModule::new(contract.get_contract(), state.context())
         .expect("Failed to create can_add module");
 
     let result = module
-        .entrypoint(payload.payload().to_vec(), signer.into(), signature.into())
+        .entrypoint(payload.get_payload().to_vec(), signer.into(), signature.into())
         .map_err(|e| ApplyError::InvalidTransaction(format!("{:?}", e)))?;
 
     match result {
@@ -515,7 +515,7 @@ fn create_contract_registry(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let name = payload.name();
+    let name = payload.get_name();
 
     match state.get_contract_registry(name) {
         Ok(None) => (),
@@ -563,8 +563,8 @@ fn create_contract_registry(
     }
 
     let contract_registry = ContractRegistryBuilder::new()
-        .with_name(name.into())
-        .with_owners(payload.owners().to_vec())
+        .set_name(name.into())
+        .set_owners(payload.get_owners().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build contract registry"))
@@ -578,7 +578,7 @@ fn delete_contract_registry(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let name = payload.name();
+    let name = payload.get_name();
     let contract_registry = match state.get_contract_registry(name) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
@@ -613,7 +613,7 @@ fn update_contract_registry_owners(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let name = payload.name();
+    let name = payload.get_name();
     let contract_registry = match state.get_contract_registry(name) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
@@ -635,7 +635,7 @@ fn update_contract_registry_owners(
 
     let contract_registry = contract_registry
         .into_builder()
-        .with_owners(payload.owners().to_vec())
+        .set_owners(payload.get_owners().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build contract registry"))
@@ -649,7 +649,7 @@ fn create_namespace_registry(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let namespace = payload.namespace();
+    let namespace = payload.get_namespace();
 
     if namespace.len() < 6 {
         return Err(ApplyError::InvalidTransaction(format!(
@@ -704,8 +704,8 @@ fn create_namespace_registry(
     }
 
     let namespace_registry = NamespaceRegistryBuilder::new()
-        .with_namespace(namespace.into())
-        .with_owners(payload.owners().to_vec())
+        .set_namespace(namespace.into())
+        .set_owners(payload.get_owners().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build namespace registry"))
@@ -719,7 +719,7 @@ fn delete_namespace_registry(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let namespace = payload.namespace();
+    let namespace = payload.get_namespace();
 
     let namespace_registry = match state.get_namespace_registry(namespace) {
         Ok(None) => {
@@ -752,7 +752,7 @@ fn update_namespace_registry_owners(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let namespace = payload.namespace();
+    let namespace = payload.get_namespace();
 
     let namespace_registry = match state.get_namespace_registry(namespace) {
         Ok(None) => {
@@ -774,7 +774,7 @@ fn update_namespace_registry_owners(
     can_update_namespace_registry(namespace_registry.clone(), signer, state)?;
     let namespace_registry = namespace_registry
         .into_builder()
-        .with_owners(payload.owners().to_vec())
+        .set_owners(payload.get_owners().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build namespace registry"))
@@ -788,8 +788,8 @@ fn create_namespace_registry_permission(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let namespace = payload.namespace();
-    let contract_name = payload.contract_name();
+    let namespace = payload.get_namespace();
+    let contract_name = payload.get_contract_name();
     let namespace_registry = match state.get_namespace_registry(namespace) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
@@ -809,9 +809,9 @@ fn create_namespace_registry_permission(
     can_update_namespace_registry(namespace_registry.clone(), signer, state)?;
 
     let new_permission = PermissionBuilder::new()
-        .with_contract_name(contract_name.into())
-        .with_read(payload.read())
-        .with_write(payload.write())
+        .set_contract_name(contract_name.into())
+        .set_read(payload.get_read())
+        .set_write(payload.get_write())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from(
@@ -823,7 +823,7 @@ fn create_namespace_registry_permission(
     let mut permissions = namespace_registry.permissions().to_vec();
     let mut index = None;
     for (count, permission) in permissions.iter().enumerate() {
-        if permission.contract_name() == contract_name {
+        if permission.get_contract_name() == contract_name {
             index = Some(count);
             break;
         }
@@ -837,7 +837,7 @@ fn create_namespace_registry_permission(
 
     let namespace_registry = namespace_registry
         .into_builder()
-        .with_permissions(permissions)
+        .set_permissions(permissions)
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build namespace registry"))
@@ -851,8 +851,8 @@ fn delete_namespace_registry_permission(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    let namespace = payload.namespace();
-    let contract_name = payload.contract_name();
+    let namespace = payload.get_namespace();
+    let contract_name = payload.get_contract_name();
 
     let namespace_registry = match state.get_namespace_registry(namespace) {
         Ok(None) => {
@@ -876,7 +876,7 @@ fn delete_namespace_registry_permission(
     let mut permissions = namespace_registry.permissions().to_vec();
     let mut index = None;
     for (count, permission) in permissions.iter().enumerate() {
-        if permission.contract_name() == contract_name {
+        if permission.get_contract_name() == contract_name {
             index = Some(count);
             break;
         }
@@ -896,7 +896,7 @@ fn delete_namespace_registry_permission(
 
     let namespace_registry = namespace_registry
         .into_builder()
-        .with_permissions(permissions)
+        .set_permissions(permissions)
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build namespace registry"))
@@ -925,13 +925,13 @@ pub(crate) fn is_admin(
         }
     };
 
-    if admin.org_id() != org_id {
+    if admin.get_org_id() != org_id {
         return Err(ApplyError::InvalidTransaction(format!(
             "Signer is not associated with the organization: {}",
             signer,
         )));
     }
-    if !admin.roles().contains(&"admin".to_string()) {
+    if !admin.get_roles().contains(&"admin".to_string()) {
         return Err(ApplyError::InvalidTransaction(format!(
             "Signer is not an admin: {}",
             signer,
@@ -953,15 +953,15 @@ fn create_smart_permission(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to create smart permissions
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.get_org_id(), state)?;
 
     // Check if the smart permissions already exists
-    match state.get_smart_permission(payload.org_id(), payload.name()) {
+    match state.get_smart_permission(payload.get_org_id(), payload.get_name()) {
         Ok(None) => (),
         Ok(Some(_)) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Smart Permission already exists: {} ",
-                payload.name(),
+                payload.get_name(),
             )));
         }
         Err(err) => {
@@ -973,11 +973,11 @@ fn create_smart_permission(
     };
 
     // Check that organizations exists
-    match state.get_organization(payload.org_id()) {
+    match state.get_organization(payload.get_org_id()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Organization does not exist exists: {}",
-                payload.org_id(),
+                payload.get_org_id(),
             )));
         }
         Ok(Some(_)) => (),
@@ -990,15 +990,15 @@ fn create_smart_permission(
     };
 
     let smart_permission = SmartPermissionBuilder::new()
-        .with_name(payload.name().to_string())
-        .with_org_id(payload.org_id().to_string())
-        .with_function(payload.function().to_vec())
+        .set_name(payload.get_name().to_string())
+        .set_org_id(payload.get_org_id().to_string())
+        .set_function(payload.get_function().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build smart permission"))
         })?;
 
-    state.set_smart_permission(payload.org_id(), payload.name(), smart_permission)
+    state.set_smart_permission(payload.get_org_id(), payload.get_name(), smart_permission)
 }
 
 fn update_smart_permission(
@@ -1007,14 +1007,14 @@ fn update_smart_permission(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to update smart permissions
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.get_org_id(), state)?;
 
     // verify that the smart permission exists
-    let smart_permission = match state.get_smart_permission(payload.org_id(), payload.name()) {
+    let smart_permission = match state.get_smart_permission(payload.get_org_id(), payload.get_name()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Smart Permission does not exist: {} ",
-                payload.name(),
+                payload.get_name(),
             )));
         }
         Ok(Some(smart_permission)) => smart_permission,
@@ -1028,12 +1028,12 @@ fn update_smart_permission(
 
     let smart_permission = smart_permission
         .into_builder()
-        .with_function(payload.function().to_vec())
+        .set_function(payload.get_function().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build smart permission"))
         })?;
-    state.set_smart_permission(payload.org_id(), payload.name(), smart_permission)
+    state.set_smart_permission(payload.get_org_id(), payload.get_name(), smart_permission)
 }
 
 fn delete_smart_permission(
@@ -1042,14 +1042,14 @@ fn delete_smart_permission(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to delete smart permissions
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.get_org_id(), state)?;
 
     // verify that the smart permission exists
-    match state.get_smart_permission(payload.org_id(), payload.name()) {
+    match state.get_smart_permission(payload.get_org_id(), payload.get_name()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Smart Permission does not exists: {} ",
-                payload.name(),
+                payload.get_name(),
             )));
         }
         Ok(Some(_)) => (),
@@ -1061,7 +1061,7 @@ fn delete_smart_permission(
         }
     };
 
-    state.delete_smart_permission(payload.org_id(), payload.name())
+    state.delete_smart_permission(payload.get_org_id(), payload.get_name())
 }
 
 fn create_account(
@@ -1070,15 +1070,15 @@ fn create_account(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to create account
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.get_org_id(), state)?;
 
     // Check if the account already exists
-    match state.get_account(payload.public_key()) {
+    match state.get_account(payload.get_public_key()) {
         Ok(None) => (),
         Ok(Some(_)) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Account already exists: {} ",
-                payload.public_key(),
+                payload.get_public_key(),
             )));
         }
         Err(err) => {
@@ -1090,11 +1090,11 @@ fn create_account(
     };
 
     // Check that organizations exists
-    match state.get_organization(payload.org_id()) {
+    match state.get_organization(payload.get_org_id()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Organization does not exist exists: {}",
-                payload.org_id(),
+                payload.get_org_id(),
             )));
         }
         Ok(Some(_)) => (),
@@ -1107,16 +1107,16 @@ fn create_account(
     };
 
     let account = AccountBuilder::new()
-        .with_public_key(payload.public_key().to_string())
-        .with_org_id(payload.org_id().to_string())
-        .with_roles(payload.roles().to_vec())
-        //.with_metadata(payload.metadata().to_vec())
+        .set_public_key(payload.get_public_key().to_string())
+        .set_org_id(payload.get_org_id().to_string())
+        .set_roles(payload.get_roles().to_vec())
+        //.set_metadata(payload.get_metadata().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
         })?;
 
-    state.set_account(payload.public_key(), account)
+    state.set_account(payload.get_public_key(), account)
 }
 /*
 fn update_account(
@@ -1125,14 +1125,14 @@ fn update_account(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to update account
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.get_org_id(), state)?;
 
     // verify that the account exists
-    let account = match state.get_account(payload.public_key()) {
+    let account = match state.get_account(payload.get_public_key()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Account does not exist: {} ",
-                payload.public_key(),
+                payload.get_public_key(),
             )));
         }
         Ok(Some(account)) => account,
@@ -1146,13 +1146,13 @@ fn update_account(
 
     let account = account
         //.into_builder()
-        //.with_roles(payload.roles().to_vec())
-        .with_metadata(payload.metadata().to_vec())
+        //.set_roles(payload.get_roles().to_vec())
+        .set_metadata(payload.get_metadata().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
         })?;
-    state.set_account(payload.public_key(), account)
+    state.set_account(payload.get_public_key(), account)
 }
 */
 fn update_account(
@@ -1160,24 +1160,24 @@ fn update_account(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    if payload.public_key().is_empty() {
+    if payload.get_public_key().is_empty() {
         return Err(ApplyError::InvalidTransaction("Public key required".into()));
     }
 
-    if payload.org_id().is_empty() {
+    if payload.get_org_id().is_empty() {
         return Err(ApplyError::InvalidTransaction(
             "Organization ID required".into(),
         ));
     }
     // verify the signer of the transaction is authorized to update account
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.get_org_id(), state)?;
 
     // make sure account already exists
-    let mut account = match state.get_account(payload.public_key()) {
+    let mut account = match state.get_account(payload.get_public_key()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Account does not exists: {}",
-                payload.public_key(),
+                payload.get_public_key(),
             )))
         }
         Ok(Some(account)) => account,
@@ -1189,20 +1189,20 @@ fn update_account(
         }
     };
 
-    if !payload.roles().is_empty() {
+    if !payload.get_roles().is_empty() {
         account.set_roles(protobuf::RepeatedField::from_vec(
-            payload.roles().to_vec(),
+            payload.get_roles().to_vec(),
         ));
     }
 
-    if !payload.metadata().is_empty() {
+    if !payload.get_metadata().is_empty() {
         account.set_metadata(protobuf::RepeatedField::from_vec(
-            payload.metadata().to_vec(),
+            payload.get_metadata().to_vec(),
         ));
     }
 
     if payload.active() != account.get_active() {
-        if signer == payload.public_key() {
+        if signer == payload.get_public_key() {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Admin may not deactivate themselves: {}",
                 signer,
@@ -1211,7 +1211,7 @@ fn update_account(
         account.set_active(payload.active());
     }
     state
-        .set_account(payload.public_key(), account)
+        .set_account(payload.get_public_key(), account)
         .map_err(|e| ApplyError::InternalError(format!("Failed to create account: {:?}", e)))
 }
 
@@ -1221,15 +1221,15 @@ fn create_organization(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to create organization
-    is_admin(signer, payload.id(), state)?;
+    is_admin(signer, payload.get_id(), state)?;
 
     // Check if the organization already exists
-    match state.get_organization(payload.id()) {
+    match state.get_organization(payload.get_id()) {
         Ok(None) => (),
         Ok(Some(_)) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Organization already exists: {} ",
-                payload.name(),
+                payload.get_name(),
             )));
         }
         Err(err) => {
@@ -1241,15 +1241,15 @@ fn create_organization(
     };
 
     let organization = OrganizationBuilder::new()
-        .with_org_id(payload.id().to_string())
-        .with_name(payload.name().to_string())
-        .with_address(payload.address().to_string())
+        .set_org_id(payload.get_id().to_string())
+        .set_name(payload.get_name().to_string())
+        .set_address(payload.get_address().to_string())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build organization"))
         })?;
 
-    state.set_organization(payload.id(), organization)
+    state.set_organization(payload.get_id(), organization)
 }
 /*
 fn update_organization(
@@ -1258,14 +1258,14 @@ fn update_organization(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to update organization
-    is_admin(signer, payload.id(), state)?;
+    is_admin(signer, payload.get_id(), state)?;
 
     // verify that the organization exists
-    let organization = match state.get_organization(payload.id()) {
+    let organization = match state.get_organization(payload.get_id()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Organization does not exist: {} ",
-                payload.name(),
+                payload.get_name(),
             )));
         }
         Ok(Some(organization)) => organization,
@@ -1279,13 +1279,13 @@ fn update_organization(
 
     let organization = organization
         //.into_builder()
-        //.with_name(payload.name().to_string())
-        .with_address(payload.address().to_string())
+        //.set_name(payload.get_name().to_string())
+        .set_address(payload.get_address().to_string())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build organization"))
         })?;
-    state.set_organization(payload.id(), organization)
+    state.set_organization(payload.get_id(), organization)
 }
 */
 fn update_organization(
@@ -1293,21 +1293,21 @@ fn update_organization(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    if payload.id().is_empty() {
+    if payload.get_id().is_empty() {
         return Err(ApplyError::InvalidTransaction(
             "Unique organization ID required".into(),
         ));
     }
 
     // verify the signer of the transaction is authorized to update organization
-    is_admin(signer, payload.id(), state)?;
+    is_admin(signer, payload.get_id(), state)?;
 
     // Make sure the organization already exists
-    let mut organization = match state.get_organization(payload.id()) {
+    let mut organization = match state.get_organization(payload.get_id()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Organization does not exist exists: {}",
-                payload.id(),
+                payload.get_id(),
             )))
         }
         Ok(Some(org)) => org,
@@ -1319,13 +1319,13 @@ fn update_organization(
         }
     };
 
-    if !payload.name().is_empty() {
-        organization.set_name(payload.name().to_string());
+    if !payload.get_name().is_empty() {
+        organization.set_name(payload.get_name().to_string());
     }
-    if !payload.address().is_empty() {
-        organization.set_address(payload.address().to_string());
+    if !payload.get_address().is_empty() {
+        organization.set_address(payload.get_address().to_string());
     }
-    state.set_organization(payload.id(), organization)
+    state.set_organization(payload.get_id(), organization)
 }
 
 // helper function to check if the signer is allowed to update a namespace_registry
@@ -1334,7 +1334,7 @@ fn can_update_namespace_registry(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    if !namespace_registry.owners().contains(&signer.into()) {
+    if !namespace_registry.get_owners().contains(&signer.into()) {
         let setting = match state.get_admin_setting() {
             Ok(Some(setting)) => setting,
             Ok(None) => {
@@ -1373,7 +1373,7 @@ fn can_update_contract_registry(
     signer: &str,
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
-    if !contract_registry.owners().contains(&signer.into()) {
+    if !contract_registry.get_owners().contains(&signer.into()) {
         let setting = match state.get_admin_setting() {
             Ok(Some(setting)) => setting,
             Ok(None) => {

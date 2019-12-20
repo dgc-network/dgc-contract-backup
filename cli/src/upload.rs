@@ -73,15 +73,15 @@ fn create_upload_payload(
     contract: Vec<u8>,
 ) -> Result<SabrePayload, CliError> {
     let create_contract = CreateContractActionBuilder::new()
-        .with_name(String::from(name))
-        .with_version(String::from(version))
-        .with_inputs(inputs)
-        .with_outputs(outputs)
-        .with_contract(contract)
+        .set_name(String::from(name))
+        .set_version(String::from(version))
+        .set_inputs(inputs)
+        .set_outputs(outputs)
+        .set_contract(contract)
         .build()?;
 
     let payload = SabrePayloadBuilder::new()
-        .with_action(Action::CreateContract(create_contract))
+        .set_action(Action::CreateContract(create_contract))
         .build()?;
 
     Ok(payload)

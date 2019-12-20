@@ -415,7 +415,7 @@ impl<'a> IntkeyState<'a> {
                 };
 
                 for agent in agents.agents() {
-                    if agent.public_key() == public_key {
+                    if agent.get_public_key() == public_key {
                         return Ok(Some(agent.clone()));
                     }
                 }
@@ -442,7 +442,7 @@ impl<'a> IntkeyState<'a> {
                 };
 
                 for org in orgs.organizations() {
-                    if org.org_id() == id {
+                    if org.get_org_id() == id {
                         return Ok(Some(org.clone()));
                     }
                 }
@@ -473,7 +473,7 @@ impl<'a> IntkeyState<'a> {
                 };
 
                 for smart_permission in smart_permissions.smart_permissions() {
-                    if smart_permission.name() == name {
+                    if smart_permission.get_name() == name {
                         return Ok(Some(smart_permission.clone()));
                     }
                 }
@@ -615,13 +615,13 @@ impl TransactionHandler for IntkeyMultiplyTransactionHandler {
 }
 #[cfg(target_arch = "wasm32")]
 fn run_smart_permisson(signer: &str, payload: &[u8], agent: Agent) -> Result<i32, ApplyError> {
-    let org_id = agent.org_id();
+    let org_id = agent.get_org_id();
     let smart_permission_addr = compute_smart_permission_address(org_id, "test");
 
     invoke_smart_permission(
         smart_permission_addr,
         "test".to_string(),
-        agent.roles().to_vec(),
+        agent.get_roles().to_vec(),
         org_id.to_string(),
         signer.to_string(),
         payload,

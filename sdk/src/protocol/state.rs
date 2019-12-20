@@ -34,9 +34,9 @@ impl Version {
 
     pub fn into_builder(self) -> VersionBuilder {
         VersionBuilder::new()
-            .with_version(self.version)
-            .with_contract_sha512(self.contract_sha512)
-            .with_creator(self.creator)
+            .set_version(self.version)
+            .set_contract_sha512(self.contract_sha512)
+            .set_creator(self.creator)
     }
 }
 
@@ -56,7 +56,7 @@ impl FromNative<Version> for protos::contract_registry::ContractRegistry_Version
     fn from_native(native: Version) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::contract_registry::ContractRegistry_Version::new();
 
-        proto.set_version(native.version().to_string());
+        proto.set_version(native.get_version().to_string());
         proto.set_contract_sha512(native.contract_sha512().to_string());
         proto.set_creator(native.creator().to_string());
 
@@ -101,17 +101,17 @@ impl VersionBuilder {
         VersionBuilder::default()
     }
 
-    pub fn with_version(mut self, version: String) -> VersionBuilder {
+    pub fn set_version(mut self, version: String) -> VersionBuilder {
         self.version = Some(version);
         self
     }
 
-    pub fn with_contract_sha512(mut self, contract_sha512: String) -> VersionBuilder {
+    pub fn set_contract_sha512(mut self, contract_sha512: String) -> VersionBuilder {
         self.contract_sha512 = Some(contract_sha512);
         self
     }
 
-    pub fn with_creator(mut self, creator: String) -> VersionBuilder {
+    pub fn set_creator(mut self, creator: String) -> VersionBuilder {
         self.creator = Some(creator);
         self
     }
@@ -160,9 +160,9 @@ impl ContractRegistry {
 
     pub fn into_builder(self) -> ContractRegistryBuilder {
         ContractRegistryBuilder::new()
-            .with_name(self.name)
-            .with_versions(self.versions)
-            .with_owners(self.owners)
+            .set_name(self.name)
+            .set_versions(self.versions)
+            .set_owners(self.owners)
     }
 }
 
@@ -186,7 +186,7 @@ impl FromProto<protos::contract_registry::ContractRegistry> for ContractRegistry
 impl FromNative<ContractRegistry> for protos::contract_registry::ContractRegistry {
     fn from_native(contract_registry: ContractRegistry) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::contract_registry::ContractRegistry::new();
-        proto.set_name(contract_registry.name().to_string());
+        proto.set_name(contract_registry.get_name().to_string());
         proto.set_versions(RepeatedField::from_vec(
             contract_registry
                 .versions()
@@ -198,7 +198,7 @@ impl FromNative<ContractRegistry> for protos::contract_registry::ContractRegistr
                     ProtoConversionError,
                 >>()?,
         ));
-        proto.set_owners(RepeatedField::from_vec(contract_registry.owners().to_vec()));
+        proto.set_owners(RepeatedField::from_vec(contract_registry.get_owners().to_vec()));
 
         Ok(proto)
     }
@@ -265,17 +265,17 @@ impl ContractRegistryBuilder {
         ContractRegistryBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> ContractRegistryBuilder {
+    pub fn set_name(mut self, name: String) -> ContractRegistryBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_versions(mut self, versions: Vec<Version>) -> ContractRegistryBuilder {
+    pub fn set_versions(mut self, versions: Vec<Version>) -> ContractRegistryBuilder {
         self.versions = versions;
         self
     }
 
-    pub fn with_owners(mut self, owners: Vec<String>) -> ContractRegistryBuilder {
+    pub fn set_owners(mut self, owners: Vec<String>) -> ContractRegistryBuilder {
         self.owners = owners;
         self
     }
@@ -414,7 +414,7 @@ impl ContractRegistryListBuilder {
         ContractRegistryListBuilder::default()
     }
 
-    pub fn with_registries(
+    pub fn set_registries(
         mut self,
         registries: Vec<ContractRegistry>,
     ) -> ContractRegistryListBuilder {
@@ -452,9 +452,9 @@ impl Permission {
 
     pub fn into_builder(self) -> PermissionBuilder {
         PermissionBuilder::new()
-            .with_contract_name(self.contract_name)
-            .with_read(self.read)
-            .with_write(self.write)
+            .set_contract_name(self.contract_name)
+            .set_read(self.read)
+            .set_write(self.write)
     }
 }
 
@@ -474,9 +474,9 @@ impl FromNative<Permission> for protos::namespace_registry::NamespaceRegistry_Pe
     fn from_native(native: Permission) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::namespace_registry::NamespaceRegistry_Permission::new();
 
-        proto.set_contract_name(native.contract_name().to_string());
-        proto.set_read(native.read());
-        proto.set_write(native.write());
+        proto.set_contract_name(native.get_contract_name().to_string());
+        proto.set_read(native.get_read());
+        proto.set_write(native.get_write());
 
         Ok(proto)
     }
@@ -519,17 +519,17 @@ impl PermissionBuilder {
         PermissionBuilder::default()
     }
 
-    pub fn with_contract_name(mut self, contract_name: String) -> PermissionBuilder {
+    pub fn set_contract_name(mut self, contract_name: String) -> PermissionBuilder {
         self.contract_name = Some(contract_name);
         self
     }
 
-    pub fn with_read(mut self, read: bool) -> PermissionBuilder {
+    pub fn set_read(mut self, read: bool) -> PermissionBuilder {
         self.read = Some(read);
         self
     }
 
-    pub fn with_write(mut self, write: bool) -> PermissionBuilder {
+    pub fn set_write(mut self, write: bool) -> PermissionBuilder {
         self.write = Some(write);
         self
     }
@@ -574,9 +574,9 @@ impl NamespaceRegistry {
 
     pub fn into_builder(self) -> NamespaceRegistryBuilder {
         NamespaceRegistryBuilder::new()
-            .with_namespace(self.namespace)
-            .with_owners(self.owners)
-            .with_permissions(self.permissions)
+            .set_namespace(self.namespace)
+            .set_owners(self.owners)
+            .set_permissions(self.permissions)
     }
 }
 
@@ -600,8 +600,8 @@ impl FromProto<protos::namespace_registry::NamespaceRegistry> for NamespaceRegis
 impl FromNative<NamespaceRegistry> for protos::namespace_registry::NamespaceRegistry {
     fn from_native(native: NamespaceRegistry) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::namespace_registry::NamespaceRegistry::new();
-        proto.set_namespace(native.namespace().to_string());
-        proto.set_owners(RepeatedField::from_vec(native.owners().to_vec()));
+        proto.set_namespace(native.get_namespace().to_string());
+        proto.set_owners(RepeatedField::from_vec(native.get_owners().to_vec()));
         proto.set_permissions(RepeatedField::from_vec(
             native
                 .permissions()
@@ -679,17 +679,17 @@ impl NamespaceRegistryBuilder {
         NamespaceRegistryBuilder::default()
     }
 
-    pub fn with_namespace(mut self, namespace: String) -> NamespaceRegistryBuilder {
+    pub fn set_namespace(mut self, namespace: String) -> NamespaceRegistryBuilder {
         self.namespace = Some(namespace);
         self
     }
 
-    pub fn with_owners(mut self, owners: Vec<String>) -> NamespaceRegistryBuilder {
+    pub fn set_owners(mut self, owners: Vec<String>) -> NamespaceRegistryBuilder {
         self.owners = owners;
         self
     }
 
-    pub fn with_permissions(mut self, permissions: Vec<Permission>) -> NamespaceRegistryBuilder {
+    pub fn set_permissions(mut self, permissions: Vec<Permission>) -> NamespaceRegistryBuilder {
         self.permissions = permissions;
         self
     }
@@ -830,7 +830,7 @@ impl NamespaceRegistryListBuilder {
         NamespaceRegistryListBuilder::default()
     }
 
-    pub fn with_registries(
+    pub fn set_registries(
         mut self,
         registries: Vec<NamespaceRegistry>,
     ) -> NamespaceRegistryListBuilder {
@@ -883,12 +883,12 @@ impl Contract {
 
     pub fn into_builder(self) -> ContractBuilder {
         ContractBuilder::new()
-            .with_name(self.name)
-            .with_version(self.version)
-            .with_inputs(self.inputs)
-            .with_outputs(self.outputs)
-            .with_creator(self.creator)
-            .with_contract(self.contract)
+            .set_name(self.name)
+            .set_version(self.version)
+            .set_inputs(self.inputs)
+            .set_outputs(self.outputs)
+            .set_creator(self.creator)
+            .set_contract(self.contract)
     }
 }
 
@@ -909,12 +909,12 @@ impl FromNative<Contract> for protos::contract::Contract {
     fn from_native(contract: Contract) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::contract::Contract::new();
 
-        proto.set_name(contract.name().to_string());
-        proto.set_version(contract.version().to_string());
-        proto.set_inputs(RepeatedField::from_vec(contract.inputs().to_vec()));
-        proto.set_outputs(RepeatedField::from_vec(contract.outputs().to_vec()));
+        proto.set_name(contract.get_name().to_string());
+        proto.set_version(contract.get_version().to_string());
+        proto.set_inputs(RepeatedField::from_vec(contract.get_inputs().to_vec()));
+        proto.set_outputs(RepeatedField::from_vec(contract.get_outputs().to_vec()));
         proto.set_creator(contract.creator().to_string());
-        proto.set_contract(contract.contract().to_vec());
+        proto.set_contract(contract.get_contract().to_vec());
 
         Ok(proto)
     }
@@ -984,32 +984,32 @@ impl ContractBuilder {
         ContractBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> ContractBuilder {
+    pub fn set_name(mut self, name: String) -> ContractBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_version(mut self, version: String) -> ContractBuilder {
+    pub fn set_version(mut self, version: String) -> ContractBuilder {
         self.version = Some(version);
         self
     }
 
-    pub fn with_inputs(mut self, inputs: Vec<String>) -> ContractBuilder {
+    pub fn set_inputs(mut self, inputs: Vec<String>) -> ContractBuilder {
         self.inputs = inputs;
         self
     }
 
-    pub fn with_outputs(mut self, outputs: Vec<String>) -> ContractBuilder {
+    pub fn set_outputs(mut self, outputs: Vec<String>) -> ContractBuilder {
         self.outputs = outputs;
         self
     }
 
-    pub fn with_creator(mut self, creator: String) -> ContractBuilder {
+    pub fn set_creator(mut self, creator: String) -> ContractBuilder {
         self.creator = Some(creator);
         self
     }
 
-    pub fn with_contract(mut self, contract: Vec<u8>) -> ContractBuilder {
+    pub fn set_contract(mut self, contract: Vec<u8>) -> ContractBuilder {
         self.contract = contract;
         self
     }
@@ -1168,7 +1168,7 @@ impl ContractListBuilder {
         ContractListBuilder::default()
     }
 
-    pub fn with_contracts(mut self, contracts: Vec<Contract>) -> ContractListBuilder {
+    pub fn set_contracts(mut self, contracts: Vec<Contract>) -> ContractListBuilder {
         self.contracts = contracts;
         self
     }
@@ -1203,9 +1203,9 @@ impl SmartPermission {
 
     pub fn into_builder(self) -> SmartPermissionBuilder {
         SmartPermissionBuilder::new()
-            .with_name(self.name)
-            .with_org_id(self.org_id)
-            .with_function(self.function)
+            .set_name(self.name)
+            .set_org_id(self.org_id)
+            .set_function(self.function)
     }
 }
 
@@ -1225,9 +1225,9 @@ impl FromNative<SmartPermission> for protos::smart_permission::SmartPermission {
     fn from_native(smart_permission: SmartPermission) -> Result<Self, ProtoConversionError> {
         let mut proto = protos::smart_permission::SmartPermission::new();
 
-        proto.set_name(smart_permission.name().to_string());
-        proto.set_org_id(smart_permission.org_id().to_string());
-        proto.set_function(smart_permission.function().to_vec());
+        proto.set_name(smart_permission.get_name().to_string());
+        proto.set_org_id(smart_permission.get_org_id().to_string());
+        proto.set_function(smart_permission.get_function().to_vec());
 
         Ok(proto)
     }
@@ -1294,17 +1294,17 @@ impl SmartPermissionBuilder {
         SmartPermissionBuilder::default()
     }
 
-    pub fn with_name(mut self, name: String) -> SmartPermissionBuilder {
+    pub fn set_name(mut self, name: String) -> SmartPermissionBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> SmartPermissionBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> SmartPermissionBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_function(mut self, function: Vec<u8>) -> SmartPermissionBuilder {
+    pub fn set_function(mut self, function: Vec<u8>) -> SmartPermissionBuilder {
         self.function = function;
         self
     }
@@ -1440,7 +1440,7 @@ impl SmartPermissionListBuilder {
         SmartPermissionListBuilder::default()
     }
 
-    pub fn with_smart_permissions(
+    pub fn set_smart_permissions(
         mut self,
         smart_permissions: Vec<SmartPermission>,
     ) -> SmartPermissionListBuilder {
@@ -1554,12 +1554,12 @@ impl KeyValueEntryBuilder {
         KeyValueEntryBuilder::default()
     }
 
-    pub fn with_key(mut self, key: String) -> KeyValueEntryBuilder {
+    pub fn set_key(mut self, key: String) -> KeyValueEntryBuilder {
         self.key = Some(key);
         self
     }
 
-    pub fn with_value(mut self, value: String) -> KeyValueEntryBuilder {
+    pub fn set_value(mut self, value: String) -> KeyValueEntryBuilder {
         self.value = Some(value);
         self
     }
@@ -1630,14 +1630,14 @@ impl FromNative<Account> for protos::account::Account {
     fn from_native(account: Account) -> Result<Self, ProtoConversionError> {
         let mut account_proto = protos::account::Account::new();
 
-        account_proto.set_org_id(account.org_id().to_string());
-        account_proto.set_public_key(account.public_key().to_string());
+        account_proto.set_org_id(account.get_org_id().to_string());
+        account_proto.set_public_key(account.get_public_key().to_string());
         account_proto.set_active(account.active().clone());
-        account_proto.set_org_id(account.org_id().to_string());
-        account_proto.set_roles(RepeatedField::from_vec(account.roles().to_vec()));
+        account_proto.set_org_id(account.get_org_id().to_string());
+        account_proto.set_roles(RepeatedField::from_vec(account.get_roles().to_vec()));
         account_proto.set_metadata(RepeatedField::from_vec(
             account
-                .metadata()
+                .get_metadata()
                 .to_vec()
                 .into_iter()
                 .map(KeyValueEntry::into_proto)
@@ -1707,27 +1707,27 @@ impl AccountBuilder {
         AccountBuilder::default()
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> AccountBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> AccountBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_public_key(mut self, public_key: String) -> AccountBuilder {
+    pub fn set_public_key(mut self, public_key: String) -> AccountBuilder {
         self.public_key = Some(public_key);
         self
     }
 
-    pub fn with_active(mut self, active: bool) -> AccountBuilder {
+    pub fn set_active(mut self, active: bool) -> AccountBuilder {
         self.active = Some(active);
         self
     }
 
-    pub fn with_roles(mut self, roles: Vec<String>) -> AccountBuilder {
+    pub fn set_roles(mut self, roles: Vec<String>) -> AccountBuilder {
         self.roles = roles;
         self
     }
 
-    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> AccountBuilder {
+    pub fn set_metadata(mut self, metadata: Vec<KeyValueEntry>) -> AccountBuilder {
         self.metadata = metadata;
         self
     }
@@ -1856,7 +1856,7 @@ impl AccountListBuilder {
         AccountListBuilder::default()
     }
 
-    pub fn with_accounts(mut self, accounts: Vec<Account>) -> AccountListBuilder {
+    pub fn set_accounts(mut self, accounts: Vec<Account>) -> AccountListBuilder {
         self.accounts = accounts;
         self
     }
@@ -1923,11 +1923,11 @@ impl FromNative<Organization> for protos::account::Organization {
     fn from_native(org: Organization) -> Result<Self, ProtoConversionError> {
         let mut org_proto = protos::account::Organization::new();
 
-        org_proto.set_org_id(org.org_id().to_string());
-        org_proto.set_name(org.name().to_string());
-        org_proto.set_address(org.address().to_string());
+        org_proto.set_org_id(org.get_org_id().to_string());
+        org_proto.set_name(org.get_name().to_string());
+        org_proto.set_address(org.get_address().to_string());
         org_proto.set_metadata(RepeatedField::from_vec(
-            org.metadata()
+            org.get_metadata()
                 .to_vec()
                 .into_iter()
                 .map(KeyValueEntry::into_proto)
@@ -2001,22 +2001,22 @@ impl OrganizationBuilder {
         OrganizationBuilder::default()
     }
 
-    pub fn with_org_id(mut self, org_id: String) -> OrganizationBuilder {
+    pub fn set_org_id(mut self, org_id: String) -> OrganizationBuilder {
         self.org_id = Some(org_id);
         self
     }
 
-    pub fn with_name(mut self, name: String) -> OrganizationBuilder {
+    pub fn set_name(mut self, name: String) -> OrganizationBuilder {
         self.name = Some(name);
         self
     }
 
-    pub fn with_address(mut self, name: String) -> OrganizationBuilder {
+    pub fn set_address(mut self, name: String) -> OrganizationBuilder {
         self.address = Some(name);
         self
     }
 
-    pub fn with_metadata(mut self, metadata: Vec<KeyValueEntry>) -> OrganizationBuilder {
+    pub fn set_metadata(mut self, metadata: Vec<KeyValueEntry>) -> OrganizationBuilder {
         self.metadata = metadata;
         self
     }
@@ -2148,7 +2148,7 @@ impl OrganizationListBuilder {
         OrganizationListBuilder::default()
     }
 
-    pub fn with_organizations(
+    pub fn set_organizations(
         mut self,
         organizations: Vec<Organization>,
     ) -> OrganizationListBuilder {
@@ -2180,23 +2180,23 @@ mod tests {
     fn check_contract_registry() {
         let builder = VersionBuilder::new();
         let version = builder
-            .with_version("0.0.0".to_string())
-            .with_contract_sha512("sha512".to_string())
-            .with_creator("The Creator".to_string())
+            .set_version("0.0.0".to_string())
+            .set_contract_sha512("sha512".to_string())
+            .set_creator("The Creator".to_string())
             .build()
             .unwrap();
 
         let builder = ContractRegistryBuilder::new();
         let contract_registry = builder
-            .with_name("Tests".to_string())
-            .with_versions(vec![version.clone()])
-            .with_owners(vec!["owner".to_string()])
+            .set_name("Tests".to_string())
+            .set_versions(vec![version.clone()])
+            .set_owners(vec!["owner".to_string()])
             .build()
             .unwrap();
 
-        assert_eq!(contract_registry.name(), "Tests");
+        assert_eq!(contract_registry.get_name(), "Tests");
         assert_eq!(contract_registry.versions(), [version]);
-        assert_eq!(contract_registry.owners(), ["owner"]);
+        assert_eq!(contract_registry.get_owners(), ["owner"]);
     }
 
     #[test]
@@ -2204,17 +2204,17 @@ mod tests {
     fn check_contract_registry_bytes() {
         let builder = VersionBuilder::new();
         let version = builder
-            .with_version("0.0.0".to_string())
-            .with_contract_sha512("sha512".to_string())
-            .with_creator("The Creator".to_string())
+            .set_version("0.0.0".to_string())
+            .set_contract_sha512("sha512".to_string())
+            .set_creator("The Creator".to_string())
             .build()
             .unwrap();
 
         let builder = ContractRegistryBuilder::new();
         let original = builder
-            .with_name("Tests".to_string())
-            .with_versions(vec![version.clone()])
-            .with_owners(vec!["owner".to_string()])
+            .set_name("Tests".to_string())
+            .set_versions(vec![version.clone()])
+            .set_owners(vec!["owner".to_string()])
             .build()
             .unwrap();
 
@@ -2229,17 +2229,17 @@ mod tests {
     fn check_contract_registry_into_builder() {
         let builder = VersionBuilder::new();
         let version = builder
-            .with_version("0.0.0".to_string())
-            .with_contract_sha512("sha512".to_string())
-            .with_creator("The Creator".to_string())
+            .set_version("0.0.0".to_string())
+            .set_contract_sha512("sha512".to_string())
+            .set_creator("The Creator".to_string())
             .build()
             .unwrap();
 
         let builder = ContractRegistryBuilder::new();
         let contract_registry = builder
-            .with_name("Tests".to_string())
-            .with_versions(vec![version.clone()])
-            .with_owners(vec!["owner".to_string()])
+            .set_name("Tests".to_string())
+            .set_versions(vec![version.clone()])
+            .set_owners(vec!["owner".to_string()])
             .build()
             .unwrap();
 
@@ -2255,23 +2255,23 @@ mod tests {
     fn check_contract_registry_list() {
         let builder = VersionBuilder::new();
         let version = builder
-            .with_version("0.0.0".to_string())
-            .with_contract_sha512("sha512".to_string())
-            .with_creator("The Creator".to_string())
+            .set_version("0.0.0".to_string())
+            .set_contract_sha512("sha512".to_string())
+            .set_creator("The Creator".to_string())
             .build()
             .unwrap();
 
         let builder = ContractRegistryBuilder::new();
         let contract_registry = builder
-            .with_name("Tests".to_string())
-            .with_versions(vec![version.clone()])
-            .with_owners(vec!["owner".to_string()])
+            .set_name("Tests".to_string())
+            .set_versions(vec![version.clone()])
+            .set_owners(vec!["owner".to_string()])
             .build()
             .unwrap();
 
         let build = ContractRegistryListBuilder::new();
         let contract_registry_list = build
-            .with_registries(vec![contract_registry.clone()])
+            .set_registries(vec![contract_registry.clone()])
             .build()
             .unwrap();
 
@@ -2283,23 +2283,23 @@ mod tests {
     fn check_contract_registry_bytes_list() {
         let builder = VersionBuilder::new();
         let version = builder
-            .with_version("0.0.0".to_string())
-            .with_contract_sha512("sha512".to_string())
-            .with_creator("The Creator".to_string())
+            .set_version("0.0.0".to_string())
+            .set_contract_sha512("sha512".to_string())
+            .set_creator("The Creator".to_string())
             .build()
             .unwrap();
 
         let builder = ContractRegistryBuilder::new();
         let contract_registry = builder
-            .with_name("Tests".to_string())
-            .with_versions(vec![version.clone()])
-            .with_owners(vec!["owner".to_string()])
+            .set_name("Tests".to_string())
+            .set_versions(vec![version.clone()])
+            .set_owners(vec!["owner".to_string()])
             .build()
             .unwrap();
 
         let build = ContractRegistryListBuilder::new();
         let original = build
-            .with_registries(vec![contract_registry.clone()])
+            .set_registries(vec![contract_registry.clone()])
             .build()
             .unwrap();
 
@@ -2314,23 +2314,23 @@ mod tests {
     fn check_namespace_registry() {
         let builder = PermissionBuilder::new();
         let permission = builder
-            .with_contract_name("Test".to_string())
-            .with_read(true)
-            .with_write(true)
+            .set_contract_name("Test".to_string())
+            .set_read(true)
+            .set_write(true)
             .build()
             .unwrap();
 
         let builder = NamespaceRegistryBuilder::new();
         let namespace_registry = builder
-            .with_namespace("Tests".to_string())
-            .with_owners(vec!["owner".to_string()])
-            .with_permissions(vec![permission.clone()])
+            .set_namespace("Tests".to_string())
+            .set_owners(vec!["owner".to_string()])
+            .set_permissions(vec![permission.clone()])
             .build()
             .unwrap();
 
-        assert_eq!(namespace_registry.namespace(), "Tests");
+        assert_eq!(namespace_registry.get_namespace(), "Tests");
         assert_eq!(namespace_registry.permissions(), [permission]);
-        assert_eq!(namespace_registry.owners(), ["owner"]);
+        assert_eq!(namespace_registry.get_owners(), ["owner"]);
     }
 
     #[test]
@@ -2338,17 +2338,17 @@ mod tests {
     fn check_namespace_registry_bytes() {
         let builder = PermissionBuilder::new();
         let permission = builder
-            .with_contract_name("Test".to_string())
-            .with_read(true)
-            .with_write(true)
+            .set_contract_name("Test".to_string())
+            .set_read(true)
+            .set_write(true)
             .build()
             .unwrap();
 
         let builder = NamespaceRegistryBuilder::new();
         let original = builder
-            .with_namespace("Tests".to_string())
-            .with_owners(vec!["owner".to_string()])
-            .with_permissions(vec![permission.clone()])
+            .set_namespace("Tests".to_string())
+            .set_owners(vec!["owner".to_string()])
+            .set_permissions(vec![permission.clone()])
             .build()
             .unwrap();
 
@@ -2363,17 +2363,17 @@ mod tests {
     fn check_namespace_registry_into_build() {
         let builder = PermissionBuilder::new();
         let permission = builder
-            .with_contract_name("Test".to_string())
-            .with_read(true)
-            .with_write(true)
+            .set_contract_name("Test".to_string())
+            .set_read(true)
+            .set_write(true)
             .build()
             .unwrap();
 
         let builder = NamespaceRegistryBuilder::new();
         let namespace_registry = builder
-            .with_namespace("Tests".to_string())
-            .with_owners(vec!["owner".to_string()])
-            .with_permissions(vec![permission.clone()])
+            .set_namespace("Tests".to_string())
+            .set_owners(vec!["owner".to_string()])
+            .set_permissions(vec![permission.clone()])
             .build()
             .unwrap();
 
@@ -2389,23 +2389,23 @@ mod tests {
     fn check_namespace_registry_list() {
         let builder = PermissionBuilder::new();
         let permission = builder
-            .with_contract_name("Test".to_string())
-            .with_read(true)
-            .with_write(true)
+            .set_contract_name("Test".to_string())
+            .set_read(true)
+            .set_write(true)
             .build()
             .unwrap();
 
         let builder = NamespaceRegistryBuilder::new();
         let namespace_registry = builder
-            .with_namespace("Tests".to_string())
-            .with_owners(vec!["owner".to_string()])
-            .with_permissions(vec![permission.clone()])
+            .set_namespace("Tests".to_string())
+            .set_owners(vec!["owner".to_string()])
+            .set_permissions(vec![permission.clone()])
             .build()
             .unwrap();
 
         let build = NamespaceRegistryListBuilder::new();
         let namespace_registry_list = build
-            .with_registries(vec![namespace_registry.clone()])
+            .set_registries(vec![namespace_registry.clone()])
             .build()
             .unwrap();
 
@@ -2417,23 +2417,23 @@ mod tests {
     fn check_namespace_registry_bytes_list() {
         let builder = PermissionBuilder::new();
         let permission = builder
-            .with_contract_name("Test".to_string())
-            .with_read(true)
-            .with_write(true)
+            .set_contract_name("Test".to_string())
+            .set_read(true)
+            .set_write(true)
             .build()
             .unwrap();
 
         let builder = NamespaceRegistryBuilder::new();
         let namespace_registry = builder
-            .with_namespace("Tests".to_string())
-            .with_owners(vec!["owner".to_string()])
-            .with_permissions(vec![permission.clone()])
+            .set_namespace("Tests".to_string())
+            .set_owners(vec!["owner".to_string()])
+            .set_permissions(vec![permission.clone()])
             .build()
             .unwrap();
 
         let build = NamespaceRegistryListBuilder::new();
         let original = build
-            .with_registries(vec![namespace_registry.clone()])
+            .set_registries(vec![namespace_registry.clone()])
             .build()
             .unwrap();
 
@@ -2448,27 +2448,27 @@ mod tests {
     fn check_contract() {
         let builder = ContractBuilder::new();
         let contract = builder
-            .with_name("Tests".to_string())
-            .with_version("0.0.0".to_string())
-            .with_inputs(vec!["input1".to_string(), "input2".to_string()])
-            .with_outputs(vec!["output1".to_string(), "output2".to_string()])
-            .with_creator("The Creator".to_string())
-            .with_contract(b"test_contract".to_vec())
+            .set_name("Tests".to_string())
+            .set_version("0.0.0".to_string())
+            .set_inputs(vec!["input1".to_string(), "input2".to_string()])
+            .set_outputs(vec!["output1".to_string(), "output2".to_string()])
+            .set_creator("The Creator".to_string())
+            .set_contract(b"test_contract".to_vec())
             .build()
             .unwrap();
 
-        assert_eq!(contract.name(), "Tests");
-        assert_eq!(contract.version(), "0.0.0");
+        assert_eq!(contract.get_name(), "Tests");
+        assert_eq!(contract.get_version(), "0.0.0");
         assert_eq!(
-            contract.inputs(),
+            contract.get_inputs(),
             ["input1".to_string(), "input2".to_string()]
         );
         assert_eq!(
-            contract.outputs(),
+            contract.get_outputs(),
             ["output1".to_string(), "output2".to_string()]
         );
         assert_eq!(contract.creator(), "The Creator");
-        assert_eq!(contract.contract(), b"test_contract");
+        assert_eq!(contract.get_contract(), b"test_contract");
     }
 
     #[test]
@@ -2476,12 +2476,12 @@ mod tests {
     fn check_contract_bytes() {
         let builder = ContractBuilder::new();
         let original = builder
-            .with_name("Tests".to_string())
-            .with_version("0.0.0".to_string())
-            .with_inputs(vec!["input1".to_string(), "input2".to_string()])
-            .with_outputs(vec!["output1".to_string(), "output2".to_string()])
-            .with_creator("The Creator".to_string())
-            .with_contract(b"test_contract".to_vec())
+            .set_name("Tests".to_string())
+            .set_version("0.0.0".to_string())
+            .set_inputs(vec!["input1".to_string(), "input2".to_string()])
+            .set_outputs(vec!["output1".to_string(), "output2".to_string()])
+            .set_creator("The Creator".to_string())
+            .set_contract(b"test_contract".to_vec())
             .build()
             .unwrap();
 
@@ -2496,12 +2496,12 @@ mod tests {
     fn check_contract_into_builder() {
         let builder = ContractBuilder::new();
         let contract = builder
-            .with_name("Tests".to_string())
-            .with_version("0.0.0".to_string())
-            .with_inputs(vec!["input1".to_string(), "input2".to_string()])
-            .with_outputs(vec!["output1".to_string(), "output2".to_string()])
-            .with_creator("The Creator".to_string())
-            .with_contract(b"test_contract".to_vec())
+            .set_name("Tests".to_string())
+            .set_version("0.0.0".to_string())
+            .set_inputs(vec!["input1".to_string(), "input2".to_string()])
+            .set_outputs(vec!["output1".to_string(), "output2".to_string()])
+            .set_creator("The Creator".to_string())
+            .set_contract(b"test_contract".to_vec())
             .build()
             .unwrap();
 
@@ -2523,18 +2523,18 @@ mod tests {
     fn check_contract_list() {
         let builder = ContractBuilder::new();
         let contract = builder
-            .with_name("Tests".to_string())
-            .with_version("0.0.0".to_string())
-            .with_inputs(vec!["input1".to_string(), "input2".to_string()])
-            .with_outputs(vec!["output1".to_string(), "output2".to_string()])
-            .with_creator("The Creator".to_string())
-            .with_contract(b"test_contract".to_vec())
+            .set_name("Tests".to_string())
+            .set_version("0.0.0".to_string())
+            .set_inputs(vec!["input1".to_string(), "input2".to_string()])
+            .set_outputs(vec!["output1".to_string(), "output2".to_string()])
+            .set_creator("The Creator".to_string())
+            .set_contract(b"test_contract".to_vec())
             .build()
             .unwrap();
 
         let builder = ContractListBuilder::new();
         let contract_list = builder
-            .with_contracts(vec![contract.clone()])
+            .set_contracts(vec![contract.clone()])
             .build()
             .unwrap();
 
@@ -2546,18 +2546,18 @@ mod tests {
     fn check_contract_list_bytes() {
         let builder = ContractBuilder::new();
         let contract = builder
-            .with_name("Tests".to_string())
-            .with_version("0.0.0".to_string())
-            .with_inputs(vec!["input1".to_string(), "input2".to_string()])
-            .with_outputs(vec!["output1".to_string(), "output2".to_string()])
-            .with_creator("The Creator".to_string())
-            .with_contract(b"test_contract".to_vec())
+            .set_name("Tests".to_string())
+            .set_version("0.0.0".to_string())
+            .set_inputs(vec!["input1".to_string(), "input2".to_string()])
+            .set_outputs(vec!["output1".to_string(), "output2".to_string()])
+            .set_creator("The Creator".to_string())
+            .set_contract(b"test_contract".to_vec())
             .build()
             .unwrap();
 
         let builder = ContractListBuilder::new();
         let original = builder
-            .with_contracts(vec![contract.clone()])
+            .set_contracts(vec![contract.clone()])
             .build()
             .unwrap();
 
@@ -2572,15 +2572,15 @@ mod tests {
     fn check_smart_permission() {
         let builder = SmartPermissionBuilder::new();
         let smart_permission = builder
-            .with_name("Tests".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test_function".to_vec())
+            .set_name("Tests".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test_function".to_vec())
             .build()
             .unwrap();
 
-        assert_eq!(smart_permission.name(), "Tests");
-        assert_eq!(smart_permission.org_id(), "org_id");
-        assert_eq!(smart_permission.function(), b"test_function");
+        assert_eq!(smart_permission.get_name(), "Tests");
+        assert_eq!(smart_permission.get_org_id(), "org_id");
+        assert_eq!(smart_permission.get_function(), b"test_function");
     }
 
     #[test]
@@ -2588,9 +2588,9 @@ mod tests {
     fn check_smart_permission_bytes() {
         let builder = SmartPermissionBuilder::new();
         let original = builder
-            .with_name("Tests".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test_function".to_vec())
+            .set_name("Tests".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test_function".to_vec())
             .build()
             .unwrap();
 
@@ -2605,9 +2605,9 @@ mod tests {
     fn check_smart_permission_into_builder() {
         let builder = SmartPermissionBuilder::new();
         let smart_permission = builder
-            .with_name("Tests".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test_function".to_vec())
+            .set_name("Tests".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test_function".to_vec())
             .build()
             .unwrap();
 
@@ -2623,15 +2623,15 @@ mod tests {
     fn check_smart_permission_list() {
         let builder = SmartPermissionBuilder::new();
         let smart_permission = builder
-            .with_name("Tests".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test_function".to_vec())
+            .set_name("Tests".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test_function".to_vec())
             .build()
             .unwrap();
 
         let builder = SmartPermissionListBuilder::new();
         let smart_permission_list = builder
-            .with_smart_permissions(vec![smart_permission.clone()])
+            .set_smart_permissions(vec![smart_permission.clone()])
             .build()
             .unwrap();
 
@@ -2646,15 +2646,15 @@ mod tests {
     fn check_smart_permission_list_bytes() {
         let builder = SmartPermissionBuilder::new();
         let smart_permission = builder
-            .with_name("Tests".to_string())
-            .with_org_id("org_id".to_string())
-            .with_function(b"test_function".to_vec())
+            .set_name("Tests".to_string())
+            .set_org_id("org_id".to_string())
+            .set_function(b"test_function".to_vec())
             .build()
             .unwrap();
 
         let builder = SmartPermissionListBuilder::new();
         let original = builder
-            .with_smart_permissions(vec![smart_permission.clone()])
+            .set_smart_permissions(vec![smart_permission.clone()])
             .build()
             .unwrap();
 
@@ -2669,8 +2669,8 @@ mod tests {
     fn check_key_value_entry_builder() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
@@ -2683,8 +2683,8 @@ mod tests {
     fn check_key_value_entry_bytes() {
         let builder = KeyValueEntryBuilder::new();
         let original = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
@@ -2698,26 +2698,26 @@ mod tests {
     fn check_account_builder() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = AccountBuilder::new();
         let account = builder
-            .with_org_id("organization".to_string())
-            .with_public_key("public_key".to_string())
-            .with_active(true)
-            .with_roles(vec!["Role".to_string()])
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_public_key("public_key".to_string())
+            .set_active(true)
+            .set_roles(vec!["Role".to_string()])
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
-        assert_eq!(account.org_id(), "organization");
-        assert_eq!(account.public_key(), "public_key");
+        assert_eq!(account.get_org_id(), "organization");
+        assert_eq!(account.get_public_key(), "public_key");
         assert!(account.active());
-        assert_eq!(account.roles(), ["Role".to_string()]);
-        assert_eq!(account.metadata(), [key_value]);
+        assert_eq!(account.get_roles(), ["Role".to_string()]);
+        assert_eq!(account.get_metadata(), [key_value]);
     }
 
     #[test]
@@ -2725,18 +2725,18 @@ mod tests {
     fn check_account_bytes() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = AccountBuilder::new();
         let original = builder
-            .with_org_id("organization".to_string())
-            .with_public_key("public_key".to_string())
-            .with_active(true)
-            .with_roles(vec!["Role".to_string()])
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_public_key("public_key".to_string())
+            .set_active(true)
+            .set_roles(vec!["Role".to_string()])
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
@@ -2750,23 +2750,23 @@ mod tests {
     fn check_account_list_builder() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = AccountBuilder::new();
         let account = builder
-            .with_org_id("organization".to_string())
-            .with_public_key("public_key".to_string())
-            .with_active(true)
-            .with_roles(vec!["Role".to_string()])
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_public_key("public_key".to_string())
+            .set_active(true)
+            .set_roles(vec!["Role".to_string()])
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
         let builder = AccountListBuilder::new();
-        let account_list = builder.with_accounts(vec![account.clone()]).build().unwrap();
+        let account_list = builder.set_accounts(vec![account.clone()]).build().unwrap();
 
         assert_eq!(account_list.accounts(), [account])
     }
@@ -2776,23 +2776,23 @@ mod tests {
     fn check_account_list_bytes() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = AccountBuilder::new();
         let account = builder
-            .with_org_id("organization".to_string())
-            .with_public_key("public_key".to_string())
-            .with_active(true)
-            .with_roles(vec!["Role".to_string()])
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_public_key("public_key".to_string())
+            .set_active(true)
+            .set_roles(vec!["Role".to_string()])
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
         let builder = AccountBuilder::new();
-        let original = builder.with_accounts(vec![account.clone()]).build().unwrap();
+        let original = builder.set_accounts(vec![account.clone()]).build().unwrap();
 
         let bytes = original.clone().into_bytes().unwrap();
         let account_list = AccountList::from_bytes(&bytes).unwrap();
@@ -2804,24 +2804,24 @@ mod tests {
     fn check_organization_builder() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = OrganizationBuilder::new();
         let organization = builder
-            .with_org_id("organization".to_string())
-            .with_name("name".to_string())
-            .with_address("address".to_string())
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_name("name".to_string())
+            .set_address("address".to_string())
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
-        assert_eq!(organization.org_id(), "organization");
-        assert_eq!(organization.name(), "name");
-        assert_eq!(organization.address(), "address");
-        assert_eq!(organization.metadata(), [key_value]);
+        assert_eq!(organization.get_org_id(), "organization");
+        assert_eq!(organization.get_name(), "name");
+        assert_eq!(organization.get_address(), "address");
+        assert_eq!(organization.get_metadata(), [key_value]);
     }
 
     #[test]
@@ -2829,17 +2829,17 @@ mod tests {
     fn check_organization_bytes() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = OrganizationBuilder::new();
         let original = builder
-            .with_org_id("organization".to_string())
-            .with_name("name".to_string())
-            .with_address("address".to_string())
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_name("name".to_string())
+            .set_address("address".to_string())
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
@@ -2853,23 +2853,23 @@ mod tests {
     fn check_organization_lists_builder() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = OrganizationBuilder::new();
         let organization = builder
-            .with_org_id("organization".to_string())
-            .with_name("name".to_string())
-            .with_address("address".to_string())
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_name("name".to_string())
+            .set_address("address".to_string())
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
         let builder = OrganizationListBuilder::new();
         let organization_list = builder
-            .with_organizations(vec![organization.clone()])
+            .set_organizations(vec![organization.clone()])
             .build()
             .unwrap();
 
@@ -2881,23 +2881,23 @@ mod tests {
     fn check_organization_list_bytes() {
         let builder = KeyValueEntryBuilder::new();
         let key_value = builder
-            .with_key("Key".to_string())
-            .with_value("Value".to_string())
+            .set_key("Key".to_string())
+            .set_value("Value".to_string())
             .build()
             .unwrap();
 
         let builder = OrganizationBuilder::new();
         let organization = builder
-            .with_org_id("organization".to_string())
-            .with_name("name".to_string())
-            .with_address("address".to_string())
-            .with_metadata(vec![key_value.clone()])
+            .set_org_id("organization".to_string())
+            .set_name("name".to_string())
+            .set_address("address".to_string())
+            .set_metadata(vec![key_value.clone()])
             .build()
             .unwrap();
 
         let builder = OrganizationListBuilder::new();
         let original = builder
-            .with_organizations(vec![organization.clone()])
+            .set_organizations(vec![organization.clone()])
             .build()
             .unwrap();
 
