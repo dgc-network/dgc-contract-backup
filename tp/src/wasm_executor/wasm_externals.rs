@@ -277,7 +277,7 @@ impl<'a> WasmExternals<'a> {
                     }
                 };
 
-                for smart_permission in smart_permissions.smart_permissions() {
+                for smart_permission in smart_permissions.get_smart_permissions() {
                     if smart_permission.get_name() == name {
                         return Ok(Some(smart_permission.clone()));
                     }
@@ -797,7 +797,7 @@ impl<'a> SmartPermissionModule<'a> {
 
         let instance = ModuleInstance::new(
             &self.module,
-            &ImportsBuilder::new().set_resolver("env", &env),
+            &ImportsBuilder::new().with_resolver("env", &env),
         )?
         .assert_no_start();
 

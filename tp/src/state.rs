@@ -73,7 +73,7 @@ impl<'a> SabreState<'a> {
                     ))
                 })?;
                 Ok(contracts
-                    .contracts()
+                    .get_contracts()
                     .iter()
                     .find(|c| c.get_name() == name)
                     .cloned())
@@ -95,7 +95,7 @@ impl<'a> SabreState<'a> {
                 Ok(contracts) => {
                     // remove old contract if it exists
                     contracts
-                        .contracts()
+                        .get_contracts()
                         .iter()
                         .filter(|c| c.get_name() != name)
                         .cloned()
@@ -167,7 +167,7 @@ impl<'a> SabreState<'a> {
                     })?;
 
                 Ok(contract_registries
-                    .registries()
+                    .get_registries()
                     .iter()
                     .find(|reg| reg.get_name() == name)
                     .cloned())
@@ -188,7 +188,7 @@ impl<'a> SabreState<'a> {
                 Ok(contract_registries) => {
                     // remove old contract_registry if it exists
                     contract_registries
-                        .registries()
+                        .get_registries()
                         .iter()
                         .filter(|c| c.get_name() != name)
                         .cloned()
@@ -262,7 +262,7 @@ impl<'a> SabreState<'a> {
                     })?;
 
                 Ok(namespace_registries
-                    .registries()
+                    .get_registries()
                     .iter()
                     .find(|reg| reg.get_namespace() == namespace)
                     .cloned())
@@ -304,7 +304,7 @@ impl<'a> SabreState<'a> {
                 Ok(namespace_registries) => {
                     // remove old namespace rgistry if it exists
                     namespace_registries
-                        .registries()
+                        .get_registries()
                         .iter()
                         .filter(|nr| nr.get_namespace() != namespace)
                         .cloned()
@@ -378,7 +378,7 @@ impl<'a> SabreState<'a> {
                     })?;
 
                 Ok(smart_permissions
-                    .smart_permissions()
+                    .get_smart_permissions()
                     .iter()
                     .find(|sp| sp.get_name() == name)
                     .cloned())
@@ -400,7 +400,7 @@ impl<'a> SabreState<'a> {
                 Ok(smart_permissions) => {
                     // remove old smart_permission if it exists
                     smart_permissions
-                        .smart_permissions()
+                        .get_smart_permissions()
                         .iter()
                         .filter(|sp| sp.get_name() != name)
                         .cloned()
@@ -471,7 +471,7 @@ impl<'a> SabreState<'a> {
                 })?;
 
                 Ok(accounts
-                    .accounts()
+                    .get_accounts()
                     .iter()
                     .find(|account| account.get_public_key() == public_key)
                     .cloned())
@@ -492,7 +492,7 @@ impl<'a> SabreState<'a> {
                 Ok(accounts) => {
                     // remove old account if it exists
                     accounts
-                        .accounts()
+                        .get_accounts()
                         .iter()
                         .filter(|sp| sp.get_public_key() != public_key)
                         .cloned()
@@ -544,7 +544,7 @@ impl<'a> SabreState<'a> {
                 })?;
 
                 Ok(orgs
-                    .organizations()
+                    .get_organizations()
                     .iter()
                     .find(|org| org.get_org_id() == org_id)
                     .cloned())
@@ -565,7 +565,7 @@ impl<'a> SabreState<'a> {
                 Ok(organizations) => {
                     // remove old organization if it exists
                     organizations
-                        .organizations()
+                        .get_organizations()
                         .iter()
                         .filter(|sp| sp.get_org_id() != org_id)
                         .cloned()

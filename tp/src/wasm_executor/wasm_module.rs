@@ -30,7 +30,7 @@ impl<'a> WasmModule<'a> {
 
         let instance = ModuleInstance::new(
             &self.module,
-            &ImportsBuilder::new().set_resolver("env", &env),
+            &ImportsBuilder::new().with_resolver("env", &env),
         )?
         .assert_no_start();
 
