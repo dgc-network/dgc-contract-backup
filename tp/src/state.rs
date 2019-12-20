@@ -9,7 +9,7 @@ use sabre_sdk::protocol::state::{
     ContractRegistryListBuilder, NamespaceRegistry, NamespaceRegistryList,
     NamespaceRegistryListBuilder, SmartPermission, SmartPermissionList, SmartPermissionListBuilder,
     Account, AccountList, Organization, OrganizationList,
-    AccountBuilder, OrganizationBuilder,
+    AccountListBuilder, OrganizationListBuilder,
 };
 use sabre_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
 use sabre_sdk::protos::{FromBytes, IntoBytes};
@@ -585,7 +585,7 @@ impl<'a> SabreState<'a> {
         // sort the organization by org_id
         organizations.sort_by_key(|sp| sp.org_id().to_string());
 
-        let organization_list = OrganizationBuilder::new()
+        let organization_list = OrganizationListBuilder::new()
             .with_organizations(organizations)
             .build()
             .map_err(|_| {
