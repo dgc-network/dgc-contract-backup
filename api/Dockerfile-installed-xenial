@@ -1,7 +1,7 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-# docker build -f contracts/api/Dockerfile-installed-xenial -t dgc-rest-api .
+# docker build -f api/Dockerfile-installed-xenial -t dgc-rest-api .
 
 # -------------=== dgc api build ===-------------
 
@@ -33,7 +33,7 @@ RUN /root/.cargo/bin/cargo install cargo-deb
 
 COPY . /project
 
-WORKDIR /project/contracts/api
+WORKDIR /project/api
 
 RUN export VERSION=$(../../../bin/get_version) \
  && sed -i -e "0,/version.*$/ s/version.*$/version\ =\ \"${VERSION}\"/" Cargo.toml \
@@ -43,7 +43,7 @@ RUN export VERSION=$(../../../bin/get_version) \
 
 FROM ubuntu:xenial
 
-COPY --from=dgc-api-builder /project/contracts/api/target/debian/dgc-api*.deb /tmp
+COPY --from=dgc-api-builder /project/api/target/debian/dgc-api*.deb /tmp
 
 RUN apt-get update \
  && dpkg -i /tmp/dgc-api*.deb || true \

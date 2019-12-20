@@ -457,6 +457,79 @@ impl<'a> SabreState<'a> {
         Ok(())
     }
 
+    pub fn get_account(&mut self, public_key: &str) -> Result<Option<Account>, ApplyError> {
+        let address = compute_account_address(public_key);
+        let d = self.context.get_state_entry(&address)?;
+        match d {
+            Some(packed) => {
+                let accounts = AccountList::from_bytes(packed.as_slice()).map_err(|err| {
+                    ApplyError::InvalidTransaction(format!(
+                        "Cannot deserialize account list: {:?}",
+                        err,
+                    ))
+                })?;
+
+                Ok(accounts
+                    .accounts()
+                    .iter()
+                    .find(|account| account.public_key() == public_key)
+                    .cloned())
+            }
+            None => Ok(None),
+        }
+    }
+
+    pub fn set_account(
+        &mut self,
+        public_key: &str,
+        new_account: Account,
+    ) -> Result<(), ApplyError> {
+        let address = compute_account_address(org_id, public_key);
+        let d = self.context.get_state_entry(&address)?;
+        let mut accounts = match d {
+            Some(packed) => match AccountList::from_bytes(packed.as_slice()) {
+                Ok(accounts) => {
+                    // remove old account if it exists
+                    accounts
+                        .accounts()
+                        .iter()
+                        .filter(|sp| sp.public_key() != public_key)
+                        .cloned()
+                        .collect::<Vec<Account>>()
+                }
+                Err(err) => {
+                    return Err(ApplyError::InvalidTransaction(format!(
+                        "Cannot deserialize account list: {}",
+                        err,
+                    )));
+                }
+            },
+            None => vec![],
+        };
+
+        accounts.push(new_account);
+        // sort the account by public_key
+        accounts.sort_by_key(|sp| sp.public_key().to_string());
+
+        let account_list = AccountListBuilder::new()
+            .with_accounts(accounts)
+            .build()
+            .map_err(|_| {
+                ApplyError::InvalidTransaction(String::from("Cannot build account list"))
+            })?;
+
+        let serialized = account_list.into_bytes().map_err(|err| {
+            ApplyError::InvalidTransaction(format!(
+                "Cannot serialize account list: {:?}",
+                err,
+            ))
+        })?;
+        self.context
+            .set_state_entry(address, serialized)
+            .map_err(|err| ApplyError::InvalidTransaction(format!("{}", err)))?;
+        Ok(())
+    }
+
     pub fn get_organization(&mut self, id: &str) -> Result<Option<Organization>, ApplyError> {
         let address = compute_org_address(id);
         let d = self.context.get_state_entry(&address)?;
@@ -479,25 +552,54 @@ impl<'a> SabreState<'a> {
         }
     }
 
-    pub fn get_account(&mut self, public_key: &str) -> Result<Option<Account>, ApplyError> {
-        let address = compute_account_address(public_key);
+    pub fn set_organization(
+        &mut self,
+        org_id: &str,
+        new_organization: Organization,
+    ) -> Result<(), ApplyError> {
+        let address = compute_organization_address(org_id);
         let d = self.context.get_state_entry(&address)?;
-        match d {
-            Some(packed) => {
-                let accounts = AccountList::from_bytes(packed.as_slice()).map_err(|err| {
-                    ApplyError::InvalidTransaction(format!(
-                        "Cannot deserialize account list: {:?}",
+        let mut organizations = match d {
+            Some(packed) => match OrganizationList::from_bytes(packed.as_slice()) {
+                Ok(organizations) => {
+                    // remove old organization if it exists
+                    organizations
+                        .organizations()
+                        .iter()
+                        .filter(|sp| sp.org_id() != org_id)
+                        .cloned()
+                        .collect::<Vec<Organization>>()
+                }
+                Err(err) => {
+                    return Err(ApplyError::InvalidTransaction(format!(
+                        "Cannot deserialize organization list: {}",
                         err,
-                    ))
-                })?;
+                    )));
+                }
+            },
+            None => vec![],
+        };
 
-                Ok(accounts
-                    .accounts()
-                    .iter()
-                    .find(|account| account.public_key() == public_key)
-                    .cloned())
-            }
-            None => Ok(None),
-        }
+        organizations.push(new_organization);
+        // sort the organization by org_id
+        organizations.sort_by_key(|sp| sp.org_id().to_string());
+
+        let organization_list = OrganizationBuilder::new()
+            .with_organizations(organizations)
+            .build()
+            .map_err(|_| {
+                ApplyError::InvalidTransaction(String::from("Cannot build organization list"))
+            })?;
+
+        let serialized = organization_list.into_bytes().map_err(|err| {
+            ApplyError::InvalidTransaction(format!(
+                "Cannot serialize smart permission list: {:?}",
+                err,
+            ))
+        })?;
+        self.context
+            .set_state_entry(address, serialized)
+            .map_err(|err| ApplyError::InvalidTransaction(format!("{}", err)))?;
+        Ok(())
     }
 }

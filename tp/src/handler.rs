@@ -1073,7 +1073,7 @@ fn create_account(
     is_admin(signer, payload.org_id(), state)?;
 
     // Check if the account already exists
-    match state.get_account(payload.org_id(), payload.public_key()) {
+    match state.get_account(payload.public_key()) {
         Ok(None) => (),
         Ok(Some(_)) => {
             return Err(ApplyError::InvalidTransaction(format!(
@@ -1110,13 +1110,13 @@ fn create_account(
         .with_public_key(payload.public_key().to_string())
         .with_org_id(payload.org_id().to_string())
         .with_roles(payload.roles().to_vec())
-        .with_metadata(payload.with_metadata().to_vec())
+        .with_metadata(payload.metadata().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
         })?;
 
-    state.set_account(payload.org_id(), payload.public_key(), account)
+    state.set_account(payload.public_key(), account)
 }
 
 fn update_account(
@@ -1128,7 +1128,7 @@ fn update_account(
     is_admin(signer, payload.org_id(), state)?;
 
     // verify that the account exists
-    let account = match state.get_account(payload.org_id(), payload.public_key()) {
+    let account = match state.get_account(payload.public_key()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Account does not exist: {} ",
@@ -1152,7 +1152,7 @@ fn update_account(
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
         })?;
-    state.set_account(payload.org_id(), payload.public_key(), account)
+    state.set_account(payload.public_key(), account)
 }
 
 fn create_organization(
@@ -1161,10 +1161,10 @@ fn create_organization(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to create organization
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.id(), state)?;
 
     // Check if the organization already exists
-    match state.get_organization(payload.org_id()) {
+    match state.get_organization(payload.id()) {
         Ok(None) => (),
         Ok(Some(_)) => {
             return Err(ApplyError::InvalidTransaction(format!(
@@ -1181,7 +1181,7 @@ fn create_organization(
     };
 
     let organization = OrganizationBuilder::new()
-        .with_org_id(payload.org_id().to_string())
+        .with_org_id(payload.id().to_string())
         .with_name(payload.name().to_string())
         .with_address(payload.address().to_string())
         .build()
@@ -1189,7 +1189,7 @@ fn create_organization(
             ApplyError::InvalidTransaction(String::from("Cannot build organization"))
         })?;
 
-    state.set_organization(payload.org_id(), organization)
+    state.set_organization(payload.id(), organization)
 }
 
 fn update_organization(
@@ -1198,10 +1198,10 @@ fn update_organization(
     state: &mut SabreState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to update organization
-    is_admin(signer, payload.org_id(), state)?;
+    is_admin(signer, payload.id(), state)?;
 
     // verify that the organization exists
-    let organization = match state.get_organization(payload.org_id()) {
+    let organization = match state.get_organization(payload.id()) {
         Ok(None) => {
             return Err(ApplyError::InvalidTransaction(format!(
                 "Organization does not exist: {} ",
@@ -1225,7 +1225,7 @@ fn update_organization(
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build organization"))
         })?;
-    state.set_organization(payload.org_id(), organization)
+    state.set_organization(payload.id(), organization)
 }
 
 // helper function to check if the signer is allowed to update a namespace_registry
