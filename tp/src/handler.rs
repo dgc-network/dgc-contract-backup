@@ -1249,7 +1249,7 @@ fn create_organization(
 
     state.set_organization(payload.get_id(), organization)
 }
-/*
+
 fn update_organization(
     payload: UpdateOrganizationAction,
     signer: &str,
@@ -1276,8 +1276,8 @@ fn update_organization(
     };
 
     let organization = organization
-        //.into_builder()
-        //.set_name(payload.get_name().to_string())
+        .into_builder()
+        .set_name(payload.get_name().to_string())
         .set_address(payload.get_address().to_string())
         .build()
         .map_err(|_| {
@@ -1285,7 +1285,7 @@ fn update_organization(
         })?;
     state.set_organization(payload.get_id(), organization)
 }
-*/
+/*
 fn update_organization(
     payload: UpdateOrganizationAction,
     signer: &str,
@@ -1325,7 +1325,7 @@ fn update_organization(
     }
     state.set_organization(payload.get_id(), organization)
 }
-
+*/
 // helper function to check if the signer is allowed to update a namespace_registry
 fn can_update_namespace_registry(
     namespace_registry: NamespaceRegistry,

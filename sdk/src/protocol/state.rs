@@ -1607,6 +1607,15 @@ impl Account {
     pub fn get_metadata(&self) -> &[KeyValueEntry] {
         &self.metadata
     }
+
+    pub fn into_builder(self) -> AccountBuilder {
+        AccountBuilder::new()
+            .set_org_id(self.org_id)
+            .set_public_key(self.public_key)
+            .set_active(self.active)
+            .set_roles(self.roles)
+            .set_metadata(self.metadata)
+    }
 }
 
 impl FromProto<protos::account::Account> for Account {
@@ -1900,6 +1909,14 @@ impl Organization {
 
     pub fn get_metadata(&self) -> &[KeyValueEntry] {
         &self.metadata
+    }
+
+    pub fn into_builder(self) -> AccountBuilder {
+        AccountBuilder::new()
+            .set_org_id(self.org_id)
+            .set_name(self.name)
+            .set_address(self.address)
+            .set_metadata(self.metadata)
     }
 }
 
