@@ -913,7 +913,7 @@ impl FromNative<Contract> for protos::contract::Contract {
         proto.set_version(contract.get_version().to_string());
         proto.set_inputs(RepeatedField::from_vec(contract.get_inputs().to_vec()));
         proto.set_outputs(RepeatedField::from_vec(contract.get_outputs().to_vec()));
-        proto.set_creator(contract.creator().to_string());
+        proto.set_creator(contract.get_creator().to_string());
         proto.set_contract(contract.get_contract().to_vec());
 
         Ok(proto)
