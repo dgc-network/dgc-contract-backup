@@ -1110,7 +1110,7 @@ fn create_account(
         .with_public_key(payload.public_key().to_string())
         .with_org_id(payload.org_id().to_string())
         .with_roles(payload.roles().to_vec())
-        .with_metadata(payload.metadata().to_vec())
+        //.with_metadata(payload.metadata().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
@@ -1145,7 +1145,7 @@ fn update_account(
     };
 
     let account = account
-        .into_builder()
+        //.into_builder()
         .with_roles(payload.roles().to_vec())
         .with_metadata(payload.metadata().to_vec())
         .build()
@@ -1218,7 +1218,7 @@ fn update_organization(
     };
 
     let organization = organization
-        .into_builder()
+        //.into_builder()
         .with_name(payload.name().to_string())
         .with_address(payload.address().to_string())
         .build()
