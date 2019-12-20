@@ -9,6 +9,7 @@ use sabre_sdk::protocol::state::{
     ContractRegistryListBuilder, NamespaceRegistry, NamespaceRegistryList,
     NamespaceRegistryListBuilder, SmartPermission, SmartPermissionList, SmartPermissionListBuilder,
     Account, AccountList, Organization, OrganizationList,
+    AccountBuilder, OrganizationBuilder,
 };
 use sabre_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
 use sabre_sdk::protos::{FromBytes, IntoBytes};
@@ -557,7 +558,7 @@ impl<'a> SabreState<'a> {
         org_id: &str,
         new_organization: Organization,
     ) -> Result<(), ApplyError> {
-        let address = compute_organization_address(org_id);
+        let address = compute_org_address(org_id);
         let d = self.context.get_state_entry(&address)?;
         let mut organizations = match d {
             Some(packed) => match OrganizationList::from_bytes(packed.as_slice()) {
