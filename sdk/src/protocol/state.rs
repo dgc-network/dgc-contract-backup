@@ -20,15 +20,15 @@ pub struct Version {
 }
 
 impl Version {
-    pub fn version(&self) -> &String {
+    pub fn get_version(&self) -> &String {
         &self.version
     }
 
-    pub fn contract_sha512(&self) -> &String {
+    pub fn get_contract_sha512(&self) -> &String {
         &self.contract_sha512
     }
 
-    pub fn creator(&self) -> &String {
+    pub fn get_creator(&self) -> &String {
         &self.creator
     }
 
@@ -57,8 +57,8 @@ impl FromNative<Version> for protos::contract_registry::ContractRegistry_Version
         let mut proto = protos::contract_registry::ContractRegistry_Version::new();
 
         proto.set_version(native.get_version().to_string());
-        proto.set_contract_sha512(native.contract_sha512().to_string());
-        proto.set_creator(native.creator().to_string());
+        proto.set_contract_sha512(native.get_contract_sha512().to_string());
+        proto.set_creator(native.get_creator().to_string());
 
         Ok(proto)
     }
@@ -146,15 +146,15 @@ pub struct ContractRegistry {
 }
 
 impl ContractRegistry {
-    pub fn name(&self) -> &String {
+    pub fn get_name(&self) -> &String {
         &self.name
     }
 
-    pub fn versions(&self) -> &[Version] {
+    pub fn get_versions(&self) -> &[Version] {
         &self.versions
     }
 
-    pub fn owners(&self) -> &[String] {
+    pub fn get_owners(&self) -> &[String] {
         &self.owners
     }
 
@@ -189,7 +189,7 @@ impl FromNative<ContractRegistry> for protos::contract_registry::ContractRegistr
         proto.set_name(contract_registry.get_name().to_string());
         proto.set_versions(RepeatedField::from_vec(
             contract_registry
-                .versions()
+                .get_versions()
                 .to_vec()
                 .into_iter()
                 .map(Version::into_proto)
@@ -312,7 +312,7 @@ pub struct ContractRegistryList {
 }
 
 impl ContractRegistryList {
-    pub fn registries(&self) -> &[ContractRegistry] {
+    pub fn get_registries(&self) -> &[ContractRegistry] {
         &self.registries
     }
 }
@@ -340,7 +340,7 @@ impl FromNative<ContractRegistryList> for protos::contract_registry::ContractReg
         proto.set_registries(
             RepeatedField::from_vec(
                 contract_registry_list
-                    .registries()
+                    .get_registries()
                     .to_vec()
                     .into_iter()
                     .map(ContractRegistry::into_proto)
@@ -438,15 +438,15 @@ pub struct Permission {
 }
 
 impl Permission {
-    pub fn contract_name(&self) -> &String {
+    pub fn get_contract_name(&self) -> &String {
         &self.contract_name
     }
 
-    pub fn read(&self) -> bool {
+    pub fn get_read(&self) -> bool {
         self.read
     }
 
-    pub fn write(&self) -> bool {
+    pub fn get_write(&self) -> bool {
         self.write
     }
 
@@ -560,15 +560,15 @@ pub struct NamespaceRegistry {
 }
 
 impl NamespaceRegistry {
-    pub fn namespace(&self) -> &String {
+    pub fn get_namespace(&self) -> &String {
         &self.namespace
     }
 
-    pub fn owners(&self) -> &[String] {
+    pub fn get_owners(&self) -> &[String] {
         &self.owners
     }
 
-    pub fn permissions(&self) -> &[Permission] {
+    pub fn get_permissions(&self) -> &[Permission] {
         &self.permissions
     }
 
@@ -604,7 +604,7 @@ impl FromNative<NamespaceRegistry> for protos::namespace_registry::NamespaceRegi
         proto.set_owners(RepeatedField::from_vec(native.get_owners().to_vec()));
         proto.set_permissions(RepeatedField::from_vec(
             native
-                .permissions()
+                .get_permissions()
                 .to_vec()
                 .into_iter()
                 .map(Permission::into_proto)
@@ -726,7 +726,7 @@ pub struct NamespaceRegistryList {
 }
 
 impl NamespaceRegistryList {
-    pub fn registries(&self) -> &[NamespaceRegistry] {
+    pub fn get_registries(&self) -> &[NamespaceRegistry] {
         &self.registries
     }
 }
@@ -754,7 +754,7 @@ impl FromNative<NamespaceRegistryList> for protos::namespace_registry::Namespace
         proto.set_registries(
             RepeatedField::from_vec(
                 namespace_registry_list
-                    .registries()
+                    .get_registries()
                     .to_vec()
                     .into_iter()
                     .map(NamespaceRegistry::into_proto)
@@ -857,27 +857,27 @@ pub struct Contract {
 }
 
 impl Contract {
-    pub fn name(&self) -> &String {
+    pub fn get_name(&self) -> &String {
         &self.name
     }
 
-    pub fn version(&self) -> &String {
+    pub fn get_version(&self) -> &String {
         &self.version
     }
 
-    pub fn inputs(&self) -> &[String] {
+    pub fn get_inputs(&self) -> &[String] {
         &self.inputs
     }
 
-    pub fn outputs(&self) -> &[String] {
+    pub fn get_outputs(&self) -> &[String] {
         &self.outputs
     }
 
-    pub fn creator(&self) -> &String {
+    pub fn get_creator(&self) -> &String {
         &self.creator
     }
 
-    pub fn contract(&self) -> &[u8] {
+    pub fn get_contract(&self) -> &[u8] {
         &self.contract
     }
 
@@ -1075,7 +1075,7 @@ pub struct ContractList {
 }
 
 impl ContractList {
-    pub fn contracts(&self) -> &[Contract] {
+    pub fn get_contracts(&self) -> &[Contract] {
         &self.contracts
     }
 }
@@ -1098,7 +1098,7 @@ impl FromNative<ContractList> for protos::contract::ContractList {
         let mut proto = protos::contract::ContractList::new();
         proto.set_contracts(RepeatedField::from_vec(
             contract_list
-                .contracts()
+                .get_contracts()
                 .to_vec()
                 .into_iter()
                 .map(Contract::into_proto)
@@ -1189,15 +1189,15 @@ pub struct SmartPermission {
 }
 
 impl SmartPermission {
-    pub fn name(&self) -> &String {
+    pub fn get_name(&self) -> &String {
         &self.name
     }
 
-    pub fn org_id(&self) -> &String {
+    pub fn get_org_id(&self) -> &String {
         &self.org_id
     }
 
-    pub fn function(&self) -> &[u8] {
+    pub fn get_function(&self) -> &[u8] {
         &self.function
     }
 
@@ -1343,7 +1343,7 @@ pub struct SmartPermissionList {
 }
 
 impl SmartPermissionList {
-    pub fn smart_permissions(&self) -> &[SmartPermission] {
+    pub fn get_smart_permissions(&self) -> &[SmartPermission] {
         &self.smart_permissions
     }
 }
@@ -1370,7 +1370,7 @@ impl FromNative<SmartPermissionList> for protos::smart_permission::SmartPermissi
         let mut proto = protos::smart_permission::SmartPermissionList::new();
         proto.set_smart_permissions(RepeatedField::from_vec(
             smart_permissions_list
-                .smart_permissions()
+                .get_smart_permissions()
                 .to_vec()
                 .into_iter()
                 .map(SmartPermission::into_proto)
@@ -1463,11 +1463,11 @@ pub struct KeyValueEntry {
 }
 
 impl KeyValueEntry {
-    pub fn key(&self) -> &str {
+    pub fn get_key(&self) -> &str {
         &self.key
     }
 
-    pub fn value(&self) -> &str {
+    pub fn get_value(&self) -> &str {
         &self.value
     }
 }
@@ -1487,8 +1487,8 @@ impl FromNative<KeyValueEntry> for protos::account::KeyValueEntry {
     fn from_native(key_value: KeyValueEntry) -> Result<Self, ProtoConversionError> {
         let mut key_value_proto = protos::account::KeyValueEntry::new();
 
-        key_value_proto.set_key(key_value.key().to_string());
-        key_value_proto.set_value(key_value.value().to_string());
+        key_value_proto.set_key(key_value.get_key().to_string());
+        key_value_proto.set_value(key_value.get_value().to_string());
 
         Ok(key_value_proto)
     }
@@ -1588,23 +1588,23 @@ pub struct Account {
 }
 
 impl Account {
-    pub fn org_id(&self) -> &str {
+    pub fn get_org_id(&self) -> &str {
         &self.org_id
     }
 
-    pub fn public_key(&self) -> &str {
+    pub fn get_public_key(&self) -> &str {
         &self.public_key
     }
 
-    pub fn active(&self) -> &bool {
+    pub fn get_active(&self) -> &bool {
         &self.active
     }
 
-    pub fn roles(&self) -> &[String] {
+    pub fn get_roles(&self) -> &[String] {
         &self.roles
     }
 
-    pub fn metadata(&self) -> &[KeyValueEntry] {
+    pub fn get_metadata(&self) -> &[KeyValueEntry] {
         &self.metadata
     }
 }
@@ -1632,7 +1632,7 @@ impl FromNative<Account> for protos::account::Account {
 
         account_proto.set_org_id(account.get_org_id().to_string());
         account_proto.set_public_key(account.get_public_key().to_string());
-        account_proto.set_active(account.active().clone());
+        account_proto.set_active(account.get_active().clone());
         account_proto.set_org_id(account.get_org_id().to_string());
         account_proto.set_roles(RepeatedField::from_vec(account.get_roles().to_vec()));
         account_proto.set_metadata(RepeatedField::from_vec(
@@ -1762,7 +1762,7 @@ pub struct AccountList {
 }
 
 impl AccountList {
-    pub fn accounts(&self) -> &[Account] {
+    pub fn get_accounts(&self) -> &[Account] {
         &self.accounts
     }
 }
@@ -1786,7 +1786,7 @@ impl FromNative<AccountList> for protos::account::AccountList {
 
         account_list_proto.set_accounts(RepeatedField::from_vec(
             account_list
-                .accounts()
+                .get_accounts()
                 .to_vec()
                 .into_iter()
                 .map(Account::into_proto)
@@ -1886,19 +1886,19 @@ pub struct Organization {
 }
 
 impl Organization {
-    pub fn org_id(&self) -> &str {
+    pub fn get_org_id(&self) -> &str {
         &self.org_id
     }
 
-    pub fn name(&self) -> &str {
+    pub fn get_name(&self) -> &str {
         &self.name
     }
 
-    pub fn address(&self) -> &str {
+    pub fn get_address(&self) -> &str {
         &self.address
     }
 
-    pub fn metadata(&self) -> &[KeyValueEntry] {
+    pub fn get_metadata(&self) -> &[KeyValueEntry] {
         &self.metadata
     }
 }
@@ -2052,7 +2052,7 @@ pub struct OrganizationList {
 }
 
 impl OrganizationList {
-    pub fn organizations(&self) -> &[Organization] {
+    pub fn get_organizations(&self) -> &[Organization] {
         &self.organizations
     }
 }
@@ -2078,7 +2078,7 @@ impl FromNative<OrganizationList> for protos::account::OrganizationList {
 
         org_list_proto.set_organizations(RepeatedField::from_vec(
             org_list
-                .organizations()
+                .get_organizations()
                 .to_vec()
                 .into_iter()
                 .map(Organization::into_proto)
@@ -2195,7 +2195,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(contract_registry.get_name(), "Tests");
-        assert_eq!(contract_registry.versions(), [version]);
+        assert_eq!(contract_registry.get_versions(), [version]);
         assert_eq!(contract_registry.get_owners(), ["owner"]);
     }
 
@@ -2275,7 +2275,7 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(contract_registry_list.registries(), [contract_registry]);
+        assert_eq!(contract_registry_list.get_registries(), [contract_registry]);
     }
 
     #[test]
@@ -2329,7 +2329,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(namespace_registry.get_namespace(), "Tests");
-        assert_eq!(namespace_registry.permissions(), [permission]);
+        assert_eq!(namespace_registry.get_permissions(), [permission]);
         assert_eq!(namespace_registry.get_owners(), ["owner"]);
     }
 
@@ -2409,7 +2409,7 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(namespace_registry_list.registries(), [namespace_registry]);
+        assert_eq!(namespace_registry_list.get_registries(), [namespace_registry]);
     }
 
     #[test]
@@ -2467,7 +2467,7 @@ mod tests {
             contract.get_outputs(),
             ["output1".to_string(), "output2".to_string()]
         );
-        assert_eq!(contract.creator(), "The Creator");
+        assert_eq!(contract.get_creator(), "The Creator");
         assert_eq!(contract.get_contract(), b"test_contract");
     }
 
@@ -2538,7 +2538,7 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(contract_list.contracts(), [contract]);
+        assert_eq!(contract_list.get_contracts(), [contract]);
     }
 
     #[test]
@@ -2636,7 +2636,7 @@ mod tests {
             .unwrap();
 
         assert_eq!(
-            smart_permission_list.smart_permissions(),
+            smart_permission_list.get_smart_permissions(),
             [smart_permission]
         );
     }
@@ -2715,7 +2715,7 @@ mod tests {
 
         assert_eq!(account.get_org_id(), "organization");
         assert_eq!(account.get_public_key(), "public_key");
-        assert!(account.active());
+        assert!(account.get_active());
         assert_eq!(account.get_roles(), ["Role".to_string()]);
         assert_eq!(account.get_metadata(), [key_value]);
     }
@@ -2768,7 +2768,7 @@ mod tests {
         let builder = AccountListBuilder::new();
         let account_list = builder.set_accounts(vec![account.clone()]).build().unwrap();
 
-        assert_eq!(account_list.accounts(), [account])
+        assert_eq!(account_list.get_accounts(), [account])
     }
 
     #[test]
@@ -2873,7 +2873,7 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(organization_list.organizations(), [organization])
+        assert_eq!(organization_list.get_organizations(), [organization])
     }
 
     #[test]
