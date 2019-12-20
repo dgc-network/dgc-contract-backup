@@ -1911,8 +1911,8 @@ impl Organization {
         &self.metadata
     }
 
-    pub fn into_builder(self) -> AccountBuilder {
-        AccountBuilder::new()
+    pub fn into_builder(self) -> OrganizationBuilder {
+        OrganizationBuilder::new()
             .set_org_id(self.org_id)
             .set_name(self.name)
             .set_address(self.address)
