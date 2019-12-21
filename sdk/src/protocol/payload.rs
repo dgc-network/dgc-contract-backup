@@ -10,8 +10,9 @@ use crate::protos;
 use crate::protos::{
     FromBytes, FromNative, FromProto, IntoBytes, IntoNative, IntoProto, ProtoConversionError,
 };
+//use protos::state::KeyValueEntry;
 //use crate::protocol::state::KeyValueEntry;
-//use crate::protos::account::KeyValueEntry;
+use crate::protos::account::KeyValueEntry;
 
 /// Native implementation for SabrePayload_Action
 #[derive(Debug, Clone, PartialEq)]
