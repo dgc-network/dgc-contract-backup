@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 syntax = "proto3";
-import "account.proto";
+//import "account.proto";
 
 message SabrePayload {
   enum Action {
@@ -171,6 +171,11 @@ message DeleteSmartPermissionAction {
   string name = 1;
   // ID of organization that owns the smart permission
   string org_id = 2;
+}
+
+message KeyValueEntry {
+  string key = 1;
+  string value = 2;
 }
 
 // Creates an account
