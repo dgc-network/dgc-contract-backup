@@ -1,9 +1,9 @@
 
 ![Hyperledger Sawtooth](images/sawtooth_logo_light_blue-small.png)
 
-# Sawtooth Sabre
+# Sawtooth Smart
 
-Sawtooth Sabre is a transaction family which implements on-chain smart contracts
+Sawtooth Smart is a transaction family which implements on-chain smart contracts
 executed in a WebAssembly virtual machine. This distributed application runs on
 top of Hyperledger Sawtooth, an enterprise blockchain. To learn more about
 Hyperledger Sawtooth please see the
@@ -12,8 +12,8 @@ Hyperledger Sawtooth please see the
 
 ## Documentation
 
-Sawtooth Sabre documentation can be found here:
-https://sawtooth.hyperledger.org/docs/sabre/releases/latest/
+Sawtooth Smart documentation can be found here:
+https://sawtooth.hyperledger.org/docs/smart/releases/latest/
 
 ## License
 

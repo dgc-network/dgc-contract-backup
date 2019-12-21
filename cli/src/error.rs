@@ -7,16 +7,16 @@ use std::error::Error as StdError;
 
 use hyper;
 use protobuf;
-use sabre_sdk::protocol::payload::{
+use smart_sdk::protocol::payload::{
     CreateContractActionBuildError, CreateContractRegistryActionBuildError,
     CreateNamespaceRegistryActionBuildError, CreateNamespaceRegistryPermissionActionBuildError,
     CreateSmartPermissionActionBuildError, DeleteContractRegistryActionBuildError,
     DeleteNamespaceRegistryActionBuildError, DeleteNamespaceRegistryPermissionActionBuildError,
-    DeleteSmartPermissionActionBuildError, ExecuteContractActionBuildError, SabrePayloadBuildError,
+    DeleteSmartPermissionActionBuildError, ExecuteContractActionBuildError, SmartPayloadBuildError,
     UpdateContractRegistryOwnersActionBuildError, UpdateNamespaceRegistryOwnersActionBuildError,
     UpdateSmartPermissionActionBuildError,
 };
-use sabre_sdk::protos::ProtoConversionError;
+use smart_sdk::protos::ProtoConversionError;
 use sawtooth_sdk::signing;
 
 #[derive(Debug)]
@@ -90,7 +90,7 @@ impl From<ProtoConversionError> for CliError {
     }
 }
 
-// used to convert BuildErrors from the sabre sdk protocols into a CliError.
+// used to convert BuildErrors from the smart sdk protocols into a CliError.
 macro_rules! impl_builder_errors {
     ($($x:ty),*) => {
         $(
@@ -107,7 +107,7 @@ impl_builder_errors!(
     CreateContractRegistryActionBuildError,
     UpdateContractRegistryOwnersActionBuildError,
     DeleteContractRegistryActionBuildError,
-    SabrePayloadBuildError,
+    SmartPayloadBuildError,
     CreateNamespaceRegistryActionBuildError,
     UpdateNamespaceRegistryOwnersActionBuildError,
     CreateNamespaceRegistryPermissionActionBuildError,

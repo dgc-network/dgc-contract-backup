@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extern crate sabre_sdk;
+extern crate smart_sdk;
 extern crate protobuf;
 
 mod protos;
 
-use sabre_sdk::{WasmPtr, WasmPtrList, execute_smart_permission_entrypoint, WasmSdkError, Request};
+use smart_sdk::{WasmPtr, WasmPtrList, execute_smart_permission_entrypoint, WasmSdkError, Request};
 use protos::payload::CreateProposalAction;
 use protos::agent::AgentContainer;
 

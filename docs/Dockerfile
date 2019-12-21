@@ -53,4 +53,4 @@ RUN curl https://sh.rustup.rs -sSf > /usr/bin/rustup-init \
 ENV PATH=$PATH:/protoc3/bin:/root/.cargo/bin:/project/cli/target/debug \
     CARGO_INCREMENTAL=0
 
-WORKDIR /project/sawtooth-sabre/docs
+WORKDIR /project/sawtooth-smart/docs

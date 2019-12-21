@@ -1,11 +1,11 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-# docker build -f cli/Dockerfile-installed-xenial -t sawtooth-sabre-cli .
+# docker build -f cli/Dockerfile-installed-xenial -t sawtooth-smart-cli .
 
-# -------------=== sabre cli build ===-------------
+# -------------=== smart cli build ===-------------
 
-FROM ubuntu:xenial as sabre-cli-builder
+FROM ubuntu:xenial as smart-cli-builder
 
 ENV VERSION=AUTO_STRICT
 
@@ -38,14 +38,14 @@ RUN export VERSION=$(../bin/get_version) \
  && sed -i -e s/version.*$/version\ =\ \"${VERSION}\"/ Cargo.toml \
  && /root/.cargo/bin/cargo deb --deb-version $VERSION
 
-# -------------=== sabre cli docker build ===-------------
+# -------------=== smart cli docker build ===-------------
 
 FROM hyperledger/sawtooth-all:1.0
 
-COPY --from=sabre-cli-builder /project/cli/target/debian/sabre-cli*.deb /tmp
+COPY --from=smart-cli-builder /project/cli/target/debian/smart-cli*.deb /tmp
 
 RUN apt-get update \
- && dpkg -i /tmp/sabre-cli_*.deb || true \
+ && dpkg -i /tmp/smart-cli_*.deb || true \
  && apt-get -f -y install
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]

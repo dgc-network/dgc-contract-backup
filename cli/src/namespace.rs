@@ -1,10 +1,10 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-use sabre_sdk::protocol::payload::{
+use smart_sdk::protocol::payload::{
     Action, CreateNamespaceRegistryActionBuilder, CreateNamespaceRegistryPermissionActionBuilder,
     DeleteNamespaceRegistryActionBuilder, DeleteNamespaceRegistryPermissionActionBuilder,
-    SabrePayloadBuilder, UpdateNamespaceRegistryOwnersActionBuilder,
+    SmartPayloadBuilder, UpdateNamespaceRegistryOwnersActionBuilder,
 };
 use sawtooth_sdk::signing;
 
@@ -30,7 +30,7 @@ pub fn do_ns_create(
         .set_owners(owners)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::CreateNamespaceRegistry(action))
         .build()?;
 
@@ -58,7 +58,7 @@ pub fn do_ns_update(
         .set_owners(owners)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::UpdateNamespaceRegistryOwners(action))
         .build()?;
 
@@ -84,7 +84,7 @@ pub fn do_ns_delete(
         .set_namespace(namespace.into())
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::DeleteNamespaceRegistry(action))
         .build()?;
 
@@ -116,7 +116,7 @@ pub fn do_perm_create(
         .set_write(write)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::CreateNamespaceRegistryPermission(action))
         .build()?;
 
@@ -141,7 +141,7 @@ pub fn do_perm_delete(
         .set_namespace(namespace.into())
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::DeleteNamespaceRegistryPermission(action))
         .build()?;
 

@@ -1,4 +1,4 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-#SAWTOOTH_SABRE_ARGS=-vv -C tcp://localhost:4004
+#SAWTOOTH_SMART_ARGS=-vv -C tcp://localhost:4004

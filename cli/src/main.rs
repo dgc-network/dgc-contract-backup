@@ -30,20 +30,20 @@ fn run() -> Result<(), error::CliError> {
     let matches = clap_app!(myapp =>
         (name: APP_NAME)
         (version: VERSION)
-        (about: "Sawtooth Sabre CLI")
+        (about: "Sawtooth Smart CLI")
         (@setting SubcommandRequiredElseHelp)
         (@subcommand upload =>
-            (about: "upload a Sabre contract")
-            (@arg filename: -f --filename +required +takes_value "Path to Sabre contract definition (*.yaml)")
+            (about: "upload a Smart contract")
+            (@arg filename: -f --filename +required +takes_value "Path to Smart contract definition (*.yaml)")
             (@arg key: -k --key +takes_value "Signing key name")
             (@arg url: --url +takes_value "URL to the Sawtooth REST API")
             (@arg wait: --wait +takes_value "A time in seconds to wait for batches to be committed")
             (@arg wasm: -w --wasm +takes_value "Path to compiled smart contract (*.wasm)")
         )
         (@subcommand exec =>
-            (about: "execute a Sabre contract")
-            (@arg contract: -C --contract +required +takes_value "Name:Version of a Sabre contract")
-            (@arg payload: -p --payload +required +takes_value "Path to Sabre contract payload")
+            (about: "execute a Smart contract")
+            (@arg contract: -C --contract +required +takes_value "Name:Version of a Smart contract")
+            (@arg payload: -p --payload +required +takes_value "Path to Smart contract payload")
             (@arg key: -k --key +takes_value "Signing key name")
             (@arg url: --url +takes_value "URL to the Sawtooth REST API")
             (@arg inputs: --inputs +takes_value +multiple "Input addresses used by the contract")
@@ -51,7 +51,7 @@ fn run() -> Result<(), error::CliError> {
             (@arg wait: --wait +takes_value "A time in seconds to wait for batches to be committed")
         )
         (@subcommand ns =>
-            (about: "create, update, or delete a Sabre namespace")
+            (about: "create, update, or delete a Smart namespace")
             (@group action =>
                 (@arg create: -c --create "Create the namespace")
                 (@arg update: -u --update "Update the namespace")
@@ -64,7 +64,7 @@ fn run() -> Result<(), error::CliError> {
             (@arg wait: --wait +takes_value "A time in seconds to wait for batches to be committed")
         )
         (@subcommand perm =>
-            (about: "set or delete a Sabre namespace permission")
+            (about: "set or delete a Smart namespace permission")
             (@arg namespace: +required "A global state address prefix (namespace)")
             (@arg contract: +required "Name of the contract")
             (@arg key: -k --key +takes_value "Signing key name")
@@ -75,7 +75,7 @@ fn run() -> Result<(), error::CliError> {
             (@arg wait: --wait +takes_value "A time in seconds to wait for batches to be committed")
         )
         (@subcommand cr =>
-            (about: "create, update, or delete a Sabre contract registry")
+            (about: "create, update, or delete a Smart contract registry")
             (@group action =>
                 (@arg create: -c --create "Create the contract registry")
                 (@arg update: -u --update "Update the contract registry")

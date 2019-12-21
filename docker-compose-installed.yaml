@@ -6,7 +6,7 @@ version: "2.1"
 services:
   validator:
     image: hyperledger/sawtooth-validator:latest
-    container_name: sabre-validator
+    container_name: smart-validator
     volumes:
       - .:/project
     expose:
@@ -35,7 +35,7 @@ services:
 
   rest-api:
     image: hyperledger/sawtooth-rest-api:latest
-    container_name: sabre-sawtooth-rest-api
+    container_name: smart-sawtooth-rest-api
     expose:
       - 9708
     ports:
@@ -44,7 +44,7 @@ services:
 
   shell:
     image: hyperledger/sawtooth-shell:latest
-    container_name: sabre-shell
+    container_name: smart-shell
     entrypoint: |
         bash -c "
         sawtooth keygen &&
@@ -52,7 +52,7 @@ services:
 
   settings-tp:
     image: hyperledger/sawtooth-settings-tp:latest
-    container_name: sabre-settings-tp
+    container_name: smart-settings-tp
     entrypoint: settings-tp -vv --connect tcp://validator:9704
 
   devmode-rust:
@@ -64,22 +64,22 @@ services:
         devmode-engine-rust -v --connect tcp://validator:5050
     stop_signal: SIGKILL
 
-  sabre-tp:
+  smart-tp:
     build:
       context: .
       dockerfile: tp/Dockerfile-installed-${DISTRO}
-    image: sawtooth-sabre-tp:${ISOLATION_ID}
-    container_name: sawtooth-sabre-tp
+    image: sawtooth-smart-tp:${ISOLATION_ID}
+    container_name: sawtooth-smart-tp
     depends_on:
       - validator
-    entrypoint: sawtooth-sabre -vv --connect tcp://validator:9704
+    entrypoint: sawtooth-smart -vv --connect tcp://validator:9704
 
-  sabre-cli:
+  smart-cli:
     build:
       context: .
       dockerfile: cli/Dockerfile-installed-${DISTRO}
-    image: sawtooth-sabre-cli:${ISOLATION_ID}
-    container_name: sabre-cli
+    image: sawtooth-smart-cli:${ISOLATION_ID}
+    container_name: smart-cli
     volumes:
       - .:/project
       - ./keys:/root/.sawtooth/keys

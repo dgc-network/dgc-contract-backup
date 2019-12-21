@@ -14,12 +14,12 @@
 # ------------------------------------------------------------------------------
 
 # Description:
-#   Builds an environment to publish the Sawtooth Sabre SDK to crates.io.
+#   Builds an environment to publish the Sawtooth Smart SDK to crates.io.
 #   Your crates api token must be passed in as CARGO_CRED at runtime
 #   using Docker's -e option.
 
-# docker build -f ci/sabre-publish-sdk-crates -t sabre-publish-sdk-crates ci/
-# docker run --rm -v $(pwd):/project/sawtooth-sabre -e CARGO_CRED=%CREDVALUE% sabre-publish-sdk-crates
+# docker build -f ci/smart-publish-sdk-crates -t smart-publish-sdk-crates ci/
+# docker run --rm -v $(pwd):/project/sawtooth-smart -e CARGO_CRED=%CREDVALUE% smart-publish-sdk-crates
 
 FROM ubuntu:bionic
 
@@ -44,7 +44,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
 
 ENV PATH=$PATH:/protoc3/bin:/root/.cargo/bin
 
-WORKDIR /project/sawtooth-sabre
+WORKDIR /project/sawtooth-smart
 
 CMD cd sdk \
  && cargo login $CARGO_CRED \

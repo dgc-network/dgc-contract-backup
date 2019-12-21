@@ -1,16 +1,16 @@
 ***********************************
-Sabre Application Developer's Guide
+Smart Application Developer's Guide
 ***********************************
-The guide covers development of Sabre smart contracts which can be stored on
-chain and executed using the Sabre Transaction Processor. Topics covered
+The guide covers development of Smart smart contracts which can be stored on
+chain and executed using the Smart Transaction Processor. Topics covered
 include how to write a smart contract, how to convert an already existing
 transaction processor to a smart contract, and how to upload and execute the
 contracts.
 
-It would be a good idea to read through the Sabre Transaction Family
+It would be a good idea to read through the Smart Transaction Family
 Specification before reading through this guide.
 
-Currently, Sabre smart contracts can only be written in Rust. The following
+Currently, Smart smart contracts can only be written in Rust. The following
 guide will use an example smart contract called intkey-multiply. This smart
 contract will take intkey values, multiply them, and store the new intkey key
 value pair in the intkey state.
@@ -18,31 +18,31 @@ value pair in the intkey state.
 .. note:: This guide assumes familiarity with Sawtooth Transaction Processors
   and that cargo/rust is already installed.
 
-.. _writing-sabre-sm-label:
+.. _writing-smart-sm-label:
 
-Writing A Sabre Smart Contract
+Writing A Smart Smart Contract
 ==============================
-The Sabre Smart Contracts use a similar API to the Sawtooth transaction
+The Smart Smart Contracts use a similar API to the Sawtooth transaction
 processor API. If you are unfamiliar, please take a look at
 https://sawtooth.hyperledger.org/docs/core/nightly/master/sdks.html.
 
-Include the Sabre SDK in the dependencies list of the Cargo.toml file.
+Include the Smart SDK in the dependencies list of the Cargo.toml file.
 
 .. code-block:: none
 
   [dependencies]
-  sabre-sdk = {git = "https://github.com/hyperledger/sawtooth-sabre"}
+  smart-sdk = {git = "https://github.com/hyperledger/sawtooth-smart"}
 
-The Sabre SDK provides the following required structs needed to write
+The Smart SDK provides the following required structs needed to write
 a smart contract.
 
 .. code-block:: rust
 
-  use sabre_sdk::ApplyError;
-  use sabre_sdk::TransactionContext;
-  use sabre_sdk::TransactionHandler;
-  use sabre_sdk::TpProcessRequest;
-  use sabre_sdk::{WasmPtr, execute_entrypoint};
+  use smart_sdk::ApplyError;
+  use smart_sdk::TransactionContext;
+  use smart_sdk::TransactionHandler;
+  use smart_sdk::TpProcessRequest;
+  use smart_sdk::{WasmPtr, execute_entrypoint};
 
 - ApplyError: Used to raise an InvalidTransaction or an InternalError
 - TransactionHandler: Mimics the Sawtooth SDK TransactionHandler and should be
@@ -84,7 +84,7 @@ be deployed, not started up as a transaction processor in a different process.
 
 Converting a Transaction Processor to a Smart Contract
 ------------------------------------------------------
-Due to the similar API used for the Sabre SDK and the Sawtooth Transaction
+Due to the similar API used for the Smart SDK and the Sawtooth Transaction
 Processor SDK it is very simple to convert an existing transaction processor to
 a smart contract. In fact the exact same code can be run in either format.
 
@@ -114,7 +114,7 @@ The following is an example for intkey-multiply
 
   [target.'cfg(target_arch = "wasm32")'.dependencies]
   rust-crypto-wasm = "0.3"
-  sabre-sdk = {path = "../../../sdk"}
+  smart-sdk = {path = "../../../sdk"}
 
   [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
   rust-crypto = "0.2.36"
@@ -136,7 +136,7 @@ the handler a public module and add an empty main function.
   cfg_if! {
       if #[cfg(target_arch = "wasm32")] {
           #[macro_use]
-          extern crate sabre_sdk;
+          extern crate smart_sdk;
       } else {
           #[macro_use]
           extern crate clap;
@@ -171,11 +171,11 @@ decorator, so they will only be compiled when compiling into Wasm.
 
   cfg_if! {
       if #[cfg(target_arch = "wasm32")] {
-          use sabre_sdk::ApplyError;
-          use sabre_sdk::TransactionContext;
-          use sabre_sdk::TransactionHandler;
-          use sabre_sdk::TpProcessRequest;
-          use sabre_sdk::{WasmPtr, execute_entrypoint};
+          use smart_sdk::ApplyError;
+          use smart_sdk::TransactionContext;
+          use smart_sdk::TransactionHandler;
+          use smart_sdk::TpProcessRequest;
+          use smart_sdk::{WasmPtr, execute_entrypoint};
       } else {
           use sawtooth_sdk::processor::handler::ApplyError;
           use sawtooth_sdk::processor::handler::TransactionContext;
@@ -185,7 +185,7 @@ decorator, so they will only be compiled when compiling into Wasm.
   }
 
   #[cfg(target_arch = "wasm32")]
-  // Sabre apply must return a bool
+  // Smart apply must return a bool
   fn apply(
       request: &TpProcessRequest,
       context: &mut dyn TransactionContext,
@@ -219,16 +219,16 @@ decorator, so they will only be compiled when compiling into Wasm.
   to be written for intkey multiply.
 
 For the full intkey-multiply example look at
-sawtooth-sabre/example/intkey_multiply/processor
+sawtooth-smart/example/intkey_multiply/processor
 
 
 .. _logging-in-smart-contracts:
 
-Logging in a Sabre Smart Contract
+Logging in a Smart Smart Contract
 =================================
-The Sabre SDK provides log macros that match the provided log macros from the
+The Smart SDK provides log macros that match the provided log macros from the
 `log crate <https://doc.rust-lang.org/1.1.0/log/macro.info!.html>`_. To use add
-``#[macro_use]`` above ``extern crate sabre_sdk`` and use the macros as normal.
+``#[macro_use]`` above ``extern crate smart_sdk`` and use the macros as normal.
 
 .. code-block:: rust
 
@@ -245,7 +245,7 @@ the apply method:
 .. code-block::
 
   #[cfg(target_arch = "wasm32")]
-  // Sabre apply must return a bool
+  // Smart apply must return a bool
   fn apply(
       request: &TpProcessRequest,
       context: &mut dyn TransactionContext,
@@ -262,8 +262,8 @@ the apply method:
 
   }
 
-The log level of the Sabre transaction processor is enforced for all smart
-contracts. For example, if the Sabre transaction processor has a log level of
+The log level of the Smart transaction processor is enforced for all smart
+contracts. For example, if the Smart transaction processor has a log level of
 ``info`` a ``debug`` statement in a smart contract will not be logged.
 
 .. _compiling-smart-contract-label:
@@ -280,7 +280,7 @@ chain and need to add target wasm32-unknown-unknown.
   $ rustup target add wasm32-unknown-unknown --toolchain nightly
 
 To compile the smart contract run the following command in
-sawtooth-sabre/example/intkey_multiply/processor:
+sawtooth-smart/example/intkey_multiply/processor:
 
 .. code-block:: console
 
@@ -295,19 +295,19 @@ sawtooth-sabre/example/intkey_multiply/processor:
   - Use this script to reduce the size https://www.hellorust.com/news/native-wasm-target.html
 
 
-Running a Sabre Smart Contract
+Running a Smart Smart Contract
 ==============================
 
 The previous section described an example smart contract, ``intkey-multiply``,
 and explained how to compile it into WebAssembly (Wasm).
 
-This procedure describes how to run this smart contract on Sawtooth Sabre using
+This procedure describes how to run this smart contract on Sawtooth Smart using
 Docker. You will start a Sawtooth node, create the required values and payload
 file for the contract, set up the required items, then execute the smart
 contract and check the results.
 
-The ``sawtooth-sabre`` repository includes a Sawtooth Docker Compose file that
-starts Sawtooth Sabre in Docker containers, plus another Compose file that adds
+The ``sawtooth-smart`` repository includes a Sawtooth Docker Compose file that
+starts Sawtooth Smart in Docker containers, plus another Compose file that adds
 the required containers for the example ``intkey-multiply`` environment.
 
 
@@ -315,7 +315,7 @@ Prerequisites
 -------------
 
 This procedure requires a compiled ``intkey-multiply.wasm`` smart contract,
-as described in :ref:`writing-sabre-sm-label`. The Docker Compose file in this
+as described in :ref:`writing-smart-sm-label`. The Docker Compose file in this
 procedure sets up shared volumes so that the ``.wasm`` file can be shared
 between your host system and the appropriate Docker containers.
 
@@ -324,7 +324,7 @@ between your host system and the appropriate Docker containers.
    If you do not already have a compiled ``intkey-multiply.wasm`` file,
    do the following steps before starting this procedure:
 
-   * Clone the sawtooth-sabre repository.
+   * Clone the sawtooth-smart repository.
 
    * Compile the example smart contract, ``intkey-multiply``, as described in
      :ref:`compiling-smart-contract-label`.
@@ -335,15 +335,15 @@ to). For the ``intkey-multiply`` example, the required namespace prefixes are
 included in the example contract definition file.
 
 
-Step 1: Start Sawtooth Sabre with Docker
+Step 1: Start Sawtooth Smart with Docker
 ----------------------------------------
 
 In this step, you will start a Sawtooth node that is running a validator, REST
-API, and three transaction processors: Settings, IntegerKey (intkey), and Sabre.
+API, and three transaction processors: Settings, IntegerKey (intkey), and Smart.
 
 1. Open a terminal window on your system.
 
-#. Go to the top-level ``sawtooth-sabre`` directory and run the following
+#. Go to the top-level ``sawtooth-smart`` directory and run the following
    command:
 
    .. code-block:: console
@@ -358,12 +358,12 @@ API, and three transaction processors: Settings, IntegerKey (intkey), and Sabre.
    The first ``docker-compose.yaml`` file sets up the Sawtooth environment:
 
    * Starts a container for each Sawtooth component (validator, REST API, and
-     the Settings and Sabre transaction processors), plus a sabre-shell and
-     sabre-cli container
+     the Settings and Smart transaction processors), plus a smart-shell and
+     smart-cli container
    * Generates keys for the validator and root user
    * Configures root as a Sawtooth administrator (with the
      ``sawtooth.swa.administrators`` setting)
-   * Shares the administrator keys between the validator and sabre-cli
+   * Shares the administrator keys between the validator and smart-cli
      containers
 
    The second file, ``example/intkey_multiply/docker-compose.yaml``, starts the
@@ -378,7 +378,7 @@ API, and three transaction processors: Settings, IntegerKey (intkey), and Sabre.
 Step 2: Create Initial Values for the Smart Contract
 ----------------------------------------------------
 
-In this step, you will use the ``sabre-shell`` container to set initial
+In this step, you will use the ``smart-shell`` container to set initial
 values in state for your contract.
 
 The ``intkey-multiply`` smart contract executes the simple function
@@ -390,12 +390,12 @@ In this step, you will use the ``intkey set`` command to submit transactions
 that store the initial values in "intkey state" (the namespace used by the
 IntegerKey transaction family).
 
-1. Open a new terminal window and connect to the ``sabre-shell`` Docker
+1. Open a new terminal window and connect to the ``smart-shell`` Docker
    container.
 
    .. code-block:: console
 
-     $ docker exec -it sabre-shell bash
+     $ docker exec -it smart-shell bash
 
 #. Submit an intkey transaction to set B to 10.
 
@@ -417,7 +417,7 @@ IntegerKey transaction family).
       B: 10
       C: 5
 
-#. Log out of the ``sabre-shell`` container.
+#. Log out of the ``smart-shell`` container.
 
 
 Step 3: Generate the Payload File
@@ -457,10 +457,10 @@ executing the ``intkey-multiply`` smart contract.
 Step 4: Create a Contract Registry
 ----------------------------------
 
-In this step, you will use the ``sabre-cli`` container to create a contract
+In this step, you will use the ``smart-cli`` container to create a contract
 registry for the ``intkey-multiply`` smart contract.
 
-Each smart contract requires a contract registry so that Sabre can keep track of
+Each smart contract requires a contract registry so that Smart can keep track of
 the contract's versions and owners. A contract registry has the same name as its
 contract and has one or more owners. For more information, see
 :ref:`TPdoc-ContractRegistry-label`.
@@ -470,14 +470,14 @@ contract and has one or more owners. For more information, see
    Only a Sawtooth administrator (defined in the ``sawtooth.swa.administrators``
    setting) can create a contract registry and set the initial owner or owners.
    The example Docker Compose file sets up root as a Sawtooth administrator and
-   shares the root keys between the validator container and the ``sabre-cli``
+   shares the root keys between the validator container and the ``smart-cli``
    container.
 
-1. Connect to the ``sabre-cli`` container.
+1. Connect to the ``smart-cli`` container.
 
    .. code-block:: console
 
-      $ docker exec -it sabre-cli bash
+      $ docker exec -it smart-cli bash
 
 #. Copy your public key.
 
@@ -488,18 +488,18 @@ contract and has one or more owners. For more information, see
    This example uses root as the contract registry owner. In a production
    environment, the owner would be a regular user, not root.
 
-#. Use the ``sabre cr`` command to create a contract registry for the
+#. Use the ``smart cr`` command to create a contract registry for the
    ``intkey_multiply`` smart contract. Replace ``{owner-public-key}`` with your
    public key.
 
    .. code-block:: console
 
-      # sabre cr --create intkey_multiply --owner {owner-public-key} --url http://rest-api:9708
+      # smart cr --create intkey_multiply --owner {owner-public-key} --url http://rest-api:9708
 
   This command creates a contract registry named ``intkey_multiply`` (the
   same name as the smart contract) with one owner.  To specify multiple owners,
   repeat the ``--owner`` option. For more information on command options, run
-  ``sabre cr --help``.
+  ``smart cr --help``.
 
 Once the contract registry is created, any contract registry owner can add
 and delete versions of the contract. An owner can also delete an empty
@@ -509,13 +509,13 @@ contract registry.
 Step 5. Upload the Contract Definition File
 -------------------------------------------
 
-In this step, you will continue to use the ``sabre-cli`` container to upload
+In this step, you will continue to use the ``smart-cli`` container to upload
 a contract definition file for the ``intkey-multiply`` smart contract.
 
-Each Sabre smart contract requires a contract definition file in YAML format.
+Each Smart smart contract requires a contract definition file in YAML format.
 This file specifies the contract name, version, path to the compiled contract
 (Wasm file), and the contract's inputs and outputs.
-The ``sawtooth-sabre`` repository includes an example contract definition file,
+The ``sawtooth-smart`` repository includes an example contract definition file,
 ``intkey_multiply.yaml``.
 
 1. Display the example contract definition file.
@@ -544,14 +544,14 @@ The ``sawtooth-sabre`` repository includes an example contract definition file,
    and write to. This example uses the following namespace prefixes:
 
    * ``1cf126``: intkey namespace
-   * ``00ec03``: Sabre smart permission namespace
+   * ``00ec03``: Smart smart permission namespace
    * ``cad11d``: Pike (identity management) namespace
 
-3. Run the following command to upload this contract definition file to Sabre.
+3. Run the following command to upload this contract definition file to Smart.
 
    .. code-block:: console
 
-      # sabre upload --filename ../example/intkey_multiply/intkey_multiply.yaml --url http://rest-api:9708
+      # smart upload --filename ../example/intkey_multiply/intkey_multiply.yaml --url http://rest-api:9708
 
    .. note::
 
@@ -560,13 +560,13 @@ The ``sawtooth-sabre`` repository includes an example contract definition file,
 
    By default, the signing key name is set to your public key (root in this
    example). Use the ``--key`` option to specify a different signing key name.
-   For more information on command options, run ``sabre upload --help``.
+   For more information on command options, run ``smart upload --help``.
 
 
 Step 6. Create a Namespace Registry and Set Contract Permissions
 ----------------------------------------------------------------
 
-In this step, you will continue to use the ``sabre-cli`` container to create a
+In this step, you will continue to use the ``smart-cli`` container to create a
 namespace registry, then set the namespace read and write permissions for your
 contract.
 
@@ -591,49 +591,49 @@ explicit namespace read and write permissions to the contract.
    This example uses root as the namespace registry owner. In a production
    environment, the owner would be a regular user, not root.
 
-#. Use ``sabre ns`` to create the namespace registry. Replace ``{owner-key}``
+#. Use ``smart ns`` to create the namespace registry. Replace ``{owner-key}``
    with your public key.
 
    .. code-block:: console
 
-      # sabre ns --create 1cf126 --owner {owner-key} --url http://rest-api:9708
+      # smart ns --create 1cf126 --owner {owner-key} --url http://rest-api:9708
 
    This command specifies the intkey namespace prefix (``1cf126``) and defines
    root as the namespace registry owner.
-   For more information on command options, run ``sabre ns --help``.
+   For more information on command options, run ``smart ns --help``.
 
-#. Use ``sabre perm`` to grant the appropriate namespace permissions for your
+#. Use ``smart perm`` to grant the appropriate namespace permissions for your
    smart contract.
 
    .. code-block:: console
 
-      # sabre perm  1cf126 intkey_multiply --read --write --url http://rest-api:9708
+      # smart perm  1cf126 intkey_multiply --read --write --url http://rest-api:9708
 
    This command gives ``intkey-multiply`` both read and write permissions for
    the intkey namespace (``1cf126``). For more information on command options,
-   run ``sabre perm --help``.
+   run ``smart perm --help``.
 
-#. Use ``sabre ns`` to create the namespace registry for pike. Replace
+#. Use ``smart ns`` to create the namespace registry for pike. Replace
    ``{owner-key}`` with your public key.
 
    .. code-block:: console
 
-      # sabre ns --create cad11d --owner {owner-key} --url http://rest-api:9708
+      # smart ns --create cad11d --owner {owner-key} --url http://rest-api:9708
 
    This command specifies the pike namespace prefix (``cad11d``) and defines
    root as the namespace registry owner.
-   For more information on command options, run ``sabre ns --help``.
+   For more information on command options, run ``smart ns --help``.
 
-#. Use ``sabre perm`` to grant the appropriate namespace permissions for your
+#. Use ``smart perm`` to grant the appropriate namespace permissions for your
    smart contract.
 
    .. code-block:: console
 
-     # sabre perm cad11d intkey_multiply --read --url http://rest-api:9708
+     # smart perm cad11d intkey_multiply --read --url http://rest-api:9708
 
    This command gives ``intkey-multiply`` read permissions for the pike
    namespace (``cad11d``). For more information on command options,
-   run ``sabre perm --help``.
+   run ``smart perm --help``.
 
 Step 7. Execute the Smart Contract
 ----------------------------------
@@ -653,18 +653,18 @@ smart contract:
 * The namespace registry declares that the contract will use the intkey
   namespace and sets the owner.
 
-* The ``sabre perm`` command has granted the necessary namespace
+* The ``smart perm`` command has granted the necessary namespace
   permissions (both read and write) to the ``intkey_multiply`` contract.
 
-In this step, you will continue to use the ``sabre-cli`` container to execute
-the ``intkey-multiply`` smart contract, then use the ``sabre-shell`` container
+In this step, you will continue to use the ``smart-cli`` container to execute
+the ``intkey-multiply`` smart contract, then use the ``smart-shell`` container
 to check the results.
 
 1. Run the following command to execute the ``intkey-multiply`` smart contract.
 
    .. code-block:: console
 
-      # sabre exec --contract intkey_multiply:1.0 \
+      # smart exec --contract intkey_multiply:1.0 \
         --payload /project/example/intkey_multiply/cli/payload  \
         --inputs  1cf126 --inputs cad11d --outputs  1cf126 \
         --url http://rest-api:9708
@@ -675,16 +675,16 @@ to check the results.
 
    .. note::
 
-      The ``sabre exec`` command requires namespace prefixes or addresses that
+      The ``smart exec`` command requires namespace prefixes or addresses that
       are at least 6 characters long.  For more information on command options,
-      run ``sabre exec --help``.
+      run ``smart exec --help``.
 
-#. To check the results, connect to the ``sabre-shell`` container in a separate
+#. To check the results, connect to the ``smart-shell`` container in a separate
    terminal window.
 
    .. code-block:: console
 
-      $ docker exec -it sabre-shell bash
+      $ docker exec -it smart-shell bash
 
 #. Run the following command to display intkey state values.  You should see
    that A is set to 50.
@@ -696,13 +696,13 @@ to check the results.
       B 10
       C 5
 
-#. Log out of the ``sabre-shell`` docker container.
+#. Log out of the ``smart-shell`` docker container.
 
 
 Step 8: Stop the Sawtooth Environment
 -------------------------------------
 
-When you are done using this Sawtooth Sabre environment, use this procedure to
+When you are done using this Sawtooth Smart environment, use this procedure to
 stop and reset the environment.
 
 .. important::
@@ -713,7 +713,7 @@ stop and reset the environment.
   directory into the container. See the `Docker
   documentation <https://docs.docker.com/>`_ for more information.
 
-1. Log out of the ``sabre-cli`` container and any other open containers.
+1. Log out of the ``smart-cli`` container and any other open containers.
 
 #. Enter CTRL-c from the window where you originally ran ``docker-compose up``.
 

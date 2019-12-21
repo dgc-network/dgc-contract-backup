@@ -21,4 +21,4 @@ INSERT INTO agents VALUES
 
 INSERT INTO organizations VALUES
     ('1', 'Patricle, Inc.', '9342 Fake Street', 'Madeup', 'ND', '33333', 'United States'),
-    ('2', 'Sabre Corp', '800 N Fake Ave #124', 'Notreal', 'FL', '12345', 'United States');
+    ('2', 'Smart Corp', '800 N Fake Ave #124', 'Notreal', 'FL', '12345', 'United States');

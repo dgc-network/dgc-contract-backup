@@ -173,15 +173,15 @@ pub trait TransactionContext {
 }
 
 #[derive(Default)]
-pub struct SabreTransactionContext {}
+pub struct SmartTransactionContext {}
 
-impl SabreTransactionContext {
-    pub fn new() -> SabreTransactionContext {
-        SabreTransactionContext {}
+impl SmartTransactionContext {
+    pub fn new() -> SmartTransactionContext {
+        SmartTransactionContext {}
     }
 }
 
-impl TransactionContext for SabreTransactionContext {
+impl TransactionContext for SmartTransactionContext {
     fn get_state_entries(
         &self,
         addresses: &[String],
@@ -380,7 +380,7 @@ where
     let mut header = Header::new(signer);
     match apply(
         &TpProcessRequest::new(payload, &mut header, signature),
-        &mut SabreTransactionContext::new(),
+        &mut SmartTransactionContext::new(),
     ) {
         Ok(r) => {
             if r {

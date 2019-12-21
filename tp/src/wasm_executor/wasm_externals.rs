@@ -9,8 +9,8 @@ use std::string::FromUtf8Error;
 use std::time::Instant;
 
 use log::{max_level, LevelFilter};
-use sabre_sdk::protocol::state::{SmartPermission, SmartPermissionList};
-use sabre_sdk::protos::FromBytes;
+use smart_sdk::protocol::state::{SmartPermission, SmartPermissionList};
+use smart_sdk::protos::FromBytes;
 //use crate::protocol::state::{SmartPermission, SmartPermissionList};
 //use crate::protos::FromBytes;
 use sawtooth_sdk::processor::handler::{ContextError, TransactionContext};

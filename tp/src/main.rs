@@ -6,13 +6,13 @@ extern crate clap;
 
 use log::Level;
 
-use sawtooth_sabre::handler::SabreTransactionHandler;
+use sawtooth_smart::handler::SmartTransactionHandler;
 use sawtooth_sdk::processor::TransactionProcessor;
 
 fn main() {
     let matches = clap_app!(wasm_store_tp =>
         (version: crate_version!())
-        (about: "Implements the Sawtooth Sabre transaction family")
+        (about: "Implements the Sawtooth Smart transaction family")
         (@arg connect: -C --connect +takes_value
          "connection endpoint for validator")
         (@arg verbose: -v --verbose +multiple
@@ -32,7 +32,7 @@ fn main() {
         .value_of("connect")
         .unwrap_or("tcp://localhost:4004");
 
-    let handler = SabreTransactionHandler::new();
+    let handler = SmartTransactionHandler::new();
     let mut processor = TransactionProcessor::new(connect);
 
     processor.add_handler(&handler);

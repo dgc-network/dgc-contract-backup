@@ -1,7 +1,7 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-//! Provides a Sawtooth Transaction Handler for executing Sabre transactions.
+//! Provides a Sawtooth Transaction Handler for executing Smart transactions.
 
 use crypto::digest::Digest;
 use crypto::sha2::Sha512;
@@ -10,15 +10,15 @@ use sawtooth_sdk::processor::handler::ApplyError;
 use sawtooth_sdk::processor::handler::TransactionContext;
 use sawtooth_sdk::processor::handler::TransactionHandler;
 
-use crate::payload::SabreRequestPayload;
-use crate::state::SabreState;
+use crate::payload::SmartRequestPayload;
+use crate::state::SmartState;
 use crate::wasm_executor::wasm_module::WasmModule;
-use sabre_sdk::protocol::state::{
+use smart_sdk::protocol::state::{
     ContractBuilder, ContractRegistry, ContractRegistryBuilder, NamespaceRegistry,
     NamespaceRegistryBuilder, PermissionBuilder, SmartPermissionBuilder, VersionBuilder,
     AccountBuilder, OrganizationBuilder,
 };
-use sabre_sdk::protocol::payload::{
+use smart_sdk::protocol::payload::{
     Action, CreateContractAction, CreateContractRegistryAction, CreateNamespaceRegistryAction,
     CreateNamespaceRegistryPermissionAction, CreateSmartPermissionAction, DeleteContractAction,
     DeleteContractRegistryAction, DeleteNamespaceRegistryAction,
@@ -28,7 +28,7 @@ use sabre_sdk::protocol::payload::{
     CreateAccountAction, UpdateAccountAction,
     CreateOrganizationAction, UpdateOrganizationAction,
 };
-use sabre_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
+use smart_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
 
 /// The namespace registry prefix for global state (00ec00)
 const NAMESPACE_REGISTRY_PREFIX: &str = "00ec00";
@@ -39,27 +39,27 @@ const CONTRACT_REGISTRY_PREFIX: &str = "00ec01";
 /// The contract prefix for global state (00ec02)
 const CONTRACT_PREFIX: &str = "00ec02";
 
-/// Handles Sabre Transactions
+/// Handles Smart Transactions
 ///
-/// This handler implements the Sawtooth TransactionHandler trait, in order to execute Sabre
+/// This handler implements the Sawtooth TransactionHandler trait, in order to execute Smart
 /// transaction payloads.  These payloads include on-chain smart contracts executed in a
 /// WebAssembly virtual machine.
 ///
 /// WebAssembly (Wasm) is a stack-based virtual machine newly implemented in major browsers. It is
 /// well-suited for the purposes of smart contract execution due to its sandboxed design, growing
 /// popularity, and tool support.
-pub struct SabreTransactionHandler {
+pub struct SmartTransactionHandler {
     family_name: String,
     family_versions: Vec<String>,
     namespaces: Vec<String>,
 }
 
-impl SabreTransactionHandler {
-    /// Constructs a new SabreTransactionHandler
+impl SmartTransactionHandler {
+    /// Constructs a new SmartTransactionHandler
     #[allow(clippy::new_without_default)]
-    pub fn new() -> SabreTransactionHandler {
-        SabreTransactionHandler {
-            family_name: "sabre".into(),
+    pub fn new() -> SmartTransactionHandler {
+        SmartTransactionHandler {
+            family_name: "smart".into(),
             family_versions: vec!["0.4".into()],
             namespaces: vec![
                 NAMESPACE_REGISTRY_PREFIX.into(),
@@ -70,7 +70,7 @@ impl SabreTransactionHandler {
     }
 }
 
-impl TransactionHandler for SabreTransactionHandler {
+impl TransactionHandler for SmartTransactionHandler {
     fn family_name(&self) -> String {
         self.family_name.clone()
     }
@@ -88,7 +88,7 @@ impl TransactionHandler for SabreTransactionHandler {
         request: &TpProcessRequest,
         context: &mut dyn TransactionContext,
     ) -> Result<(), ApplyError> {
-        let payload = SabreRequestPayload::new(request.get_payload());
+        let payload = SmartRequestPayload::new(request.get_payload());
 
         let payload = match payload {
             Err(e) => return Err(e),
@@ -104,7 +104,7 @@ impl TransactionHandler for SabreTransactionHandler {
         };
 
         let signer = request.get_header().get_signer_public_key();
-        let mut state = SabreState::new(context);
+        let mut state = SmartState::new(context);
 
         info!(
             "{} {:?} {:?}",
@@ -194,7 +194,7 @@ impl TransactionHandler for SabreTransactionHandler {
 fn create_contract(
     payload: CreateContractAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let name = payload.get_name();
     let version = payload.get_version();
@@ -279,7 +279,7 @@ fn create_contract(
 fn delete_contract(
     payload: DeleteContractAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let name = payload.get_name();
     let version = payload.get_version();
@@ -347,7 +347,7 @@ fn execute_contract(
     payload: ExecuteContractAction,
     signer: &str,
     signature: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let name = payload.get_name();
     let version = payload.get_version();
@@ -510,7 +510,7 @@ fn execute_contract(
 fn create_contract_registry(
     payload: CreateContractRegistryAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let name = payload.get_name();
 
@@ -573,7 +573,7 @@ fn create_contract_registry(
 fn delete_contract_registry(
     payload: DeleteContractRegistryAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let name = payload.get_name();
     let contract_registry = match state.get_contract_registry(name) {
@@ -608,7 +608,7 @@ fn delete_contract_registry(
 fn update_contract_registry_owners(
     payload: UpdateContractRegistryOwnersAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let name = payload.get_name();
     let contract_registry = match state.get_contract_registry(name) {
@@ -644,7 +644,7 @@ fn update_contract_registry_owners(
 fn create_namespace_registry(
     payload: CreateNamespaceRegistryAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let namespace = payload.get_namespace();
 
@@ -714,7 +714,7 @@ fn create_namespace_registry(
 fn delete_namespace_registry(
     payload: DeleteNamespaceRegistryAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let namespace = payload.get_namespace();
 
@@ -747,7 +747,7 @@ fn delete_namespace_registry(
 fn update_namespace_registry_owners(
     payload: UpdateNamespaceRegistryOwnersAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let namespace = payload.get_namespace();
 
@@ -783,7 +783,7 @@ fn update_namespace_registry_owners(
 fn create_namespace_registry_permission(
     payload: CreateNamespaceRegistryPermissionAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let namespace = payload.get_namespace();
     let contract_name = payload.get_contract_name();
@@ -846,7 +846,7 @@ fn create_namespace_registry_permission(
 fn delete_namespace_registry_permission(
     payload: DeleteNamespaceRegistryPermissionAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let namespace = payload.get_namespace();
     let contract_name = payload.get_contract_name();
@@ -904,7 +904,7 @@ fn delete_namespace_registry_permission(
 pub(crate) fn is_admin(
     signer: &str,
     org_id: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     let admin = match state.get_account(signer) {
         Ok(None) => {
@@ -947,7 +947,7 @@ pub(crate) fn is_admin(
 fn create_smart_permission(
     payload: CreateSmartPermissionAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to create smart permissions
     is_admin(signer, payload.get_org_id(), state)?;
@@ -1001,7 +1001,7 @@ fn create_smart_permission(
 fn update_smart_permission(
     payload: UpdateSmartPermissionAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to update smart permissions
     is_admin(signer, payload.get_org_id(), state)?;
@@ -1036,7 +1036,7 @@ fn update_smart_permission(
 fn delete_smart_permission(
     payload: DeleteSmartPermissionAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to delete smart permissions
     is_admin(signer, payload.get_org_id(), state)?;
@@ -1064,7 +1064,7 @@ fn delete_smart_permission(
 fn create_account(
     payload: CreateAccountAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to create account
     is_admin(signer, payload.get_org_id(), state)?;
@@ -1119,7 +1119,7 @@ fn create_account(
 fn update_account(
     payload: UpdateAccountAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to update account
     is_admin(signer, payload.get_org_id(), state)?;
@@ -1156,7 +1156,7 @@ fn update_account(
 fn create_organization(
     payload: CreateOrganizationAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to create organization
     is_admin(signer, payload.get_id(), state)?;
@@ -1193,7 +1193,7 @@ fn create_organization(
 fn update_organization(
     payload: UpdateOrganizationAction,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     // verify the signer of the transaction is authorized to update organization
     is_admin(signer, payload.get_id(), state)?;
@@ -1230,7 +1230,7 @@ fn update_organization(
 fn can_update_namespace_registry(
     namespace_registry: NamespaceRegistry,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     if !namespace_registry.get_owners().contains(&signer.into()) {
         let setting = match state.get_admin_setting() {
@@ -1269,7 +1269,7 @@ fn can_update_namespace_registry(
 fn can_update_contract_registry(
     contract_registry: ContractRegistry,
     signer: &str,
-    state: &mut SabreState,
+    state: &mut SmartState,
 ) -> Result<(), ApplyError> {
     if !contract_registry.get_owners().contains(&signer.into()) {
         let setting = match state.get_admin_setting() {

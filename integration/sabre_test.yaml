@@ -23,7 +23,7 @@ services:
 
   shell:
     image: hyperledger/sawtooth-shell:latest
-    container_name: sabre-shell
+    container_name: smart-shell
     entrypoint: "bash -c \"\
         while true; \
           do curl -s http://rest-api:9708/state | grep -q head; if [ $$? -eq 0 ]; then break; fi; sleep 0.5; done; \
@@ -72,9 +72,9 @@ services:
       context: integration
 
 
-  test_sabre:
-    image: test_sabre:${ISOLATION_ID}
-    container_name: test_sabre
+  test_smart:
+    image: test_smart:${ISOLATION_ID}
+    container_name: test_smart
     depends_on:
       - rest-api
     entrypoint: "bash -c \"\

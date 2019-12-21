@@ -1,11 +1,11 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-# docker build -f tp/Dockerfile-installed-bionic -t sawtooth-sabre-tp .
+# docker build -f tp/Dockerfile-installed-bionic -t sawtooth-smart-tp .
 
-# -------------=== sabre tp build ===-------------
+# -------------=== smart tp build ===-------------
 
-FROM ubuntu:bionic as sabre-tp-builder
+FROM ubuntu:bionic as smart-tp-builder
 
 ENV VERSION=AUTO_STRICT
 
@@ -41,12 +41,12 @@ RUN export VERSION=$(../bin/get_version) \
  && sed -i -e s/version.*$/version\ =\ \"${VERSION}\"/ Cargo.toml \
  && /root/.cargo/bin/cargo deb --deb-version $VERSION
 
-# -------------=== sabre tp build ===-------------
+# -------------=== smart tp build ===-------------
 
 FROM ubuntu:bionic
 
-COPY --from=sabre-tp-builder /project/tp/target/debian/sawtooth-sabre_*.deb /tmp
+COPY --from=smart-tp-builder /project/tp/target/debian/sawtooth-smart_*.deb /tmp
 
 RUN apt-get update \
- && dpkg -i /tmp/sawtooth-sabre_*.deb || true \
+ && dpkg -i /tmp/sawtooth-smart_*.deb || true \
  && apt-get -f -y install

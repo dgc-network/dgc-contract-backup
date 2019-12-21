@@ -1,7 +1,7 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-//! Contains functions which assist with the creation of Sabre Batches and
+//! Contains functions which assist with the creation of Smart Batches and
 //! Transactions
 
 use std::time::Instant;
@@ -10,9 +10,9 @@ use crypto::digest::Digest;
 use crypto::sha2::Sha512;
 use protobuf;
 use protobuf::Message;
-use sabre_sdk::protocol::payload::{Action, SabrePayload};
-use sabre_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
-use sabre_sdk::protos::IntoBytes;
+use smart_sdk::protocol::payload::{Action, SmartPayload};
+use smart_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
+use smart_sdk::protos::IntoBytes;
 use sawtooth_sdk::messages::batch::Batch;
 use sawtooth_sdk::messages::batch::BatchHeader;
 use sawtooth_sdk::messages::batch::BatchList;
@@ -22,11 +22,11 @@ use sawtooth_sdk::signing::Signer;
 
 use crate::error::CliError;
 
-/// The Sawtooth Sabre transaction family name (sabre)
-const SABRE_FAMILY_NAME: &str = "sabre";
+/// The Sawtooth Smart transaction family name (smart)
+const SMART_FAMILY_NAME: &str = "smart";
 
-/// The Sawtooth Sabre transaction family version (0.4)
-const SABRE_FAMILY_VERSION: &str = "0.4";
+/// The Sawtooth Smart transaction family version (0.4)
+const SMART_FAMILY_VERSION: &str = "0.4";
 
 /// The namespace registry prefix for global state (00ec00)
 const NAMESPACE_REGISTRY_PREFIX: &str = "00ec00";
@@ -216,15 +216,15 @@ fn compute_org_address(id: &str) -> String {
 ///
 /// If a signing error occurs, a `CliError::SigningError` is returned.
 pub fn create_transaction(
-    payload: SabrePayload,
+    payload: SmartPayload,
     signer: &Signer,
     public_key: &str,
 ) -> Result<Transaction, CliError> {
     let mut txn = Transaction::new();
     let mut txn_header = TransactionHeader::new();
 
-    txn_header.set_family_name(String::from(SABRE_FAMILY_NAME));
-    txn_header.set_family_version(String::from(SABRE_FAMILY_VERSION));
+    txn_header.set_family_name(String::from(SMART_FAMILY_NAME));
+    txn_header.set_family_version(String::from(SMART_FAMILY_VERSION));
     txn_header.set_nonce(create_nonce());
     txn_header.set_signer_public_key(public_key.to_string());
     txn_header.set_batcher_public_key(public_key.to_string());

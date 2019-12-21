@@ -4,9 +4,9 @@
 version: "2.1"
 
 services:
-  sabre-docs:
-    image: sabre-docs:${ISOLATION_ID}
-    container_name: sabre-docs
+  smart-docs:
+    image: smart-docs:${ISOLATION_ID}
+    container_name: smart-docs
     volumes:
       - ..:/project
     build:

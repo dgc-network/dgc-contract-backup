@@ -18,11 +18,11 @@ use crypto::sha2::Sha512;
 
 cfg_if! {
     if #[cfg(target_arch = "wasm32")] {
-        use sabre_sdk::ApplyError;
-        use sabre_sdk::TransactionContext;
-        use sabre_sdk::TransactionHandler;
-        use sabre_sdk::TpProcessRequest;
-        use sabre_sdk::{WasmPtr, execute_entrypoint};
+        use smart_sdk::ApplyError;
+        use smart_sdk::TransactionContext;
+        use smart_sdk::TransactionHandler;
+        use smart_sdk::TpProcessRequest;
+        use smart_sdk::{WasmPtr, execute_entrypoint};
     } else {
         use sawtooth_sdk::processor::handler::ApplyError;
         use sawtooth_sdk::processor::handler::TransactionContext;
@@ -539,7 +539,7 @@ pub fn is_admin(signer: &str, org_id: &str, state: &mut PikeState) -> Result<(),
 }
 
 #[cfg(target_arch = "wasm32")]
-// Sabre apply must return a bool
+// Smart apply must return a bool
 fn apply(
     request: &TpProcessRequest,
     context: &mut dyn TransactionContext,

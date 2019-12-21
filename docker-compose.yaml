@@ -29,7 +29,7 @@ services:
 
   validator:
     image: hyperledger/sawtooth-validator:latest
-    container_name: sabre-validator
+    container_name: smart-validator
     volumes:
       - .:/project
     expose:
@@ -58,7 +58,7 @@ services:
 
   rest-api:
     image: hyperledger/sawtooth-rest-api:latest
-    container_name: sabre-sawtooth-rest-api
+    container_name: smart-sawtooth-rest-api
     expose:
       - 9708
     ports:
@@ -67,7 +67,7 @@ services:
 
   shell:
     image: hyperledger/sawtooth-shell:latest
-    container_name: sabre-shell
+    container_name: smart-shell
     entrypoint: "bash -c \"\
         sawtooth keygen && \
         tail -f /dev/null \
@@ -75,7 +75,7 @@ services:
 
   settings-tp:
     image: hyperledger/sawtooth-settings-tp:latest
-    container_name: sabre-settings-tp
+    container_name: smart-settings-tp
     entrypoint: settings-tp -vv --connect tcp://validator:9704
 
   devmode-rust:
@@ -87,22 +87,22 @@ services:
         devmode-engine-rust -v --connect tcp://validator:5050
     stop_signal: SIGKILL
 
-  sabre-tp:
-    image: sabre-tp:${ISOLATION_ID}
-    container_name: sabre-tp
+  smart-tp:
+    image: smart-tp:${ISOLATION_ID}
+    container_name: smart-tp
     entrypoint: "bash -c \"\
         cd /project/tp/ && \
         cargo build && \
-        sawtooth-sabre -vv -C tcp://validator:9704 \
+        sawtooth-smart -vv -C tcp://validator:9704 \
         \""
     volumes:
       - .:/project
     build:
       context: tp
 
-  sabre-cli:
-    image: sabre-cli:${ISOLATION_ID}
-    container_name: sabre-cli
+  smart-cli:
+    image: smart-cli:${ISOLATION_ID}
+    container_name: smart-cli
     volumes:
       - .:/project
       - ./keys:/root/.sawtooth/keys

@@ -1,17 +1,17 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-use sabre_sdk::protocol::payload::{Action, SabrePayload};
-use sabre_sdk::protos::FromBytes;
+use smart_sdk::protocol::payload::{Action, SmartPayload};
+use smart_sdk::protos::FromBytes;
 use sawtooth_sdk::processor::handler::ApplyError;
 
-pub struct SabreRequestPayload {
+pub struct SmartRequestPayload {
     action: Action,
 }
 
-impl SabreRequestPayload {
-    pub fn new(payload: &[u8]) -> Result<Option<SabreRequestPayload>, ApplyError> {
-        let payload = match SabrePayload::from_bytes(payload) {
+impl SmartRequestPayload {
+    pub fn new(payload: &[u8]) -> Result<Option<SmartRequestPayload>, ApplyError> {
+        let payload = match SmartPayload::from_bytes(payload) {
             Ok(payload) => payload,
             Err(_) => {
                 return Err(ApplyError::InvalidTransaction(String::from(
@@ -20,8 +20,8 @@ impl SabreRequestPayload {
             }
         };
 
-        let sabre_action = payload.action();
-        match sabre_action {
+        let smart_action = payload.action();
+        match smart_action {
             Action::CreateContract(create_contract) => {
                 if create_contract.get_name().is_empty() {
                     return Err(ApplyError::InvalidTransaction(String::from(
@@ -297,8 +297,8 @@ impl SabreRequestPayload {
             }
         };
 
-        Ok(Some(SabreRequestPayload {
-            action: sabre_action.clone(),
+        Ok(Some(SmartRequestPayload {
+            action: smart_action.clone(),
         }))
     }
 

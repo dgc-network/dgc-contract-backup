@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [Unit]
-Description=Sawtooth Sabre TP
+Description=Sawtooth Smart TP
 After=network.target
 
 [Service]
 User=sawtooth
 Group=sawtooth
-EnvironmentFile=-/etc/default/sawtooth-sabre
-ExecStart=/usr/bin/sawtooth-sabre $SAWTOOTH_SABRE_ARGS
+EnvironmentFile=-/etc/default/sawtooth-smart
+ExecStart=/usr/bin/sawtooth-smart $SAWTOOTH_SMART_ARGS
 Restart=on-failure
 
 [Install]

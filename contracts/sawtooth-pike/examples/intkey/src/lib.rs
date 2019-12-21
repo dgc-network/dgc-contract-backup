@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extern crate sabre_sdk;
+extern crate smart_sdk;
 
-use sabre_sdk::{WasmPtr, WasmPtrList, execute_smart_permission_entrypoint, WasmSdkError, Request};
+use smart_sdk::{WasmPtr, WasmPtrList, execute_smart_permission_entrypoint, WasmSdkError, Request};
 
 fn has_permission(request: Request) -> Result<bool, WasmSdkError> {
     Ok(request

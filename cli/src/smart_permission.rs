@@ -7,9 +7,9 @@ use std::io::BufReader;
 use std::path::Path;
 use std::path::PathBuf;
 
-use sabre_sdk::protocol::payload::{
+use smart_sdk::protocol::payload::{
     Action, CreateSmartPermissionActionBuilder, DeleteSmartPermissionActionBuilder,
-    SabrePayloadBuilder, UpdateSmartPermissionActionBuilder,
+    SmartPayloadBuilder, UpdateSmartPermissionActionBuilder,
 };
 use sawtooth_sdk::signing;
 
@@ -42,7 +42,7 @@ pub fn do_create(
         .set_function(function)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::CreateSmartPermission(action))
         .build()?;
 
@@ -77,7 +77,7 @@ pub fn do_update(
         .set_function(function)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::UpdateSmartPermission(action))
         .build()?;
 
@@ -105,7 +105,7 @@ pub fn do_delete(
         .set_org_id(org_id.to_string())
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::DeleteSmartPermission(action))
         .build()?;
 

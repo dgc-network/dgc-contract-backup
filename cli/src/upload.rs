@@ -7,8 +7,8 @@ use std::io::BufReader;
 use std::path::Path;
 use std::path::PathBuf;
 
-use sabre_sdk::protocol::payload::{
-    Action, CreateContractActionBuilder, SabrePayload, SabrePayloadBuilder,
+use smart_sdk::protocol::payload::{
+    Action, CreateContractActionBuilder, SmartPayload, SmartPayloadBuilder,
 };
 use sawtooth_sdk::signing;
 use yaml_rust::YamlLoader;
@@ -71,7 +71,7 @@ fn create_upload_payload(
     inputs: Vec<String>,
     outputs: Vec<String>,
     contract: Vec<u8>,
-) -> Result<SabrePayload, CliError> {
+) -> Result<SmartPayload, CliError> {
     let create_contract = CreateContractActionBuilder::new()
         .set_name(String::from(name))
         .set_version(String::from(version))
@@ -80,7 +80,7 @@ fn create_upload_payload(
         .set_contract(contract)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::CreateContract(create_contract))
         .build()?;
 

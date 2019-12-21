@@ -2,15 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [package]
-name = "sabre-sdk"
+name = "smart-sdk"
 version = "0.4.3"
 authors = ["dgc.network"]
 license = "Apache-2.0"
 description = """\
-    Sawtooth Sabre is a transaction family which implements on-chain smart \
+    Sawtooth Smart is a transaction family which implements on-chain smart \
     contracts executed in a WebAssembly virtual machine.
 """
-documentation = "https://sawtooth.hyperledger.org/docs/sabre/releases/latest/"
+documentation = "https://sawtooth.hyperledger.org/docs/smart/releases/latest/"
 edition = "2018"
 
 

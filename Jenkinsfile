@@ -71,23 +71,23 @@ pipeline {
 
         stage('Run Lint') {
             steps {
-              sh 'docker build . -f docker/lint -t lint-sabre:$ISOLATION_ID'
-              sh 'docker run --rm -v $(pwd):/project/sawtooth-sabre lint-sabre:$ISOLATION_ID'
+              sh 'docker build . -f docker/lint -t lint-smart:$ISOLATION_ID'
+              sh 'docker run --rm -v $(pwd):/project/sawtooth-smart lint-smart:$ISOLATION_ID'
             }
         }
 
-        stage('Build Sabre') {
+        stage('Build Smart') {
             steps {
-                sh 'docker-compose -f docker-compose-installed.yaml build sabre-cli'
-                sh 'docker-compose -f docker-compose-installed.yaml build sabre-tp'
+                sh 'docker-compose -f docker-compose-installed.yaml build smart-cli'
+                sh 'docker-compose -f docker-compose-installed.yaml build smart-tp'
                 sh 'docker-compose -f docker-compose-installed.yaml build intkey_multiply'
 
             }
         }
 
-        stage('Test Sabre') {
+        stage('Test Smart') {
             steps {
-                sh 'docker-compose -f docker-compose.yaml -f integration/sabre_test.yaml up --build --abort-on-container-exit --exit-code-from test_sabre'
+                sh 'docker-compose -f docker-compose.yaml -f integration/smart_test.yaml up --build --abort-on-container-exit --exit-code-from test_smart'
             }
         }
 
@@ -112,15 +112,15 @@ pipeline {
         stage('Build Archive Artifacts') {
             steps {
                 sh 'mkdir -p build/debs'
-                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-sabre-cli:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
-                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-sabre-tp:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
+                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-smart-cli:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
+                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-smart-tp:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
                 sh 'docker run --rm -v $(pwd)/build/scar:/build/scar --entrypoint "/bin/bash" intkeym-scar:${ISOLATION_ID} "-c" "cp /tmp/*.scar /build/scar"'
             }
         }
     }
     post {
         always {
-            sh 'docker-compose -f docker-compose.yaml -f integration/sabre_test.yaml down'
+            sh 'docker-compose -f docker-compose.yaml -f integration/smart_test.yaml down'
             sh 'docker-compose -f docs/docker-compose.yaml down'
         }
         success {

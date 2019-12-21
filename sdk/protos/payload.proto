@@ -4,7 +4,7 @@
 syntax = "proto3";
 import "account.proto";
 
-message SabrePayload {
+message SmartPayload {
   enum Action {
     ACTION_UNSET = 0;
     CREATE_CONTRACT = 1;

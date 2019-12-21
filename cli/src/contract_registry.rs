@@ -1,9 +1,9 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-use sabre_sdk::protocol::payload::{
+use smart_sdk::protocol::payload::{
     Action, CreateContractRegistryActionBuilder, DeleteContractRegistryActionBuilder,
-    SabrePayloadBuilder, UpdateContractRegistryOwnersActionBuilder,
+    SmartPayloadBuilder, UpdateContractRegistryOwnersActionBuilder,
 };
 use sawtooth_sdk::signing;
 
@@ -29,7 +29,7 @@ pub fn do_cr_create(
         .set_owners(owners)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::CreateContractRegistry(action))
         .build()?;
 
@@ -57,7 +57,7 @@ pub fn do_cr_update(
         .set_owners(owners)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::UpdateContractRegistryOwners(action))
         .build()?;
 
@@ -79,7 +79,7 @@ pub fn do_cr_delete(key_name: Option<&str>, url: &str, name: &str) -> Result<Str
         .set_name(name.into())
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::DeleteContractRegistry(action))
         .build()?;
 

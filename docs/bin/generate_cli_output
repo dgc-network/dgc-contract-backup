@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 if [ ! -e source/conf.py ]; then
-    echo "Must be run from the sawtooth-sabre repo docs directory." 1>&2
+    echo "Must be run from the sawtooth-smart repo docs directory." 1>&2
     exit 1
 fi
 
@@ -21,16 +21,16 @@ function save_usage() {
 export PATH=$PATH:$(pwd)/../bin
 mkdir -p source/cli/output
 
-save_usage sabre
+save_usage smart
 
-save_usage sabre cr
+save_usage smart cr
 
-save_usage sabre exec
+save_usage smart exec
 
-save_usage sabre ns
+save_usage smart ns
 
-save_usage sabre perm
+save_usage smart perm
 
-save_usage sabre upload
+save_usage smart upload
 
-save_usage sabre sp
+save_usage smart sp

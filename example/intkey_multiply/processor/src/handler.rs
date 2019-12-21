@@ -21,14 +21,14 @@ use std::collections::HashMap;
 
 cfg_if! {
     if #[cfg(target_arch = "wasm32")] {
-        use sabre_sdk::ApplyError;
-        use sabre_sdk::TransactionContext;
-        use sabre_sdk::TransactionHandler;
-        use sabre_sdk::TpProcessRequest;
-        use sabre_sdk::{WasmPtr, execute_entrypoint, invoke_smart_permission};
-        use sabre_sdk::protos::FromBytes;
-        use sabre_sdk::protocol::state::{SmartPermission, SmartPermissionList};
-        use sabre_sdk::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
+        use smart_sdk::ApplyError;
+        use smart_sdk::TransactionContext;
+        use smart_sdk::TransactionHandler;
+        use smart_sdk::TpProcessRequest;
+        use smart_sdk::{WasmPtr, execute_entrypoint, invoke_smart_permission};
+        use smart_sdk::protos::FromBytes;
+        use smart_sdk::protocol::state::{SmartPermission, SmartPermissionList};
+        use smart_sdk::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
     } else {
         use sawtooth_sdk::processor::handler::ApplyError;
         use sawtooth_sdk::processor::handler::TransactionContext;
@@ -632,7 +632,7 @@ fn run_smart_permisson(signer: &str, payload: &[u8], agent: Agent) -> Result<i32
 }
 
 #[cfg(target_arch = "wasm32")]
-// Sabre apply must return a bool
+// Smart apply must return a bool
 fn apply(
     request: &TpProcessRequest,
     context: &mut dyn TransactionContext,

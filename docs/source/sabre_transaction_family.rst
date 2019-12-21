@@ -1,10 +1,10 @@
 ************************
-Sabre Transaction Family
+Smart Transaction Family
 ************************
 
 Overview
 =========
-Sawtooth Sabre is a transaction family which implements on-chain smart
+Sawtooth Smart is a transaction family which implements on-chain smart
 contracts executed in a WebAssembly virtual machine.
 
 WebAssembly (Wasm) is a stack-based virtual machine newly implemented in major
@@ -14,7 +14,7 @@ its sandboxed design, growing popularity, and tool support.
 State
 =====
 
-All Sabre objects are serialized using Protocol Buffers before being stored in
+All Smart objects are serialized using Protocol Buffers before being stored in
 state. Theses objects include namespace registries, contract registries, and
 contracts. All objects are stored in a list to handle hash collisions.
 
@@ -27,7 +27,7 @@ permissions given to that namespace. NamespaceRegistry is uniquely identified
 by its namespace.
 
 Permissions are used to control read and/or write access to the namespace. It
-includes a contract name that correlates to the name of a Sabre contract and
+includes a contract name that correlates to the name of a Smart contract and
 whether that contract is allowed to read and/or write to that namespace. The
 permission is uniquely identified by the contract_name. If the contract is
 executed but does not have the needed permission to read or write to state,
@@ -62,7 +62,7 @@ address in a NamespaceRegistryList
 
 ContractRegistry
 ----------------
-ContractRegistry keeps track of versions of the Sabre contract and the list of
+ContractRegistry keeps track of versions of the Smart contract and the list of
 owners. A ContractRegistry is uniquely identified by the name of its contract.
 
 Versions represent the contract version and include the sha512 hash of the
@@ -101,7 +101,7 @@ ContractRegsitryList.
 Contract
 --------
 
-A Contract represents the Sabre smart contract. It is uniquely
+A Contract represents the Smart smart contract. It is uniquely
 identified by its name and version number. The contract also contains
 the expected inputs and outputs (namespaces) used when executing the
 contract, the public key of the creator, and the compiled wasm code of
@@ -165,7 +165,7 @@ list. A smart permission list contains one field:
 Addressing
 ----------
 
-Sabre objects are stored under 4 namespaces:
+Smart objects are stored under 4 namespaces:
 
   - ``00ec00``: Namespace for NamespaceRegistry
   - ``00ec01``: Namespace for ContractRegistry
@@ -196,18 +196,18 @@ Transaction Payload and Execution
 Below, the different payload actions are defined along with the inputs and
 outputs that are required in the transaction header.
 
-SabrePayload
+SmartPayload
 ------------
 
-A SabrePayload contains an action enum and the associated action payload. This
+A SmartPayload contains an action enum and the associated action payload. This
 allows for the action payload to be dispatched to the appropriate logic.
 
 Only the defined actions are available and only one action payload should be
-defined in the SabrePayload.
+defined in the SmartPayload.
 
 .. code-block:: protobuf
 
-  message SabrePayload {
+  message SmartPayload {
     enum Action {
       ACTION_UNSET = 0;
       CREATE_CONTRACT = 1;
@@ -285,7 +285,7 @@ The outputs for CreateContractAction must include:
 * the address for the contract registry
 
 .. note:: These inputs/outputs are for the general Sawtooth transaction.
-   They are required for any transaction, whether it is a Sabre
+   They are required for any transaction, whether it is a Smart
    transaction or a transaction of any other transaction family.
    However, the inputs/outputs fields in the ``CreateContractAction``,
    above,  are not related to the ones listed in the Sawtooth
@@ -680,7 +680,7 @@ No dependencies.
 
 Family
 ------
-- family_name: "sabre"
+- family_name: "smart"
 - family_version: "0.3"
 
 .. Licensed under Creative Commons Attribution 4.0 International License

@@ -1,26 +1,26 @@
 ****************************************
-Sabre and Sawtooth Version Compatibility
+Smart and Sawtooth Version Compatibility
 ****************************************
 
-The following table shows the compatible versions of the Sabre transaction
-processor, Sabre SDK, and Sawtooth Rust SDK. It also shows the Docker tag for
-the Sabre transaction processor image.
+The following table shows the compatible versions of the Smart transaction
+processor, Smart SDK, and Sawtooth Rust SDK. It also shows the Docker tag for
+the Smart transaction processor image.
 
- - The Sabre transaction processor versions are
+ - The Smart transaction processor versions are
    the versions used as part of the transaction processor’s registration.
 
- - The Sabre SDK versions are the Crate versions of the Rust library that should
+ - The Smart SDK versions are the Crate versions of the Rust library that should
    be set in the Cargo.toml file.
 
  - The Docker tag is the tag that should be used for the
-   hyperledger/sawtooth-sabre-tp image if including in a docker-compose yaml
+   hyperledger/sawtooth-smart-tp image if including in a docker-compose yaml
    file.
 
  - The Sawtooth Rust SDK versions are the Crate versions of the Rust library
    that should be set in the Cargo.toml file.
 
 +------------+----------+-----------+---------+--------------------------------+
-| Sabre      | Sabre SDK| Docker Tag| Sawtooth| Changes                        |
+| Smart      | Smart SDK| Docker Tag| Sawtooth| Changes                        |
 | Transaction|          |           | Rust SDK|                                |
 | Processor  |          |           |         |                                |
 +============+==========+===========+=========+================================+
@@ -37,15 +37,15 @@ the Sabre transaction processor image.
 +------------+----------+-----------+---------+--------------------------------+
 | 0.3        | 0.3      | 0.3       |  0.3    | - Adds native rust             |
 |            |          |           |         |   implementation of the proto  |
-|            |          |           |         |   messages to the Sabre SDK and|
-|            |          |           |         |   is used by the Sabre         |
+|            |          |           |         |   messages to the Smart SDK and|
+|            |          |           |         |   is used by the Smart         |
 |            |          |           |         |   Transaction Processor.       |
 |            |          |           |         | - Adds no-op logging macros to |
-|            |          |           |         |   the Sabre SDK                |
+|            |          |           |         |   the Smart SDK                |
 +------------+----------+-----------+---------+--------------------------------+
 | 0.4        | 0.4      | 0.4       |  0.3    | - Replaces the no-op log macros|
 |            |          |           |         |   with macros that will        |
 |            |          |           |         |   marshal the log back to the  |
-|            |          |           |         |   Sabre Transaction Processor  |
+|            |          |           |         |   Smart Transaction Processor  |
 |            |          |           |         |   where it will be logged.     |
 +------------+----------+-----------+---------+--------------------------------+

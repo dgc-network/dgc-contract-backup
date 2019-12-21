@@ -13,9 +13,9 @@
 # limitations under the License.
 
 # docker build . -f docker/lint -t run_lint
-# docker run --rm -v $(pwd):/project/sawtooth-sabre run_lint
+# docker run --rm -v $(pwd):/project/sawtooth-smart run_lint
 
-FROM ubuntu:bionic as SABRE-LINTER
+FROM ubuntu:bionic as SMART-LINTER
 
 # Install base dependencies
 RUN apt-get update \
@@ -40,13 +40,13 @@ RUN curl -OLsS https://github.com/google/protobuf/releases/download/v3.7.1/proto
     && unzip -o protoc-3.7.1-linux-x86_64.zip -d /usr/local \
     && rm protoc-3.7.1-linux-x86_64.zip
 
-ENV PATH=$PATH:/root/.cargo/bin:/project/sawtooth-sabre/bin \
+ENV PATH=$PATH:/root/.cargo/bin:/project/sawtooth-smart/bin \
   CARGO_INCREMENTAL=0
 
 # Install rustfmt and clippy
 RUN rustup component add rustfmt \
  && rustup component add clippy
 
-WORKDIR /project/sawtooth-sabre
+WORKDIR /project/sawtooth-smart
 
 CMD run_lint

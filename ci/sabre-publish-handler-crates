@@ -14,12 +14,12 @@
 # ------------------------------------------------------------------------------
 
 # Description:
-#   Builds an environment to publish the Sawtooth Sabre handler to crates.io.
+#   Builds an environment to publish the Sawtooth Smart handler to crates.io.
 #   Your crates api token must be passed in as CARGO_CRED at runtime
 #   using Docker's -e option.
 
-# docker build -f ci/sabre-publish-handler-crates -t sabre-publish-handler-crates ci/
-# docker run --rm -v $(pwd):/project/sawtooth-sabre -e CARGO_CRED=%CREDVALUE% sabre-publish-handler-crates
+# docker build -f ci/smart-publish-handler-crates -t smart-publish-handler-crates ci/
+# docker run --rm -v $(pwd):/project/sawtooth-smart -e CARGO_CRED=%CREDVALUE% smart-publish-handler-crates
 
 FROM ubuntu:bionic
 
@@ -44,7 +44,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
 
 ENV PATH=$PATH:/protoc3/bin:/root/.cargo/bin
 
-WORKDIR /project/sawtooth-sabre
+WORKDIR /project/sawtooth-smart
 
 CMD cd tp \
  && cargo login $CARGO_CRED \
@@ -52,7 +52,7 @@ CMD cd tp \
  && REPO_VER=$(VERSION=AUTO_STRICT ../bin/get_version) \
  && MINOR_VERSION=${REPO_VER%.*} \
  && sed -i'' -e "s/version.*$/version\ =\ \"$REPO_VER\"/" Cargo.toml \
- && sed -i'' -e "s/sabre-sdk.*$/sabre-sdk\ =\ \"$MINOR_VERSION\"/" Cargo.toml \
+ && sed -i'' -e "s/smart-sdk.*$/smart-sdk\ =\ \"$MINOR_VERSION\"/" Cargo.toml \
  && cargo clean \
  && cargo test \
  && cargo publish --allow-dirty \

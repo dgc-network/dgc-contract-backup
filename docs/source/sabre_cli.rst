@@ -1,30 +1,30 @@
 *******************
-Sabre CLI Reference
+Smart CLI Reference
 *******************
 
-The Sabre CLI provides a way to upload and execute Sabre smart contracts from
+The Smart CLI provides a way to upload and execute Smart smart contracts from
 the command line. It also provides the ability to manage namespace registries
 and their permissions.
 
-sabre
+smart
 =====
-``sabre`` is the top level command for Sabre. It contains the following
+``smart`` is the top level command for Smart. It contains the following
 subcommands: ``cr``, ``upload``, ``ns``, ``perm``, and ``exec``. The subcommands
 have options and arguments that control their behavior. All subcommands include
 ``-key``, the name of the signing key, and ``--url``, the url to the Sawtooth
 REST API.
 
-.. literalinclude:: cli/output/sabre_usage.out
+.. literalinclude:: cli/output/smart_usage.out
    :language: console
 
 
-sabre cr
+smart cr
 ========
 
-The ``sabre cr`` subcommand submits a Sabre transaction that can create, update
+The ``smart cr`` subcommand submits a Smart transaction that can create, update
 or delete a contract registry.
 
-.. literalinclude:: cli/output/sabre_cr_usage.out
+.. literalinclude:: cli/output/smart_cr_usage.out
   :language: console
 
 A contract registry can only be created by an administrator. An administrator
@@ -37,13 +37,13 @@ Only an owner or an administrator is allowed to update owners of a contract
 registry or delete a contract registry.
 
 
-sabre upload
+smart upload
 ============
 
-The ``sabre upload`` subcommand submits a Sabre transaction that adds a new
+The ``smart upload`` subcommand submits a Smart transaction that adds a new
 contract.
 
-.. literalinclude:: cli/output/sabre_upload_usage.out
+.. literalinclude:: cli/output/smart_upload_usage.out
   :language: console
 
 The command requires that a path to a contract definition is provided to
@@ -63,12 +63,12 @@ following information:
 Only an owner of the associated contract registry is allowed to upload
 a new version of a contract.
 
-sabre ns
+smart ns
 ========
-The ``sabre ns`` subcommand submits a Sabre transaction that can create, update
+The ``smart ns`` subcommand submits a Smart transaction that can create, update
 or delete a namespace registry.
 
-.. literalinclude:: cli/output/sabre_ns_usage.out
+.. literalinclude:: cli/output/smart_ns_usage.out
   :language: console
 
 A namespace registry can only be created by an administrator. An administrator
@@ -81,12 +81,12 @@ registry or delete a namespace registry.
 
 A namespace must be at least 6 characters long.
 
-sabre perm
+smart perm
 ==========
-The ``sabre perm`` subcommand submits a Sabre transaction that can create or
+The ``smart perm`` subcommand submits a Smart transaction that can create or
 delete a namespace registry permissions.
 
-.. literalinclude:: cli/output/sabre_perm_usage.out
+.. literalinclude:: cli/output/smart_perm_usage.out
   :language: console
 
 A namespace registry permissions can only be created by an administrator or an
@@ -97,27 +97,27 @@ allowed to write to the namespace.
 Using ``--delete`` will remove all permissions for the provided contract name.
 Again a permission can only be deleted by an owner or an administrator.
 
-sabre exec
+smart exec
 ==========
 
-The ``sabre exec`` subcommand submits a Sabre transaction that execute the
+The ``smart exec`` subcommand submits a Smart transaction that execute the
 provided payload against an uploaded contract.
 
-.. literalinclude:: cli/output/sabre_exec_usage.out
+.. literalinclude:: cli/output/smart_exec_usage.out
   :language: console
 
 The ``--contract`` should be <contract_name:version_number>. The ``--inputs``
 and ``--outputs`` should include any namespaces or addresses that the contract
 needs to have access to. Finally the ``--payload`` should be a path to
-the file that contains the Sabre contract bytes.
+the file that contains the Smart contract bytes.
 
-sabre sp
+smart sp
 ========
 
-The ``sabre sp`` subbcommand submits a Sabre transaction that can create,
+The ``smart sp`` subbcommand submits a Smart transaction that can create,
 update, or delete smart permissions
 
-.. literalinclude:: cli/output/sabre_sp_usage.out
+.. literalinclude:: cli/output/smart_sp_usage.out
   :language: console
 
 The ``--filename`` should be the path to a compiled WebAssembly file. The 

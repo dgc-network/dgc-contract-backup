@@ -1,16 +1,16 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-//use sabre_sdk::protocol::pike::state::{Particpant, ParticpantList, Organization, OrganizationList};
-use sabre_sdk::protocol::state::{
+//use smart_sdk::protocol::pike::state::{Particpant, ParticpantList, Organization, OrganizationList};
+use smart_sdk::protocol::state::{
     Contract, ContractList, ContractListBuilder, ContractRegistry, ContractRegistryList,
     ContractRegistryListBuilder, NamespaceRegistry, NamespaceRegistryList,
     NamespaceRegistryListBuilder, SmartPermission, SmartPermissionList, SmartPermissionListBuilder,
     Account, AccountList, Organization, OrganizationList,
     AccountListBuilder, OrganizationListBuilder,
 };
-use sabre_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
-use sabre_sdk::protos::{FromBytes, IntoBytes};
+use smart_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
+use smart_sdk::protos::{FromBytes, IntoBytes};
 use sawtooth_sdk::messages::setting::Setting;
 use sawtooth_sdk::processor::handler::ApplyError;
 use sawtooth_sdk::processor::handler::TransactionContext;
@@ -20,13 +20,13 @@ use crate::addressing::{
     make_contract_address, make_contract_registry_address, make_namespace_registry_address,
 };
 
-pub struct SabreState<'a> {
+pub struct SmartState<'a> {
     context: &'a mut dyn TransactionContext,
 }
 
-impl<'a> SabreState<'a> {
-    pub fn new(context: &'a mut dyn TransactionContext) -> SabreState {
-        SabreState { context }
+impl<'a> SmartState<'a> {
+    pub fn new(context: &'a mut dyn TransactionContext) -> SmartState {
+        SmartState { context }
     }
 
     pub fn context(&mut self) -> &mut dyn TransactionContext {

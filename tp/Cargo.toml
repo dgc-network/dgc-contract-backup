@@ -2,42 +2,42 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [package]
-name = "sawtooth-sabre"
+name = "sawtooth-smart"
 version = "0.4.3"
-description = "Sawtooth Sabre Transaction Processor"
+description = "Sawtooth Smart Transaction Processor"
 authors = ["dgc.network"]
 license = "Apache-2.0"
 edition = "2018"
 
 [package.metadata.deb]
 extended-description= """\
-    Sawtooth Sabre is a transaction family which implements on-chain smart \
+    Sawtooth Smart is a transaction family which implements on-chain smart \
     contracts executed in a WebAssembly virtual machine.
 """
 depends = "$auto"
 assets = [
-    ["packaging/systemd/sawtooth-sabre.service",
-    "/lib/systemd/system/sawtooth-sabre.service", "644"],
-    ["packaging/systemd/sawtooth-sabre", "/etc/default/sawtooth-sabre", "644"],
-    ["target/release/sawtooth-sabre", "/usr/bin/sawtooth-sabre", "755"],
+    ["packaging/systemd/sawtooth-smart.service",
+    "/lib/systemd/system/sawtooth-smart.service", "644"],
+    ["packaging/systemd/sawtooth-smart", "/etc/default/sawtooth-smart", "644"],
+    ["target/release/sawtooth-smart", "/usr/bin/sawtooth-smart", "755"],
 ]
 maintainer-scripts = "packaging/ubuntu"
 conf-files = [
-    "/lib/systemd/system/sawtooth-sabre.service",
-    "/etc/default/sawtooth-sabre"
+    "/lib/systemd/system/sawtooth-smart.service",
+    "/etc/default/sawtooth-smart"
 ]
 
 [lib]
-name = "sawtooth_sabre"
+name = "sawtooth_smart"
 path = "src/lib.rs"
 
 [[bin]]
-name = "sawtooth-sabre"
+name = "sawtooth-smart"
 path = "src/main.rs"
 
 [dependencies]
 sawtooth-sdk = "0.3"
-sabre-sdk = {path = "../sdk"}
+smart-sdk = {path = "../sdk"}
 log = "0.4"
 simple_logger = "1"
 clap = "2"

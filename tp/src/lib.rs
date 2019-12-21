@@ -12,5 +12,5 @@ mod wasm_executor;
 //mod protocol;
 //mod protos;
 
-pub use sabre_sdk::protocol::{ADMINISTRATORS_SETTING_ADDRESS, ADMINISTRATORS_SETTING_KEY};
+pub use smart_sdk::protocol::{ADMINISTRATORS_SETTING_ADDRESS, ADMINISTRATORS_SETTING_KEY};
 //pub use crate::protocol::{ADMINISTRATORS_SETTING_ADDRESS, ADMINISTRATORS_SETTING_KEY};

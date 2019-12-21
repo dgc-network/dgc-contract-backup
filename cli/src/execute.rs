@@ -5,8 +5,8 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-use sabre_sdk::protocol::payload::{
-    Action, ExecuteContractActionBuilder, SabrePayload, SabrePayloadBuilder,
+use smart_sdk::protocol::payload::{
+    Action, ExecuteContractActionBuilder, SmartPayload, SmartPayloadBuilder,
 };
 use sawtooth_sdk::signing;
 
@@ -47,7 +47,7 @@ fn create_exec_txn_payload(
     inputs: Vec<String>,
     outputs: Vec<String>,
     contract_payload: Vec<u8>,
-) -> Result<SabrePayload, CliError> {
+) -> Result<SmartPayload, CliError> {
     let exec_contract = ExecuteContractActionBuilder::new()
         .set_name(name.into())
         .set_version(version.into())
@@ -56,7 +56,7 @@ fn create_exec_txn_payload(
         .set_payload(contract_payload)
         .build()?;
 
-    let payload = SabrePayloadBuilder::new()
+    let payload = SmartPayloadBuilder::new()
         .set_action(Action::ExecuteContract(exec_contract))
         .build()?;
 
