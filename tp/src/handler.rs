@@ -1107,7 +1107,7 @@ fn create_account(
         .set_public_key(payload.get_public_key().to_string())
         .set_org_id(payload.get_org_id().to_string())
         .set_roles(payload.get_roles().to_vec())
-        .set_metadata(payload.get_metadata().to_vec())
+        //.set_metadata(payload.get_metadata().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
@@ -1145,74 +1145,14 @@ fn update_account(
         .into_builder()
         .set_org_id(payload.get_org_id().to_string())
         .set_roles(payload.get_roles().to_vec())
-        .set_metadata(payload.get_metadata().to_vec())
+        //.set_metadata(payload.get_metadata().to_vec())
         .build()
         .map_err(|_| {
             ApplyError::InvalidTransaction(String::from("Cannot build account"))
         })?;
     state.set_account(payload.get_public_key(), account)
 }
-/*
-fn update_account(
-    payload: UpdateAccountAction,
-    signer: &str,
-    state: &mut SabreState,
-) -> Result<(), ApplyError> {
-    if payload.get_public_key().is_empty() {
-        return Err(ApplyError::InvalidTransaction("Public key required".into()));
-    }
 
-    if payload.get_org_id().is_empty() {
-        return Err(ApplyError::InvalidTransaction(
-            "Organization ID required".into(),
-        ));
-    }
-    // verify the signer of the transaction is authorized to update account
-    is_admin(signer, payload.get_org_id(), state)?;
-
-    // make sure account already exists
-    let mut account = match state.get_account(payload.get_public_key()) {
-        Ok(None) => {
-            return Err(ApplyError::InvalidTransaction(format!(
-                "Account does not exists: {}",
-                payload.get_public_key(),
-            )))
-        }
-        Ok(Some(account)) => account,
-        Err(err) => {
-            return Err(ApplyError::InvalidTransaction(format!(
-                "Failed to retrieve state: {}",
-                err,
-            )))
-        }
-    };
-
-    if !payload.get_roles().is_empty() {
-        account.set_roles(protobuf::RepeatedField::from_vec(
-            payload.get_roles().to_vec(),
-        ));
-    }
-
-    if !payload.get_metadata().is_empty() {
-        account.set_metadata(protobuf::RepeatedField::from_vec(
-            payload.get_metadata().to_vec(),
-        ));
-    }
-
-    if payload.get_active() != account.get_active() {
-        if signer == payload.get_public_key() {
-            return Err(ApplyError::InvalidTransaction(format!(
-                "Admin may not deactivate themselves: {}",
-                signer,
-            )));
-        }
-        account.set_active(payload.get_active());
-    }
-    state
-        .set_account(payload.get_public_key(), account)
-        .map_err(|e| ApplyError::InternalError(format!("Failed to create account: {:?}", e)))
-}
-*/
 fn create_organization(
     payload: CreateOrganizationAction,
     signer: &str,
@@ -1285,47 +1225,7 @@ fn update_organization(
         })?;
     state.set_organization(payload.get_id(), organization)
 }
-/*
-fn update_organization(
-    payload: UpdateOrganizationAction,
-    signer: &str,
-    state: &mut SabreState,
-) -> Result<(), ApplyError> {
-    if payload.get_id().is_empty() {
-        return Err(ApplyError::InvalidTransaction(
-            "Unique organization ID required".into(),
-        ));
-    }
 
-    // verify the signer of the transaction is authorized to update organization
-    is_admin(signer, payload.get_id(), state)?;
-
-    // Make sure the organization already exists
-    let mut organization = match state.get_organization(payload.get_id()) {
-        Ok(None) => {
-            return Err(ApplyError::InvalidTransaction(format!(
-                "Organization does not exist exists: {}",
-                payload.get_id(),
-            )))
-        }
-        Ok(Some(org)) => org,
-        Err(err) => {
-            return Err(ApplyError::InvalidTransaction(format!(
-                "Failed to retrieve state: {}",
-                err,
-            )))
-        }
-    };
-
-    if !payload.get_name().is_empty() {
-        organization.set_name(payload.get_name().to_string());
-    }
-    if !payload.get_address().is_empty() {
-        organization.set_address(payload.get_address().to_string());
-    }
-    state.set_organization(payload.get_id(), organization)
-}
-*/
 // helper function to check if the signer is allowed to update a namespace_registry
 fn can_update_namespace_registry(
     namespace_registry: NamespaceRegistry,

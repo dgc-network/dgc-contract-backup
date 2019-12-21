@@ -3,8 +3,6 @@
 
 use sabre_sdk::protocol::payload::{Action, SabrePayload};
 use sabre_sdk::protos::FromBytes;
-//use crate::protocol::payload::{Action, SabrePayload};
-//use crate::protos::FromBytes;
 use sawtooth_sdk::processor::handler::ApplyError;
 
 pub struct SabreRequestPayload {
