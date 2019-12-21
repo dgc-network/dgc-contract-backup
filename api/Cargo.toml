@@ -27,5 +27,5 @@ features = ["json"]
 [build-dependencies]
 protoc-rust = "2"
 
-[replace]
-"cookie:0.11.0" = { git = 'https://github.com/alexcrichton/cookie-rs.git' }
+#[replace]
+#"cookie:0.11.0" = { git = 'https://github.com/alexcrichton/cookie-rs.git' }
