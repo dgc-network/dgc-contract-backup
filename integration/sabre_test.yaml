@@ -23,7 +23,7 @@ services:
 
   shell:
     image: hyperledger/sawtooth-shell:latest
-    container_name: smart-shell
+    container_name: sawtooth-shell
     entrypoint: "bash -c \"\
         while true; \
           do curl -s http://rest-api:9708/state | grep -q head; if [ $$? -eq 0 ]; then break; fi; sleep 0.5; done; \

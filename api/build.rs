@@ -13,8 +13,8 @@ fn main() {
     protoc_rust::run(protoc_rust::Args {
         out_dir: "src/protos",
         //input: &["../protos/payload.proto", "../protos/state.proto"],
-        input: &["../protos/payload.proto", "../protos/account.proto"],
-        includes: &["../protos"],
+        input: &["../sdk/protos/payload.proto", "../sdk/protos/account.proto"],
+        includes: &["../sdk/protos"],
         customize: Customize::default(),
     }).expect("protoc");
 

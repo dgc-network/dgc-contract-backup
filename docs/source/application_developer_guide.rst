@@ -358,7 +358,7 @@ API, and three transaction processors: Settings, IntegerKey (intkey), and Smart.
    The first ``docker-compose.yaml`` file sets up the Sawtooth environment:
 
    * Starts a container for each Sawtooth component (validator, REST API, and
-     the Settings and Smart transaction processors), plus a smart-shell and
+     the Settings and Smart transaction processors), plus a sawtooth-shell and
      smart-contract-cli container
    * Generates keys for the validator and root user
    * Configures root as a Sawtooth administrator (with the
@@ -378,7 +378,7 @@ API, and three transaction processors: Settings, IntegerKey (intkey), and Smart.
 Step 2: Create Initial Values for the Smart Contract
 ----------------------------------------------------
 
-In this step, you will use the ``smart-shell`` container to set initial
+In this step, you will use the ``sawtooth-shell`` container to set initial
 values in state for your contract.
 
 The ``intkey-multiply`` smart contract executes the simple function
@@ -390,12 +390,12 @@ In this step, you will use the ``intkey set`` command to submit transactions
 that store the initial values in "intkey state" (the namespace used by the
 IntegerKey transaction family).
 
-1. Open a new terminal window and connect to the ``smart-shell`` Docker
+1. Open a new terminal window and connect to the ``sawtooth-shell`` Docker
    container.
 
    .. code-block:: console
 
-     $ docker exec -it smart-shell bash
+     $ docker exec -it sawtooth-shell bash
 
 #. Submit an intkey transaction to set B to 10.
 
@@ -417,7 +417,7 @@ IntegerKey transaction family).
       B: 10
       C: 5
 
-#. Log out of the ``smart-shell`` container.
+#. Log out of the ``sawtooth-shell`` container.
 
 
 Step 3: Generate the Payload File
@@ -657,7 +657,7 @@ smart contract:
   permissions (both read and write) to the ``intkey_multiply`` contract.
 
 In this step, you will continue to use the ``smart-contract-cli`` container to execute
-the ``intkey-multiply`` smart contract, then use the ``smart-shell`` container
+the ``intkey-multiply`` smart contract, then use the ``sawtooth-shell`` container
 to check the results.
 
 1. Run the following command to execute the ``intkey-multiply`` smart contract.
@@ -679,12 +679,12 @@ to check the results.
       are at least 6 characters long.  For more information on command options,
       run ``smart exec --help``.
 
-#. To check the results, connect to the ``smart-shell`` container in a separate
+#. To check the results, connect to the ``sawtooth-shell`` container in a separate
    terminal window.
 
    .. code-block:: console
 
-      $ docker exec -it smart-shell bash
+      $ docker exec -it sawtooth-shell bash
 
 #. Run the following command to display intkey state values.  You should see
    that A is set to 50.
@@ -696,7 +696,7 @@ to check the results.
       B 10
       C 5
 
-#. Log out of the ``smart-shell`` docker container.
+#. Log out of the ``sawtooth-shell`` docker container.
 
 
 Step 8: Stop the Sawtooth Environment

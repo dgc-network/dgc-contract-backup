@@ -67,7 +67,7 @@ services:
 
   shell:
     image: hyperledger/sawtooth-shell:latest
-    container_name: smart-shell
+    container_name: sawtooth-shell
     entrypoint: "bash -c \"\
         sawtooth keygen && \
         tail -f /dev/null \
