@@ -13,7 +13,7 @@ Hyperledger Sawtooth please see the
 ## Documentation
 
 Sawtooth Smart documentation can be found here:
-https://sawtooth.hyperledger.org/docs/smart/releases/latest/
+https://sawtooth.hyperledger.org/docs/sabre/releases/latest/
 
 ## License
 
