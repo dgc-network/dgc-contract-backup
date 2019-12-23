@@ -7,9 +7,9 @@ version = "0.0.0"
 authors = ["dgc.network"]
 
 [dependencies]
-rocket = "0.4.0"
-rocket_codegen = "0.3.8"
-rocket_cors = "0.2.0"
+rocket = "0.4.2"
+#rocket_codegen = "0.3.8"
+#rocket_cors = "0.2.0"
 serde = "1.0"
 serde_yaml = "0.7"
 serde_json = "1.0"
@@ -29,4 +29,4 @@ protoc-rust = "2"
 
 [replace]
 #"cookie:0.11.0" = { git = 'https://github.com/alexcrichton/cookie-rs.git' }
-"ring:0.16.9" = {git = 'https://github.com/briansmith/ring.git'}
+#"ring:0.16.9" = {git = 'https://github.com/briansmith/ring.git'}
