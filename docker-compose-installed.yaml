@@ -6,7 +6,7 @@ version: "2.1"
 services:
   validator:
     image: hyperledger/sawtooth-validator:latest
-    container_name: smart-validator
+    container_name: sawtooth-validator
     volumes:
       - .:/project
     expose:
@@ -35,7 +35,7 @@ services:
 
   rest-api:
     image: hyperledger/sawtooth-rest-api:latest
-    container_name: smart-sawtooth-rest-api
+    container_name: sawtooth-rest-api
     expose:
       - 9708
     ports:
@@ -52,7 +52,7 @@ services:
 
   settings-tp:
     image: hyperledger/sawtooth-settings-tp:latest
-    container_name: smart-settings-tp
+    container_name: sawtooth-settings-tp
     entrypoint: settings-tp -vv --connect tcp://validator:9704
 
   devmode-rust:
@@ -64,22 +64,22 @@ services:
         devmode-engine-rust -v --connect tcp://validator:5050
     stop_signal: SIGKILL
 
-  smart-tp:
+  smart-contract-tp:
     build:
       context: .
       dockerfile: tp/Dockerfile-installed-${DISTRO}
-    image: sawtooth-smart-tp:${ISOLATION_ID}
-    container_name: sawtooth-smart-tp
+    image: sawtooth-smart-contract-tp:${ISOLATION_ID}
+    container_name: sawtooth-smart-contract-tp
     depends_on:
       - validator
     entrypoint: sawtooth-smart -vv --connect tcp://validator:9704
 
-  smart-cli:
+  smart-contract-cli:
     build:
       context: .
       dockerfile: cli/Dockerfile-installed-${DISTRO}
-    image: sawtooth-smart-cli:${ISOLATION_ID}
-    container_name: smart-cli
+    image: sawtooth-smart-contract-cli:${ISOLATION_ID}
+    container_name: smart-contract-cli
     volumes:
       - .:/project
       - ./keys:/root/.sawtooth/keys

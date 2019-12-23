@@ -4,9 +4,9 @@
 version: "2.1"
 
 services:
-  dgc-api:
-    image: dgc-api
-    container_name: dgc-rest-api
+  smart-contract-api:
+    image: smart-contract-api
+    container_name: smart-contract-api
     volumes:
       - .:/project
     expose:
@@ -29,7 +29,7 @@ services:
 
   validator:
     image: hyperledger/sawtooth-validator:latest
-    container_name: smart-validator
+    container_name: sawtooth-validator
     volumes:
       - .:/project
     expose:
@@ -58,7 +58,7 @@ services:
 
   rest-api:
     image: hyperledger/sawtooth-rest-api:latest
-    container_name: smart-sawtooth-rest-api
+    container_name: sawtooth-rest-api
     expose:
       - 9708
     ports:
@@ -75,7 +75,7 @@ services:
 
   settings-tp:
     image: hyperledger/sawtooth-settings-tp:latest
-    container_name: smart-settings-tp
+    container_name: sawtooth-settings-tp
     entrypoint: settings-tp -vv --connect tcp://validator:9704
 
   devmode-rust:
@@ -87,9 +87,9 @@ services:
         devmode-engine-rust -v --connect tcp://validator:5050
     stop_signal: SIGKILL
 
-  smart-tp:
-    image: smart-tp:${ISOLATION_ID}
-    container_name: smart-tp
+  smart-contract-tp:
+    image: smart-contract-tp:${ISOLATION_ID}
+    container_name: smart-contract-tp
     entrypoint: "bash -c \"\
         cd /project/tp/ && \
         cargo build && \
@@ -100,9 +100,9 @@ services:
     build:
       context: tp
 
-  smart-cli:
-    image: smart-cli:${ISOLATION_ID}
-    container_name: smart-cli
+  smart-contract-cli:
+    image: smart-contract-cli:${ISOLATION_ID}
+    container_name: smart-contract-cli
     volumes:
       - .:/project
       - ./keys:/root/.sawtooth/keys

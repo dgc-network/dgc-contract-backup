@@ -359,11 +359,11 @@ API, and three transaction processors: Settings, IntegerKey (intkey), and Smart.
 
    * Starts a container for each Sawtooth component (validator, REST API, and
      the Settings and Smart transaction processors), plus a smart-shell and
-     smart-cli container
+     smart-contract-cli container
    * Generates keys for the validator and root user
    * Configures root as a Sawtooth administrator (with the
      ``sawtooth.swa.administrators`` setting)
-   * Shares the administrator keys between the validator and smart-cli
+   * Shares the administrator keys between the validator and smart-contract-cli
      containers
 
    The second file, ``example/intkey_multiply/docker-compose.yaml``, starts the
@@ -457,7 +457,7 @@ executing the ``intkey-multiply`` smart contract.
 Step 4: Create a Contract Registry
 ----------------------------------
 
-In this step, you will use the ``smart-cli`` container to create a contract
+In this step, you will use the ``smart-contract-cli`` container to create a contract
 registry for the ``intkey-multiply`` smart contract.
 
 Each smart contract requires a contract registry so that Smart can keep track of
@@ -470,14 +470,14 @@ contract and has one or more owners. For more information, see
    Only a Sawtooth administrator (defined in the ``sawtooth.swa.administrators``
    setting) can create a contract registry and set the initial owner or owners.
    The example Docker Compose file sets up root as a Sawtooth administrator and
-   shares the root keys between the validator container and the ``smart-cli``
+   shares the root keys between the validator container and the ``smart-contract-cli``
    container.
 
-1. Connect to the ``smart-cli`` container.
+1. Connect to the ``smart-contract-cli`` container.
 
    .. code-block:: console
 
-      $ docker exec -it smart-cli bash
+      $ docker exec -it smart-contract-cli bash
 
 #. Copy your public key.
 
@@ -509,7 +509,7 @@ contract registry.
 Step 5. Upload the Contract Definition File
 -------------------------------------------
 
-In this step, you will continue to use the ``smart-cli`` container to upload
+In this step, you will continue to use the ``smart-contract-cli`` container to upload
 a contract definition file for the ``intkey-multiply`` smart contract.
 
 Each Smart smart contract requires a contract definition file in YAML format.
@@ -566,7 +566,7 @@ The ``sawtooth-smart`` repository includes an example contract definition file,
 Step 6. Create a Namespace Registry and Set Contract Permissions
 ----------------------------------------------------------------
 
-In this step, you will continue to use the ``smart-cli`` container to create a
+In this step, you will continue to use the ``smart-contract-cli`` container to create a
 namespace registry, then set the namespace read and write permissions for your
 contract.
 
@@ -656,7 +656,7 @@ smart contract:
 * The ``smart perm`` command has granted the necessary namespace
   permissions (both read and write) to the ``intkey_multiply`` contract.
 
-In this step, you will continue to use the ``smart-cli`` container to execute
+In this step, you will continue to use the ``smart-contract-cli`` container to execute
 the ``intkey-multiply`` smart contract, then use the ``smart-shell`` container
 to check the results.
 
@@ -713,7 +713,7 @@ stop and reset the environment.
   directory into the container. See the `Docker
   documentation <https://docs.docker.com/>`_ for more information.
 
-1. Log out of the ``smart-cli`` container and any other open containers.
+1. Log out of the ``smart-contract-cli`` container and any other open containers.
 
 #. Enter CTRL-c from the window where you originally ran ``docker-compose up``.
 

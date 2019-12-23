@@ -1,11 +1,11 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-# docker build -f tp/Dockerfile-installed-bionic -t sawtooth-smart-tp .
+# docker build -f tp/Dockerfile-installed-bionic -t sawtooth-smart-contract-tp .
 
 # -------------=== smart tp build ===-------------
 
-FROM ubuntu:bionic as smart-tp-builder
+FROM ubuntu:bionic as smart-contract-tp-builder
 
 ENV VERSION=AUTO_STRICT
 
@@ -45,7 +45,7 @@ RUN export VERSION=$(../bin/get_version) \
 
 FROM ubuntu:bionic
 
-COPY --from=smart-tp-builder /project/tp/target/debian/sawtooth-smart_*.deb /tmp
+COPY --from=smart-contract-tp-builder /project/tp/target/debian/sawtooth-smart_*.deb /tmp
 
 RUN apt-get update \
  && dpkg -i /tmp/sawtooth-smart_*.deb || true \
