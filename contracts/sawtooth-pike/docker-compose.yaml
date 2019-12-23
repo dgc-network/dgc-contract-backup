@@ -87,18 +87,18 @@ services:
     build:
       context: ./contracts/sawtooth-pike/cli
 
-  pike-tp:
-    image: pike-tp
-    container_name: pike-tp
-    entrypoint: "bash -c \"\
-        cd /project/contracts/sawtooth-pike/tp/ && \
-        cargo build && \
-        pike -vv -C tcp://validator:9004
-        \""
-    volumes:
-      - .:/project
-    build:
-      context: ./contracts/sawtooth-pike/tp
+#  pike-tp:
+#    image: pike-tp
+#    container_name: pike-tp
+#    entrypoint: "bash -c \"\
+#        cd /project/contracts/sawtooth-pike/tp/ && \
+#        cargo build && \
+#        pike -vv -C tcp://validator:9004
+#        \""
+#    volumes:
+#      - .:/project
+#    build:
+#      context: ./contracts/sawtooth-pike/tp
 
   pike-sde-service:
     image: pike-sde-service
