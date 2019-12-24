@@ -11,6 +11,29 @@ fn index() -> &'static str {
 }
 
 fn main() {
+    let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:3000"]);
+    assert!(failed_origins.is_empty());
+
+    let options = rocket_cors::Cors {
+        allowed_origins: allowed_origins,
+        allowed_methods: vec![Method::Get, Method::Post, Method::Options].into_iter().map(From::from).collect(),
+        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
+        allow_credentials: true,
+        ..Default::default()
+    };
+/*
+    let database_url = if let Ok(s) = env::var("DATABASE_URL") {
+        s
+    } else {
+        "postgres://localhost:5432".into()
+    };
+*/
+    let validator_url = if let Ok(s) = env::var("VALIDATOR_URL") {
+       s
+    } else {
+        "tcp://localhost:8004".into()
+    };
+
     rocket::ignite().mount("/", routes![index]).launch();
 }
 /*
