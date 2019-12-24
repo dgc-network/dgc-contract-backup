@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [package]
-name = "smart-contract-api"
+name = "dgc-contract-api"
 version = "0.0.0"
 authors = ["dgc.network"]
 

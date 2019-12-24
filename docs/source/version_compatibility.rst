@@ -13,7 +13,7 @@ the Smart transaction processor image.
    be set in the Cargo.toml file.
 
  - The Docker tag is the tag that should be used for the
-   hyperledger/sawtooth-smart-contract-tp image if including in a docker-compose yaml
+   hyperledger/sawtooth-dgc-contract-tp image if including in a docker-compose yaml
    file.
 
  - The Sawtooth Rust SDK versions are the Crate versions of the Rust library

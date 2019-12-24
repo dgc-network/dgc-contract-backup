@@ -1,11 +1,11 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-# docker build -f cli/Dockerfile-installed-bionic -t sawtooth-smart-contract-cli .
+# docker build -f cli/Dockerfile-installed-bionic -t sawtooth-dgc-contract-cli .
 
 # -------------=== smart cli build ===-------------
 
-FROM ubuntu:bionic as smart-contract-cli-builder
+FROM ubuntu:bionic as dgc-contract-cli-builder
 
 ENV VERSION=AUTO_STRICT
 
@@ -45,7 +45,7 @@ RUN export VERSION=$(../bin/get_version) \
 
 FROM hyperledger/sawtooth-shell:nightly
 
-COPY --from=smart-contract-cli-builder /project/cli/target/debian/smart-contract-cli*.deb /tmp
+COPY --from=dgc-contract-cli-builder /project/cli/target/debian/dgc-contract-cli*.deb /tmp
 
 RUN apt-get update \
  && dpkg -i /tmp/smart-cli_*.deb || true \

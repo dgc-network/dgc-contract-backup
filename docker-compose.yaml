@@ -4,9 +4,9 @@
 version: "2.1"
 
 services:
-  smart-contract-api:
-    image: smart-contract-api
-    container_name: smart-contract-api
+  dgc-contract-api:
+    image: dgc-contract-api
+    container_name: dgc-contract-api
     volumes:
       - .:/project
     expose:
@@ -87,9 +87,9 @@ services:
         devmode-engine-rust -v --connect tcp://validator:5050
     stop_signal: SIGKILL
 
-  smart-contract-tp:
-    image: smart-contract-tp:${ISOLATION_ID}
-    container_name: smart-contract-tp
+  dgc-contract-tp:
+    image: dgc-contract-tp:${ISOLATION_ID}
+    container_name: dgc-contract-tp
     entrypoint: "bash -c \"\
         cd /project/tp/ && \
         cargo build && \
@@ -100,9 +100,9 @@ services:
     build:
       context: tp
 
-  smart-contract-cli:
-    image: smart-contract-cli:${ISOLATION_ID}
-    container_name: smart-contract-cli
+  dgc-contract-cli:
+    image: dgc-contract-cli:${ISOLATION_ID}
+    container_name: dgc-contract-cli
     volumes:
       - .:/project
       - ./keys:/root/.sawtooth/keys

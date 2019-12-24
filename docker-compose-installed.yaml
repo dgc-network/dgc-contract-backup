@@ -64,22 +64,22 @@ services:
         devmode-engine-rust -v --connect tcp://validator:5050
     stop_signal: SIGKILL
 
-  smart-contract-tp:
+  dgc-contract-tp:
     build:
       context: .
       dockerfile: tp/Dockerfile-installed-${DISTRO}
-    image: sawtooth-smart-contract-tp:${ISOLATION_ID}
-    container_name: sawtooth-smart-contract-tp
+    image: sawtooth-dgc-contract-tp:${ISOLATION_ID}
+    container_name: sawtooth-dgc-contract-tp
     depends_on:
       - validator
     entrypoint: sawtooth-smart -vv --connect tcp://validator:9704
 
-  smart-contract-cli:
+  dgc-contract-cli:
     build:
       context: .
       dockerfile: cli/Dockerfile-installed-${DISTRO}
-    image: sawtooth-smart-contract-cli:${ISOLATION_ID}
-    container_name: smart-contract-cli
+    image: sawtooth-dgc-contract-cli:${ISOLATION_ID}
+    container_name: dgc-contract-cli
     volumes:
       - .:/project
       - ./keys:/root/.sawtooth/keys

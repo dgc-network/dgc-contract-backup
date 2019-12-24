@@ -78,8 +78,8 @@ pipeline {
 
         stage('Build Smart') {
             steps {
-                sh 'docker-compose -f docker-compose-installed.yaml build smart-contract-cli'
-                sh 'docker-compose -f docker-compose-installed.yaml build smart-contract-tp'
+                sh 'docker-compose -f docker-compose-installed.yaml build dgc-contract-cli'
+                sh 'docker-compose -f docker-compose-installed.yaml build dgc-contract-tp'
                 sh 'docker-compose -f docker-compose-installed.yaml build intkey_multiply'
 
             }
@@ -112,8 +112,8 @@ pipeline {
         stage('Build Archive Artifacts') {
             steps {
                 sh 'mkdir -p build/debs'
-                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-smart-contract-cli:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
-                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-smart-contract-tp:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
+                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-dgc-contract-cli:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
+                sh 'docker run --rm -v $(pwd)/build/debs:/build/debs --entrypoint "/bin/bash" sawtooth-dgc-contract-tp:${ISOLATION_ID} "-c" "cp /tmp/*.deb /build/debs"'
                 sh 'docker run --rm -v $(pwd)/build/scar:/build/scar --entrypoint "/bin/bash" intkeym-scar:${ISOLATION_ID} "-c" "cp /tmp/*.scar /build/scar"'
             }
         }

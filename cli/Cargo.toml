@@ -1,5 +1,5 @@
 [package]
-name = "smart-contract-cli"
+name = "dgc-contract-cli"
 version = "0.4.3"
 authors = ["dgc.network"]
 edition = "2018"
