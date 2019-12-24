@@ -11,8 +11,10 @@ services:
       - .:/project
     expose:
       - 9001
+    #ports:
+    #  - 9001:9001
     ports:
-      - 9001:9001
+      - '0.0.0.0:3000:3000'
     entrypoint: "bash -c \"\
       cd /project/api && \
       cargo build && \
