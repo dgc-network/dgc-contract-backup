@@ -9,8 +9,8 @@ services:
     container_name: dgc-contract-api
     volumes:
       - .:/project
-    expose:
-      - 9001
+    #expose:
+    #  - 9001
     #ports:
     #  - 9001:9001
     ports:
