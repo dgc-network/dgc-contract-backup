@@ -1,7 +1,8 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-#![feature(plugin, decl_macro, custom_derive)]
+//#![feature(plugin, decl_macro, custom_derive)]
+#![feature(plugin, decl_macro)]
 #![plugin(rocket_codegen)]
 
 extern crate rocket;
