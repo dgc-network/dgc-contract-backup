@@ -86,7 +86,7 @@ fn route_request(request: &rouille::Request, task_manager: &Mutex<TaskManager>)
 fn main() {
     let task_manager = Mutex::from(TaskManager::new());
     rouille::start_server(
-        "localhost:3000", move |request| route_request(request, &task_manager))
+        "0.0.0.0:3000", move |request| route_request(request, &task_manager))
 }
 
 /*
