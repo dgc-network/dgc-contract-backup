@@ -16,7 +16,7 @@ extern crate cfg_if;
 cfg_if! {
     if #[cfg(target_arch = "wasm32")] {
         #[macro_use]
-        extern crate smart_sdk;
+        extern crate dgc_contract_sdk;
     } else {
         #[macro_use]
         extern crate clap;

@@ -13,12 +13,12 @@ use sawtooth_sdk::processor::handler::TransactionHandler;
 use crate::payload::SmartRequestPayload;
 use crate::state::SmartState;
 use crate::wasm_executor::wasm_module::WasmModule;
-use smart_sdk::protocol::state::{
+use dgc_contract_sdk::protocol::state::{
     ContractBuilder, ContractRegistry, ContractRegistryBuilder, NamespaceRegistry,
     NamespaceRegistryBuilder, PermissionBuilder, SmartPermissionBuilder, VersionBuilder,
     AccountBuilder, OrganizationBuilder,
 };
-use smart_sdk::protocol::payload::{
+use dgc_contract_sdk::protocol::payload::{
     Action, CreateContractAction, CreateContractRegistryAction, CreateNamespaceRegistryAction,
     CreateNamespaceRegistryPermissionAction, CreateSmartPermissionAction, DeleteContractAction,
     DeleteContractRegistryAction, DeleteNamespaceRegistryAction,
@@ -28,7 +28,7 @@ use smart_sdk::protocol::payload::{
     CreateAccountAction, UpdateAccountAction,
     CreateOrganizationAction, UpdateOrganizationAction,
 };
-use smart_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
+use dgc_contract_sdk::protocol::ADMINISTRATORS_SETTING_KEY;
 
 /// The namespace registry prefix for global state (00ec00)
 const NAMESPACE_REGISTRY_PREFIX: &str = "00ec00";

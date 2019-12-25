@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-use smart_sdk::protocol::payload::{
+use dgc_contract_sdk::protocol::payload::{
     Action, ExecuteContractActionBuilder, SmartPayload, SmartPayloadBuilder,
 };
 use sawtooth_sdk::signing;

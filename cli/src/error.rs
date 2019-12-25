@@ -7,7 +7,7 @@ use std::error::Error as StdError;
 
 use hyper;
 use protobuf;
-use smart_sdk::protocol::payload::{
+use dgc_contract_sdk::protocol::payload::{
     CreateContractActionBuildError, CreateContractRegistryActionBuildError,
     CreateNamespaceRegistryActionBuildError, CreateNamespaceRegistryPermissionActionBuildError,
     CreateSmartPermissionActionBuildError, DeleteContractRegistryActionBuildError,
@@ -16,7 +16,7 @@ use smart_sdk::protocol::payload::{
     UpdateContractRegistryOwnersActionBuildError, UpdateNamespaceRegistryOwnersActionBuildError,
     UpdateSmartPermissionActionBuildError,
 };
-use smart_sdk::protos::ProtoConversionError;
+use dgc_contract_sdk::protos::ProtoConversionError;
 use sawtooth_sdk::signing;
 
 #[derive(Debug)]

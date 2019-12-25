@@ -21,14 +21,14 @@ use std::collections::HashMap;
 
 cfg_if! {
     if #[cfg(target_arch = "wasm32")] {
-        use smart_sdk::ApplyError;
-        use smart_sdk::TransactionContext;
-        use smart_sdk::TransactionHandler;
-        use smart_sdk::TpProcessRequest;
-        use smart_sdk::{WasmPtr, execute_entrypoint, invoke_smart_permission};
-        use smart_sdk::protos::FromBytes;
-        use smart_sdk::protocol::state::{SmartPermission, SmartPermissionList};
-        use smart_sdk::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
+        use dgc_contract_sdk::ApplyError;
+        use dgc_contract_sdk::TransactionContext;
+        use dgc_contract_sdk::TransactionHandler;
+        use dgc_contract_sdk::TpProcessRequest;
+        use dgc_contract_sdk::{WasmPtr, execute_entrypoint, invoke_smart_permission};
+        use dgc_contract_sdk::protos::FromBytes;
+        use dgc_contract_sdk::protocol::state::{SmartPermission, SmartPermissionList};
+        use dgc_contract_sdk::protocol::pike::state::{Agent, AgentList, Organization, OrganizationList};
     } else {
         use sawtooth_sdk::processor::handler::ApplyError;
         use sawtooth_sdk::processor::handler::TransactionContext;

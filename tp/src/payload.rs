@@ -1,8 +1,8 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-use smart_sdk::protocol::payload::{Action, SmartPayload};
-use smart_sdk::protos::FromBytes;
+use dgc_contract_sdk::protocol::payload::{Action, SmartPayload};
+use dgc_contract_sdk::protos::FromBytes;
 use sawtooth_sdk::processor::handler::ApplyError;
 
 pub struct SmartRequestPayload {

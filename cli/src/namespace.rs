@@ -1,7 +1,7 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-use smart_sdk::protocol::payload::{
+use dgc_contract_sdk::protocol::payload::{
     Action, CreateNamespaceRegistryActionBuilder, CreateNamespaceRegistryPermissionActionBuilder,
     DeleteNamespaceRegistryActionBuilder, DeleteNamespaceRegistryPermissionActionBuilder,
     SmartPayloadBuilder, UpdateNamespaceRegistryOwnersActionBuilder,

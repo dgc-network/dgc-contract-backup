@@ -18,11 +18,11 @@ use crypto::sha2::Sha512;
 
 cfg_if! {
     if #[cfg(target_arch = "wasm32")] {
-        use smart_sdk::ApplyError;
-        use smart_sdk::TransactionContext;
-        use smart_sdk::TransactionHandler;
-        use smart_sdk::TpProcessRequest;
-        use smart_sdk::{WasmPtr, execute_entrypoint};
+        use dgc_contract_sdk::ApplyError;
+        use dgc_contract_sdk::TransactionContext;
+        use dgc_contract_sdk::TransactionHandler;
+        use dgc_contract_sdk::TpProcessRequest;
+        use dgc_contract_sdk::{WasmPtr, execute_entrypoint};
     } else {
         use sawtooth_sdk::processor::handler::ApplyError;
         use sawtooth_sdk::processor::handler::TransactionContext;

@@ -38,11 +38,11 @@ a smart contract.
 
 .. code-block:: rust
 
-  use smart_sdk::ApplyError;
-  use smart_sdk::TransactionContext;
-  use smart_sdk::TransactionHandler;
-  use smart_sdk::TpProcessRequest;
-  use smart_sdk::{WasmPtr, execute_entrypoint};
+  use dgc_contract_sdk::ApplyError;
+  use dgc_contract_sdk::TransactionContext;
+  use dgc_contract_sdk::TransactionHandler;
+  use dgc_contract_sdk::TpProcessRequest;
+  use dgc_contract_sdk::{WasmPtr, execute_entrypoint};
 
 - ApplyError: Used to raise an InvalidTransaction or an InternalError
 - TransactionHandler: Mimics the Sawtooth SDK TransactionHandler and should be
@@ -136,7 +136,7 @@ the handler a public module and add an empty main function.
   cfg_if! {
       if #[cfg(target_arch = "wasm32")] {
           #[macro_use]
-          extern crate smart_sdk;
+          extern crate dgc_contract_sdk;
       } else {
           #[macro_use]
           extern crate clap;
@@ -171,11 +171,11 @@ decorator, so they will only be compiled when compiling into Wasm.
 
   cfg_if! {
       if #[cfg(target_arch = "wasm32")] {
-          use smart_sdk::ApplyError;
-          use smart_sdk::TransactionContext;
-          use smart_sdk::TransactionHandler;
-          use smart_sdk::TpProcessRequest;
-          use smart_sdk::{WasmPtr, execute_entrypoint};
+          use dgc_contract_sdk::ApplyError;
+          use dgc_contract_sdk::TransactionContext;
+          use dgc_contract_sdk::TransactionHandler;
+          use dgc_contract_sdk::TpProcessRequest;
+          use dgc_contract_sdk::{WasmPtr, execute_entrypoint};
       } else {
           use sawtooth_sdk::processor::handler::ApplyError;
           use sawtooth_sdk::processor::handler::TransactionContext;
@@ -228,7 +228,7 @@ Logging in a Smart Smart Contract
 =================================
 The Smart SDK provides log macros that match the provided log macros from the
 `log crate <https://doc.rust-lang.org/1.1.0/log/macro.info!.html>`_. To use add
-``#[macro_use]`` above ``extern crate smart_sdk`` and use the macros as normal.
+``#[macro_use]`` above ``extern crate dgc_contract_sdk`` and use the macros as normal.
 
 .. code-block:: rust
 

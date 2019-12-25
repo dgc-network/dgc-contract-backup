@@ -7,7 +7,7 @@ use std::io::BufReader;
 use std::path::Path;
 use std::path::PathBuf;
 
-use smart_sdk::protocol::payload::{
+use dgc_contract_sdk::protocol::payload::{
     Action, CreateSmartPermissionActionBuilder, DeleteSmartPermissionActionBuilder,
     SmartPayloadBuilder, UpdateSmartPermissionActionBuilder,
 };

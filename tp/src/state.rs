@@ -1,16 +1,16 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-//use smart_sdk::protocol::pike::state::{Particpant, ParticpantList, Organization, OrganizationList};
-use smart_sdk::protocol::state::{
+//use dgc_contract_sdk::protocol::pike::state::{Particpant, ParticpantList, Organization, OrganizationList};
+use dgc_contract_sdk::protocol::state::{
     Contract, ContractList, ContractListBuilder, ContractRegistry, ContractRegistryList,
     ContractRegistryListBuilder, NamespaceRegistry, NamespaceRegistryList,
     NamespaceRegistryListBuilder, SmartPermission, SmartPermissionList, SmartPermissionListBuilder,
     Account, AccountList, Organization, OrganizationList,
     AccountListBuilder, OrganizationListBuilder,
 };
-use smart_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
-use smart_sdk::protos::{FromBytes, IntoBytes};
+use dgc_contract_sdk::protocol::ADMINISTRATORS_SETTING_ADDRESS;
+use dgc_contract_sdk::protos::{FromBytes, IntoBytes};
 use sawtooth_sdk::messages::setting::Setting;
 use sawtooth_sdk::processor::handler::ApplyError;
 use sawtooth_sdk::processor::handler::TransactionContext;
