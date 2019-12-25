@@ -6,7 +6,7 @@
 #[macro_use]
 extern crate rocket;
 
-use mytodo::db::{query_task, establish_connection};
+//use mytodo::db::{query_task, establish_connection};
 
 #[get("/tasks")]
 fn tasks_get() -> String {
