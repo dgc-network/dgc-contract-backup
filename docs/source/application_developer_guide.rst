@@ -31,7 +31,7 @@ Include the Smart SDK in the dependencies list of the Cargo.toml file.
 .. code-block:: none
 
   [dependencies]
-  smart-sdk = {git = "https://github.com/hyperledger/sawtooth-smart"}
+  dgc-contract-sdk = {git = "https://github.com/hyperledger/sawtooth-smart"}
 
 The Smart SDK provides the following required structs needed to write
 a smart contract.
@@ -114,7 +114,7 @@ The following is an example for intkey-multiply
 
   [target.'cfg(target_arch = "wasm32")'.dependencies]
   rust-crypto-wasm = "0.3"
-  smart-sdk = {path = "../../../sdk"}
+  dgc-contract-sdk = {path = "../../../sdk"}
 
   [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
   rust-crypto = "0.2.36"

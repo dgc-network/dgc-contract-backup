@@ -52,7 +52,7 @@ CMD cd tp \
  && REPO_VER=$(VERSION=AUTO_STRICT ../bin/get_version) \
  && MINOR_VERSION=${REPO_VER%.*} \
  && sed -i'' -e "s/version.*$/version\ =\ \"$REPO_VER\"/" Cargo.toml \
- && sed -i'' -e "s/smart-sdk.*$/smart-sdk\ =\ \"$MINOR_VERSION\"/" Cargo.toml \
+ && sed -i'' -e "s/dgc-contract-sdk.*$/dgc-contract-sdk\ =\ \"$MINOR_VERSION\"/" Cargo.toml \
  && cargo clean \
  && cargo test \
  && cargo publish --allow-dirty \
