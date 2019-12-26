@@ -5,7 +5,7 @@ openapi: '3.0.0'
 info:
   description: ''
   version: 0.0.0
-  title: dgc API
+  title: dgc-contract API
 host: localhost:9001
 basePath: /
 server:

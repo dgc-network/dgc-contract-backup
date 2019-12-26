@@ -22,8 +22,8 @@ RUN echo "deb http://repo.sawtooth.me/ubuntu/chime/stable bionic universe" >> /e
  || apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 8AA7AF1F1091A5FD) \
  && apt-get update \
  && apt-get install -y -q \
-    sawtooth-smart \
+    dgc-contract-tp \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["sawtooth-smart", "-vv"]
+ENTRYPOINT ["dgc-contract-tp", "-vv"]

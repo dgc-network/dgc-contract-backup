@@ -1,9 +1,9 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-# docker build -f tp/Dockerfile-installed-xenial -t sawtooth-dgc-contract-tp .
+# docker build -f tp/Dockerfile-installed-xenial -t dgc-contract-tp .
 
-# -------------=== smart tp build ===-------------
+# -------------=== dgc contract tp build ===-------------
 
 FROM ubuntu:xenial as dgc-contract-tp-builder
 
@@ -38,12 +38,12 @@ RUN export VERSION=$(../bin/get_version) \
  && sed -i -e s/version.*$/version\ =\ \"${VERSION}\"/ Cargo.toml \
  && /root/.cargo/bin/cargo deb --deb-version $VERSION
 
-# -------------=== smart tp build ===-------------
+# -------------=== dgc contract tp build ===-------------
 
 FROM ubuntu:xenial
 
-COPY --from=dgc-contract-tp-builder /project/tp/target/debian/sawtooth-smart_*.deb /tmp
+COPY --from=dgc-contract-tp-builder /project/tp/target/debian/dgc-contract-tp*.deb /tmp
 
 RUN apt-get update \
- && dpkg -i /tmp/sawtooth-smart_*.deb || true \
+ && dpkg -i /tmp/dgc-contract-tp*.deb || true \
  && apt-get -f -y install

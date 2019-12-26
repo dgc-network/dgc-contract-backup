@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 /*
-    This test needs to be run against the sawtooth_smart docker-compose file and from within the
+    This test needs to be run against the dgc_contract_tp docker-compose file and from within the
     test docker file. This is the only place that cargo test should be run, otherwise the test
     will fail.
 

@@ -4,9 +4,9 @@
 version: "2.1"
 
 services:
-  smart-docs:
-    image: smart-docs:${ISOLATION_ID}
-    container_name: smart-docs
+  dgc-contract-docs:
+    image: dgc-contract-docs:${ISOLATION_ID}
+    container_name: dgc-contract-docs
     volumes:
       - ..:/project
     build:

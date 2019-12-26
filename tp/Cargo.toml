@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [package]
-name = "sawtooth-smart"
+name = "dgc-contract-tp"
 version = "0.4.3"
 description = "Sawtooth Smart Transaction Processor"
 authors = ["dgc.network"]
@@ -16,23 +16,23 @@ extended-description= """\
 """
 depends = "$auto"
 assets = [
-    ["packaging/systemd/sawtooth-smart.service",
-    "/lib/systemd/system/sawtooth-smart.service", "644"],
-    ["packaging/systemd/sawtooth-smart", "/etc/default/sawtooth-smart", "644"],
-    ["target/release/sawtooth-smart", "/usr/bin/sawtooth-smart", "755"],
+    ["packaging/systemd/dgc-contract-tp.service",
+    "/lib/systemd/system/dgc-contract-tp.service", "644"],
+    ["packaging/systemd/dgc-contract-tp", "/etc/default/dgc-contract-tp", "644"],
+    ["target/release/dgc-contract-tp", "/usr/bin/dgc-contract-tp", "755"],
 ]
 maintainer-scripts = "packaging/ubuntu"
 conf-files = [
-    "/lib/systemd/system/sawtooth-smart.service",
-    "/etc/default/sawtooth-smart"
+    "/lib/systemd/system/dgc-contract-tp.service",
+    "/etc/default/dgc-contract-tp"
 ]
 
 [lib]
-name = "sawtooth_smart"
+name = "dgc_contract_tp"
 path = "src/lib.rs"
 
 [[bin]]
-name = "sawtooth-smart"
+name = "dgc-contract-tp"
 path = "src/main.rs"
 
 [dependencies]

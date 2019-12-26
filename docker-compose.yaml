@@ -95,7 +95,7 @@ services:
     entrypoint: "bash -c \"\
         cd /project/tp/ && \
         cargo build && \
-        sawtooth-smart -vv -C tcp://validator:9704 \
+        dgc-contract-tp -vv -C tcp://validator:9704 \
         \""
     volumes:
       - .:/project

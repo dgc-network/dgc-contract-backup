@@ -1,7 +1,7 @@
 ***********************************
 Smart Application Developer's Guide
 ***********************************
-The guide covers development of Smart smart contracts which can be stored on
+The guide covers development of smart contracts which can be stored on
 chain and executed using the Smart Transaction Processor. Topics covered
 include how to write a smart contract, how to convert an already existing
 transaction processor to a smart contract, and how to upload and execute the
@@ -10,7 +10,7 @@ contracts.
 It would be a good idea to read through the Smart Transaction Family
 Specification before reading through this guide.
 
-Currently, Smart smart contracts can only be written in Rust. The following
+Currently, smart contracts can only be written in Rust. The following
 guide will use an example smart contract called intkey-multiply. This smart
 contract will take intkey values, multiply them, and store the new intkey key
 value pair in the intkey state.
@@ -20,9 +20,9 @@ value pair in the intkey state.
 
 .. _writing-smart-sm-label:
 
-Writing A Smart Smart Contract
+Writing A Smart Contract
 ==============================
-The Smart Smart Contracts use a similar API to the Sawtooth transaction
+The Smart Contracts use a similar API to the Sawtooth transaction
 processor API. If you are unfamiliar, please take a look at
 https://sawtooth.hyperledger.org/docs/core/nightly/master/sdks.html.
 
@@ -31,7 +31,7 @@ Include the Smart SDK in the dependencies list of the Cargo.toml file.
 .. code-block:: none
 
   [dependencies]
-  dgc-contract-sdk = {git = "https://github.com/hyperledger/sawtooth-smart"}
+  dgc-contract-sdk = {git = "https://github.com/hyperledger/dgc-contract-tp"}
 
 The Smart SDK provides the following required structs needed to write
 a smart contract.
@@ -219,7 +219,7 @@ decorator, so they will only be compiled when compiling into Wasm.
   to be written for intkey multiply.
 
 For the full intkey-multiply example look at
-sawtooth-smart/example/intkey_multiply/processor
+dgc-contract-tp/example/intkey_multiply/processor
 
 
 .. _logging-in-smart-contracts:
@@ -280,7 +280,7 @@ chain and need to add target wasm32-unknown-unknown.
   $ rustup target add wasm32-unknown-unknown --toolchain nightly
 
 To compile the smart contract run the following command in
-sawtooth-smart/example/intkey_multiply/processor:
+dgc-contract-tp/example/intkey_multiply/processor:
 
 .. code-block:: console
 
@@ -295,7 +295,7 @@ sawtooth-smart/example/intkey_multiply/processor:
   - Use this script to reduce the size https://www.hellorust.com/news/native-wasm-target.html
 
 
-Running a Smart Smart Contract
+Running a Smart Contract
 ==============================
 
 The previous section described an example smart contract, ``intkey-multiply``,
@@ -306,7 +306,7 @@ Docker. You will start a Sawtooth node, create the required values and payload
 file for the contract, set up the required items, then execute the smart
 contract and check the results.
 
-The ``sawtooth-smart`` repository includes a Sawtooth Docker Compose file that
+The ``dgc-contract-tp`` repository includes a Sawtooth Docker Compose file that
 starts Sawtooth Smart in Docker containers, plus another Compose file that adds
 the required containers for the example ``intkey-multiply`` environment.
 
@@ -324,7 +324,7 @@ between your host system and the appropriate Docker containers.
    If you do not already have a compiled ``intkey-multiply.wasm`` file,
    do the following steps before starting this procedure:
 
-   * Clone the sawtooth-smart repository.
+   * Clone the dgc-contract-tp repository.
 
    * Compile the example smart contract, ``intkey-multiply``, as described in
      :ref:`compiling-dgc-contract-label`.
@@ -343,7 +343,7 @@ API, and three transaction processors: Settings, IntegerKey (intkey), and Smart.
 
 1. Open a terminal window on your system.
 
-#. Go to the top-level ``sawtooth-smart`` directory and run the following
+#. Go to the top-level ``dgc-contract-tp`` directory and run the following
    command:
 
    .. code-block:: console
@@ -515,7 +515,7 @@ a contract definition file for the ``intkey-multiply`` smart contract.
 Each Smart smart contract requires a contract definition file in YAML format.
 This file specifies the contract name, version, path to the compiled contract
 (Wasm file), and the contract's inputs and outputs.
-The ``sawtooth-smart`` repository includes an example contract definition file,
+The ``dgc-contract-tp`` repository includes an example contract definition file,
 ``intkey_multiply.yaml``.
 
 1. Display the example contract definition file.

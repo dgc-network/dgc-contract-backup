@@ -3,7 +3,7 @@
 
 # docker build -f api/Dockerfile-installed-xenial -t dgc-contract-api .
 
-# -------------=== dgc api build ===-------------
+# -------------=== dgc contract api build ===-------------
 
 FROM ubuntu:xenial as dgc-contract-api-builder
 
@@ -39,7 +39,7 @@ RUN export VERSION=$(../../../bin/get_version) \
  && sed -i -e "0,/version.*$/ s/version.*$/version\ =\ \"${VERSION}\"/" Cargo.toml \
  && /root/.cargo/bin/cargo deb --deb-version $VERSION
 
-# -------------=== dgc api docker build ===-------------
+# -------------=== dgc contract api docker build ===-------------
 
 FROM ubuntu:xenial
 

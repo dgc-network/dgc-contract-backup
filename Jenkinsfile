@@ -72,7 +72,7 @@ pipeline {
         stage('Run Lint') {
             steps {
               sh 'docker build . -f docker/lint -t lint-smart:$ISOLATION_ID'
-              sh 'docker run --rm -v $(pwd):/project/sawtooth-smart lint-smart:$ISOLATION_ID'
+              sh 'docker run --rm -v $(pwd):/project/dgc-contract-tp lint-smart:$ISOLATION_ID'
             }
         }
 

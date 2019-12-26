@@ -72,7 +72,7 @@ services:
     container_name: sawtooth-dgc-contract-tp
     depends_on:
       - validator
-    entrypoint: sawtooth-smart -vv --connect tcp://validator:9704
+    entrypoint: dgc-contract-tp -vv --connect tcp://validator:9704
 
   dgc-contract-cli:
     build:

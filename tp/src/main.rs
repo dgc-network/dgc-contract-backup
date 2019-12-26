@@ -6,7 +6,7 @@ extern crate clap;
 
 use log::Level;
 
-use sawtooth_smart::handler::SmartTransactionHandler;
+use dgc_contract_tp::handler::SmartTransactionHandler;
 use sawtooth_sdk::processor::TransactionProcessor;
 
 fn main() {

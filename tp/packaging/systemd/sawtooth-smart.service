@@ -8,8 +8,8 @@ After=network.target
 [Service]
 User=sawtooth
 Group=sawtooth
-EnvironmentFile=-/etc/default/sawtooth-smart
-ExecStart=/usr/bin/sawtooth-smart $SAWTOOTH_SMART_ARGS
+EnvironmentFile=-/etc/default/dgc-contract-tp
+ExecStart=/usr/bin/dgc-contract-tp $SAWTOOTH_SMART_ARGS
 Restart=on-failure
 
 [Install]

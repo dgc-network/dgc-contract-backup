@@ -1,9 +1,9 @@
 # Copyright (c) The dgc.network
 # SPDX-License-Identifier: Apache-2.0
 
-# docker build -f cli/Dockerfile-installed-bionic -t sawtooth-dgc-contract-cli .
+# docker build -f cli/Dockerfile-installed-bionic -t dgc-contract-cli .
 
-# -------------=== smart cli build ===-------------
+# -------------=== dgc contract cli build ===-------------
 
 FROM ubuntu:bionic as dgc-contract-cli-builder
 
@@ -41,14 +41,14 @@ RUN export VERSION=$(../bin/get_version) \
  && sed -i -e s/version.*$/version\ =\ \"${VERSION}\"/ Cargo.toml \
  && /root/.cargo/bin/cargo deb --deb-version $VERSION
 
-# -------------=== smart cli docker build ===-------------
+# -------------=== dgc contract cli docker build ===-------------
 
 FROM hyperledger/sawtooth-shell:nightly
 
 COPY --from=dgc-contract-cli-builder /project/cli/target/debian/dgc-contract-cli*.deb /tmp
 
 RUN apt-get update \
- && dpkg -i /tmp/smart-cli_*.deb || true \
+ && dpkg -i /tmp/dgc-contract-cli_*.deb || true \
  && apt-get -f -y install
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
