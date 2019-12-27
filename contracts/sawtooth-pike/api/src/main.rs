@@ -24,7 +24,7 @@ mod submit;
 use std::env;
 use rocket::http::Method;
 use rocket_cors::{AllowedOrigins, AllowedHeaders};
-use rocket_contrib::jason::Json;
+use rocket_contrib::json::Json;
 use routes::{agents, organizations};
 use pike_db::pools;
 use routes::transactions;

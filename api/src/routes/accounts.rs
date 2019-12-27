@@ -3,7 +3,7 @@
 
 extern crate rocket;
 
-use rocket_contrib::jason::Json;
+use rocket_contrib::json::Json;
 use guard::db_conn::DbConn;
 
 use pike_db as db;
