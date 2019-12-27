@@ -1,8 +1,22 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-extern crate rocket;
+#![feature(proc_macro_hygiene, decl_macro)]
 
+#[macro_use] extern crate rocket;
+/*
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
+}
+
+fn main() {
+    rocket::ignite().mount("/", routes![index]).launch();
+}
+
+extern crate rocket;
+*/
+use rocket::request::Form;
 use rocket_contrib::json::Json;
 use rocket::http::Status;
 use rocket::response::status::Custom;

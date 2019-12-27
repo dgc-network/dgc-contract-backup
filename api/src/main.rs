@@ -2,10 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #![feature(proc_macro_hygiene, decl_macro)]
-/*
-#[macro_use]
-extern crate rocket;
 
+#[macro_use] extern crate rocket;
+/*
 //use mytodo::db::{query_task, establish_connection};
 
 #[get("/tasks")]
@@ -24,7 +23,7 @@ fn main() {
 //#![feature(plugin)]
 //#![plugin(rocket_codegen)]
 
-extern crate rocket;
+//extern crate rocket;
 extern crate rocket_cors;
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
