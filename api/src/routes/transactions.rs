@@ -3,7 +3,7 @@
 
 extern crate rocket;
 
-use rocket_contrib::Json;
+use rocket_contrib::jason::Json;
 use rocket::http::Status;
 use rocket::response::status::Custom;
 use guard::validator_conn::ValidatorConn;
