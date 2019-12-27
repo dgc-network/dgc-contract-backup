@@ -97,8 +97,8 @@ fn main() {
     rocket::ignite()
         .mount("/", routes![
                hello,
-               openapi::openapi_json,
-               openapi::openapi_yaml,
+               //openapi::openapi_json,
+               //openapi::openapi_yaml,
                //accounts::get_account,
                //accounts::get_accounts,
                //organizations::get_org,
@@ -106,7 +106,7 @@ fn main() {
                transactions::submit_txns,
                transactions::submit_txns_wait,
                transactions::get_batch_status])
-        .manage(pools::init_pg_pool(database_url))
+        //.manage(pools::init_pg_pool(database_url))
         .manage(ZmqMessageConnection::new(&validator_url))
         .attach(options)
         .catch(errors![not_found, internal_server_error])
