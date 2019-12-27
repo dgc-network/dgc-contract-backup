@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #![feature(proc_macro_hygiene, decl_macro)]
-
+/*
 #[macro_use]
 extern crate rocket;
 
@@ -18,10 +18,10 @@ fn main() {
         .mount("/", routes![tasks_get])
         .launch();
 }
+*/
 
-/*
 //#![feature(plugin, decl_macro, custom_derive)]
-#![feature(plugin, decl_macro)]
+#![feature(plugin)]
 #![plugin(rocket_codegen)]
 
 extern crate rocket;
@@ -112,4 +112,3 @@ fn main() {
         .catch(errors![not_found, internal_server_error])
         .launch();
 }
-*/
