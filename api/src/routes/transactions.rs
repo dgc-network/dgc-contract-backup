@@ -36,7 +36,7 @@ struct StatusQuery {
 }
 
 #[post("/batches?<query>", format = "application/octet-stream", data = "<data>")]
-fn submit_txns_wait(
+pub fn submit_txns_wait(
         conn: ValidatorConn,
         data: Vec<u8>,
         query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
@@ -55,7 +55,7 @@ fn submit_txns_wait(
 }
 
 #[post("/batches", format = "application/octet-stream", data = "<data>")]
-fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
+pub fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
 
     submit_batches(&mut conn.clone(), &data, 0)
         .map_err(map_error)
@@ -63,7 +63,7 @@ fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchStatu
 }
 
 #[get("/batch_status?<query>")]
-fn get_batch_status(
+pub fn get_batch_status(
         conn: ValidatorConn,
         query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
 

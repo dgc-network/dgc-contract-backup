@@ -41,7 +41,6 @@ mod submit;
 #[cfg(test)] mod tests;
 
 use std::env;
-use rocket::Request;
 use rocket::http::Method;
 use rocket_cors::{AllowedOrigins, AllowedHeaders};
 use rocket_contrib::json::Json;
@@ -54,6 +53,23 @@ use sawtooth_sdk::messaging::zmq_stream::ZmqMessageConnection;
 #[get("/")]
 fn hello() -> &'static str {
     "Hello, world!"
+}
+
+use rocket::Request;
+
+#[catch(500)]
+fn internal_error() -> &'static str {
+    "Whoops! Looks like we messed up."
+}
+
+#[catch(400)]
+fn not_found(req: &Request) -> String {
+    format!("I couldn't find '{}'. Try something else?", req.uri())
+}
+/*
+fn main() {
+    rocket::ignite()
+        .register(catchers![internal_error, not_found])
 }
 
 #[error(404)]
@@ -69,7 +85,7 @@ fn internal_server_error(_: &rocket::Request) -> Json {
         "message": "Internal Server Error"
     }))
 }
-
+*/
 fn main() {
     let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
     assert!(failed_origins.is_empty());
@@ -109,6 +125,7 @@ fn main() {
         //.manage(pools::init_pg_pool(database_url))
         .manage(ZmqMessageConnection::new(&validator_url))
         .attach(options)
-        .catch(errors![not_found, internal_server_error])
+        //.catch(errors![not_found, internal_server_error])
+        .register(catchers![internal_error, not_found])
         .launch();
 }
