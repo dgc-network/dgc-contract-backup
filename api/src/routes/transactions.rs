@@ -39,7 +39,7 @@ struct StatusQuery {
 pub fn submit_txns_wait(
         conn: ValidatorConn,
         data: Vec<u8>,
-        query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
+        query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json<data>>> {
 
     let batch_status_list = submit_batches(&mut conn.clone(), &data, query.wait)
         .map_err(map_error)?;
@@ -55,7 +55,7 @@ pub fn submit_txns_wait(
 }
 
 #[post("/batches", format = "application/octet-stream", data = "<data>")]
-pub fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
+pub fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json<data>>> {
 
     submit_batches(&mut conn.clone(), &data, 0)
         .map_err(map_error)
@@ -65,7 +65,7 @@ pub fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchS
 #[get("/batch_status?<query>")]
 pub fn get_batch_status(
         conn: ValidatorConn,
-        query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
+        query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json<data>>> {
 
     let wait = query.wait.unwrap_or(0);
     let ids: Vec<String> = query.ids
@@ -78,7 +78,7 @@ pub fn get_batch_status(
         .and_then(|b| Ok(Json(b)))
 }
 
-fn map_error(err: error) -> Custom<Json> {
+fn map_error(err: error) -> Custom<Json<data>> {
     let message = Json(
         json!({
             "message": format!("{:?}", err)
