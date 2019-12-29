@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #![feature(proc_macro_hygiene, decl_macro)]
-
+#![feature(rustc_private)]
 #[macro_use] extern crate rocket;
 /*
 //use mytodo::db::{query_task, establish_connection};

@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #![feature(proc_macro_hygiene, decl_macro)]
-
-#[macro_use] extern crate rocket;
+#![feature(rustc_private)]
+//#[macro_use] extern crate rocket;
 /*
 #[get("/")]
 fn index() -> &'static str {
@@ -13,9 +13,9 @@ fn index() -> &'static str {
 fn main() {
     rocket::ignite().mount("/", routes![index]).launch();
 }
-
-extern crate rocket;
 */
+extern crate rocket;
+
 extern crate serde_yaml;
 extern crate serde_json;
 

@@ -1,6 +1,8 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
+#![feature(rustc_private)]
+
 use protobuf;
 use uuid;
 
