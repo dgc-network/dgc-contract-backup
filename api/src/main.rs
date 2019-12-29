@@ -41,6 +41,7 @@ mod submit;
 #[cfg(test)] mod tests;
 
 use std::env;
+use rocket::Request;
 use rocket::http::Method;
 use rocket_cors::{AllowedOrigins, AllowedHeaders};
 use rocket_contrib::json::Json;
