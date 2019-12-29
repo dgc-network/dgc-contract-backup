@@ -34,12 +34,28 @@ struct StatusQuery {
     wait: Option<u32>,
     ids: String
 }
-
+/*
+// TODO: This example can be improved by using `route` with multiple HTTP verbs.
+#[post("/<id>", format = "json", data = "<message>")]
+fn new(id: ID, message: Json<Message>, map: State<'_, MessageMap>) -> JsonValue {
+    let mut hashmap = map.lock().expect("map lock.");
+    if hashmap.contains_key(&id) {
+        json!({
+            "status": "error",
+            "reason": "ID exists. Try put."
+        })
+    } else {
+        hashmap.insert(id, message.0.contents);
+        json!({ "status": "ok" })
+    }
+}
+*/
 #[post("/batches?<query>", format = "application/octet-stream", data = "<data>")]
 pub fn submit_txns_wait(
-        conn: ValidatorConn,
-        data: Vec<u8>,
-        query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json<data>>> {
+    conn: ValidatorConn,
+    data: Vec<u8>,
+    //query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
+    query: TxnQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
 
     let batch_status_list = submit_batches(&mut conn.clone(), &data, query.wait)
         .map_err(map_error)?;
@@ -55,7 +71,9 @@ pub fn submit_txns_wait(
 }
 
 #[post("/batches", format = "application/octet-stream", data = "<data>")]
-pub fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json<data>>> {
+pub fn submit_txns(
+    conn: ValidatorConn, 
+    data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
 
     submit_batches(&mut conn.clone(), &data, 0)
         .map_err(map_error)
@@ -64,8 +82,8 @@ pub fn submit_txns(conn: ValidatorConn, data: Vec<u8>) -> Result<Json<Vec<BatchS
 
 #[get("/batch_status?<query>")]
 pub fn get_batch_status(
-        conn: ValidatorConn,
-        query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json<data>>> {
+    conn: ValidatorConn,
+    query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
 
     let wait = query.wait.unwrap_or(0);
     let ids: Vec<String> = query.ids
@@ -78,7 +96,7 @@ pub fn get_batch_status(
         .and_then(|b| Ok(Json(b)))
 }
 
-fn map_error(err: error) -> Custom<Json<data>> {
+fn map_error(err: error) -> Custom<Json> {
     let message = Json(
         json!({
             "message": format!("{:?}", err)
