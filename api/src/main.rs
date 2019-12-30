@@ -89,8 +89,9 @@ fn internal_server_error(_: &rocket::Request) -> Json {
 }
 */
 fn main() {
-    let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
-    assert!(failed_origins.is_empty());
+    //let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
+    let allowed_origins = AllowedOrigins::some_exact(&["http://localhost:9002"]);
+    //assert!(failed_origins.is_empty());
 
     let options = rocket_cors::Cors {
         allowed_origins: allowed_origins,
