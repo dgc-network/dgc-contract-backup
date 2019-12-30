@@ -3,24 +3,11 @@
 
 #![feature(proc_macro_hygiene, decl_macro)]
 
-//#[macro_use] extern crate rocket;
-/*
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
-
-fn main() {
-    rocket::ignite().mount("/", routes![index]).launch();
-}
-*/
 extern crate rocket;
 
-//use rocket::request::Form;
 use rocket_contrib::json::Json;
 use rocket::http::Status;
 use rocket::response::status::Custom;
-//use rocket::response::content::Json;
 
 use guard::validator_conn::ValidatorConn;
 use submit::{submit_batches, check_batch_status, BatchStatus};
@@ -36,33 +23,7 @@ struct StatusQuery {
     wait: Option<u32>,
     ids: String
 }
-/*
-// In a `GET` request and all other non-payload supporting request types, the
-// preferred media type in the Accept header is matched against the `format` in
-// the route attribute. Note: if this was a real application, we'd use
-// `rocket_contrib`'s built-in JSON support and return a `JsonValue` instead.
-#[get("/<name>/<age>", format = "json")]
-fn get_hello(name: String, age: u8) -> Json<String> {
-    // NOTE: In a real application, we'd use `rocket_contrib::json::Json`.
-    let person = Person { name: name, age: age, };
-    Json(serde_json::to_string(&person).unwrap())
-}
 
-// In a `POST` request and all other payload supporting request types, the
-// content type is matched against the `format` in the route attribute.
-//
-// Note that `content::Json` simply sets the content-type to `application/json`.
-// In a real application, we wouldn't use `serde_json` directly; instead, we'd
-// use `contrib::Json` to automatically serialize a type into JSON.
-#[post("/<age>", format = "plain", data = "<name_data>")]
-fn post_hello(age: u8, name_data: Data) -> Result<Json<String>, Debug<io::Error>> {
-    let mut name = String::with_capacity(32);
-    name_data.open().take(32).read_to_string(&mut name)?;
-    let person = Person { name: name, age: age, };
-    // NOTE: In a real application, we'd use `rocket_contrib::json::Json`.
-    Ok(Json(serde_json::to_string(&person).expect("valid JSON")))
-}
-*/
 #[post("/batches?<query>", format = "application/octet-stream", data = "<data>")]
 pub fn submit_txns_wait(
     conn: ValidatorConn,

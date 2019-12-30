@@ -5,28 +5,7 @@
 #![feature(rustc_private)]
 
 #[macro_use] extern crate rocket;
-/*
-//use mytodo::db::{query_task, establish_connection};
-
-#[get("/tasks")]
-fn tasks_get() -> String {
-    "this is a response\n".into()
-}
-
-fn main() {
-    rocket::ignite()
-        .mount("/", routes![tasks_get])
-        .launch();
-}
-*/
-
-//#![feature(plugin, decl_macro, custom_derive)]
-//#![feature(plugin)]
-//#![plugin(rocket_codegen)]
-
-//extern crate rocket;
 extern crate rocket_cors;
-//#[macro_use] extern crate rocket_cors;
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
 extern crate serde_yaml;
@@ -45,7 +24,7 @@ mod submit;
 use std::env;
 use rocket::http::Method;
 use rocket_cors::{AllowedOrigins, AllowedHeaders};
-//use rocket_contrib::json::Json;
+
 //use routes::{accounts, organizations};
 //use pike_db::pools;
 use routes::transactions;
