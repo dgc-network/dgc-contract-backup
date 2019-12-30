@@ -69,7 +69,7 @@ pub fn submit_txns_wait(
     data: Vec<u8>,
     //query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
     //query: TxnQuery) -> Result<Json<Vec<BatchStatus>>> {
-    query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>, <Json>> {
+    query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>, Json>> {
 
     let batch_status_list = submit_batches(&mut conn.clone(), &data, query.wait)
         .map_err(map_error)?;
