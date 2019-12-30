@@ -17,7 +17,7 @@ fn main() {
 extern crate rocket;
 
 //use rocket::request::Form;
-use rocket_contrib::json::Json;
+//use rocket_contrib::json::Json;
 use rocket::http::Status;
 use rocket::response::status::Custom;
 use guard::validator_conn::ValidatorConn;
@@ -66,7 +66,7 @@ pub fn submit_txns_wait(
     conn: ValidatorConn,
     data: Vec<u8>,
     //query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
-    query: TxnQuery) -> Result<Json<Vec<BatchStatus>>, Json> {
+    query: TxnQuery) -> Result<Json<Vec<BatchStatus>>> {
 
     let batch_status_list = submit_batches(&mut conn.clone(), &data, query.wait)
         .map_err(map_error)?;
