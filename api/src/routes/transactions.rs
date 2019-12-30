@@ -35,19 +35,30 @@ struct StatusQuery {
     ids: String
 }
 /*
-// TODO: This example can be improved by using `route` with multiple HTTP verbs.
-#[post("/<id>", format = "json", data = "<message>")]
-fn new(id: ID, message: Json<Message>, map: State<'_, MessageMap>) -> JsonValue {
-    let mut hashmap = map.lock().expect("map lock.");
-    if hashmap.contains_key(&id) {
-        json!({
-            "status": "error",
-            "reason": "ID exists. Try put."
-        })
-    } else {
-        hashmap.insert(id, message.0.contents);
-        json!({ "status": "ok" })
-    }
+// In a `GET` request and all other non-payload supporting request types, the
+// preferred media type in the Accept header is matched against the `format` in
+// the route attribute. Note: if this was a real application, we'd use
+// `rocket_contrib`'s built-in JSON support and return a `JsonValue` instead.
+#[get("/<name>/<age>", format = "json")]
+fn get_hello(name: String, age: u8) -> Json<String> {
+    // NOTE: In a real application, we'd use `rocket_contrib::json::Json`.
+    let person = Person { name: name, age: age, };
+    Json(serde_json::to_string(&person).unwrap())
+}
+
+// In a `POST` request and all other payload supporting request types, the
+// content type is matched against the `format` in the route attribute.
+//
+// Note that `content::Json` simply sets the content-type to `application/json`.
+// In a real application, we wouldn't use `serde_json` directly; instead, we'd
+// use `contrib::Json` to automatically serialize a type into JSON.
+#[post("/<age>", format = "plain", data = "<name_data>")]
+fn post_hello(age: u8, name_data: Data) -> Result<Json<String>, Debug<io::Error>> {
+    let mut name = String::with_capacity(32);
+    name_data.open().take(32).read_to_string(&mut name)?;
+    let person = Person { name: name, age: age, };
+    // NOTE: In a real application, we'd use `rocket_contrib::json::Json`.
+    Ok(Json(serde_json::to_string(&person).expect("valid JSON")))
 }
 */
 #[post("/batches?<query>", format = "application/octet-stream", data = "<data>")]
@@ -55,7 +66,7 @@ pub fn submit_txns_wait(
     conn: ValidatorConn,
     data: Vec<u8>,
     //query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
-    query: TxnQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
+    query: TxnQuery) -> Result<Json<Vec<BatchStatus>>, Json> {
 
     let batch_status_list = submit_batches(&mut conn.clone(), &data, query.wait)
         .map_err(map_error)?;
