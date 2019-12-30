@@ -3,6 +3,7 @@
 
 #![feature(proc_macro_hygiene, decl_macro)]
 #![feature(rustc_private)]
+
 #[macro_use] extern crate rocket;
 /*
 //use mytodo::db::{query_task, establish_connection};
@@ -24,7 +25,8 @@ fn main() {
 //#![plugin(rocket_codegen)]
 
 //extern crate rocket;
-extern crate rocket_cors;
+//extern crate rocket_cors;
+#[macro_use] extern crate rocket_cors;
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
 extern crate serde_yaml;
