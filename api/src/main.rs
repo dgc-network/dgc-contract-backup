@@ -77,7 +77,7 @@ fn main() {
         allowed_methods: vec![Method::Get, Method::Post, Method::Options].into_iter().map(From::from).collect(),
         allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
         allow_credentials: true,
-        ..Default::default()
+        //..Default::default()
     };
 
     let database_url = if let Ok(s) = env::var("DATABASE_URL") {
