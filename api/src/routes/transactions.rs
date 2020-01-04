@@ -73,7 +73,8 @@ pub fn get_batch_status(
 }
 
 //fn map_error(err: error) -> Custom<Json> {
-fn map_error(err: error) -> Custom<Json<String>> {
+//fn map_error(err: error) -> Custom<Json<String>> {
+fn map_error(err: error) -> Custom<JsonValue> {
     let message = Json(
         json!({
             "message": format!("{:?}", err)
