@@ -10,7 +10,8 @@ use rocket_contrib::json::JsonValue;
 
 use rocket::http::Status;
 use rocket::response::status::Custom;
-use rocket::request::FromForm;
+//use rocket::request::FromForm;
+use rocket::request::Form;
 
 use guard::validator_conn::ValidatorConn;
 use submit::{submit_batches, check_batch_status, BatchStatus};
