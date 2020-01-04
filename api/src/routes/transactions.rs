@@ -6,8 +6,11 @@
 extern crate rocket;
 
 use rocket_contrib::json::Json;
+use rocket_contrib::json::JsonValue;
+
 use rocket::http::Status;
 use rocket::response::status::Custom;
+use rocket::request::FromForm;
 
 use guard::validator_conn::ValidatorConn;
 use submit::{submit_batches, check_batch_status, BatchStatus};
@@ -18,7 +21,7 @@ struct TxnQuery {
     wait: u32
 }
 
-impl<'f> FromForm<'f> for TxnQuery {}
+//impl<'f> FromForm<'f> for TxnQuery {}
 
 #[derive(FromForm)]
 struct StatusQuery {
@@ -26,7 +29,7 @@ struct StatusQuery {
     ids: String
 }
 
-impl<'f> FromForm<'f> for StatusQuery {}
+//impl<'f> FromForm<'f> for StatusQuery {}
 
 #[post("/batches?<query>", format = "application/octet-stream", data = "<data>")]
 pub fn submit_txns_wait(
