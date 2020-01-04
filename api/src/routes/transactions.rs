@@ -22,7 +22,7 @@ struct TxnQuery {
     wait: u32
 }
 
-impl<'f> FromForm<'f> for TxnQuery {}
+//impl<'f> FromForm<'f> for TxnQuery {}
 
 #[derive(FromForm)]
 struct StatusQuery {
@@ -30,7 +30,7 @@ struct StatusQuery {
     ids: String
 }
 
-impl<'f> FromForm<'f> for StatusQuery {}
+//impl<'f> FromForm<'f> for StatusQuery {}
 
 #[post("/batches?<query>", format = "application/octet-stream", data = "<data>")]
 pub fn submit_txns_wait(
