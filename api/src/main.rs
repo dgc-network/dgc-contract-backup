@@ -27,7 +27,7 @@ use rocket_cors::{AllowedOrigins, AllowedHeaders};
 
 //use routes::{accounts, organizations};
 //use pike_db::pools;
-use routes::transactions;
+//use routes::transactions;
 
 use sawtooth_sdk::messaging::zmq_stream::ZmqMessageConnection;
 
@@ -101,9 +101,9 @@ fn main() {
                //accounts::get_accounts,
                //organizations::get_org,
                //organizations::get_orgs,
-               transactions::submit_txns,
-               transactions::submit_txns_wait,
-               transactions::get_batch_status])
+               //transactions::submit_txns,
+               //transactions::submit_txns_wait,
+               //transactions::get_batch_status])
         //.manage(pools::init_pg_pool(database_url))
         .manage(ZmqMessageConnection::new(&validator_url))
         .attach(options)
