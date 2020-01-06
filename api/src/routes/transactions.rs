@@ -37,10 +37,12 @@ pub fn submit_txns_wait(
     conn: ValidatorConn,
     data: Vec<u8>,
     //query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
-    query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json<String>>> {
+    query: TxnQuery
+) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json<String>>> {
 
     let batch_status_list = submit_batches(&mut conn.clone(), &data, query.wait)
-        .map_err(map_error)?;
+        //.map_err(map_error)?;
+        .map_err(map_error);
 
     if batch_status_list
             .iter()
@@ -56,7 +58,8 @@ pub fn submit_txns_wait(
 pub fn submit_txns(
     conn: ValidatorConn, 
     //data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
-    data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json<String>>> {
+    data: Vec<u8>
+) -> Result<Json<Vec<BatchStatus>>, Custom<Json<String>>> {
 
     submit_batches(&mut conn.clone(), &data, 0)
         .map_err(map_error)
@@ -67,7 +70,8 @@ pub fn submit_txns(
 pub fn get_batch_status(
     conn: ValidatorConn,
     //query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
-    query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json<String>>> {
+    query: StatusQuery
+) -> Result<Json<Vec<BatchStatus>>, Custom<Json<String>>> {
 
     let wait = query.wait.unwrap_or(0);
     let ids: Vec<String> = query.ids
