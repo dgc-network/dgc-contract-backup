@@ -84,7 +84,7 @@ pub fn get_batch_status(
         .and_then(|b| Ok(Json(b)))
 }
 
-fn map_error(err: error) -> Custom<Json> {
+fn map_error(err: error) -> Custom<Json<query>> {
 //fn map_error(err: error) -> Custom<Json<String>> {
 //fn map_error(err: error) -> Custom<JsonValue> {
     let message = Json(
