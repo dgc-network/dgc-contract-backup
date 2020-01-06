@@ -103,7 +103,8 @@ fn main() {
                //organizations::get_orgs,
                //transactions::submit_txns,
                //transactions::submit_txns_wait,
-               //transactions::get_batch_status])
+               //transactions::get_batch_status
+               ])
         //.manage(pools::init_pg_pool(database_url))
         .manage(ZmqMessageConnection::new(&validator_url))
         .attach(options)
