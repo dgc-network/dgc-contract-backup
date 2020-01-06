@@ -72,12 +72,14 @@ fn main() {
     let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
     assert!(failed_origins.is_empty());
 */
+    let default = rocket_cors::Cors::default();
     let options = rocket_cors::Cors {
         //allowed_origins: allowed_origins,
         allowed_methods: vec![Method::Get, Method::Post, Method::Options].into_iter().map(From::from).collect(),
         allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
         allow_credentials: true,
         //..Default::default()
+        default()
     };
 
     let database_url = if let Ok(s) = env::var("DATABASE_URL") {
