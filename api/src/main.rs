@@ -76,7 +76,7 @@ fn main() {
     //let options = rocket_cors::Cors {
     let options = rocket_cors::CorsOptions {
         //allowed_origins: allowed_origins,
-        allowed_origins: AllowedOrigins::some(&["http://localhost:9002", "^https://www.example-[A-z0-9]*.com$"]),
+        allowed_origins: AllowedOrigins::all(),
         allowed_methods: vec![Method::Get, Method::Post, Method::Options].into_iter().map(From::from).collect(),
         allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
         allow_credentials: true,
