@@ -81,7 +81,8 @@ fn main() {
         allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
         allow_credentials: true,
         ..Default::default()
-    };
+    }
+    .to_cors()?;
    
     let database_url = if let Ok(s) = env::var("DATABASE_URL") {
         s
