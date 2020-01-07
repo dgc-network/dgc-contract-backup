@@ -83,8 +83,6 @@ fn main() {
         ..Default::default()
     };
    
-    //let options = rocket_cors::CorsOptions::default();
-
     let database_url = if let Ok(s) = env::var("DATABASE_URL") {
         s
     } else {
