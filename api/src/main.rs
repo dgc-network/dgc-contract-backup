@@ -6,7 +6,8 @@
 
 #[macro_use] extern crate rocket;
 extern crate rocket_cors;
-#[macro_use] extern crate rocket_contrib;
+//#[macro_use] extern crate rocket_contrib;
+extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
 extern crate serde_yaml;
 extern crate serde_json;
@@ -68,10 +69,11 @@ fn internal_server_error(_: &rocket::Request) -> Json {
 }
 */
 fn main() {
-
+/*
     let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
     assert!(failed_origins.is_empty());
-
+*/
+    let allowed_origins = AllowedOrigins::some(&["http://localhost:9002"]);
     //let options = rocket_cors::Cors {
     let options = rocket_cors::CorsOptions {
         allowed_origins: allowed_origins,
