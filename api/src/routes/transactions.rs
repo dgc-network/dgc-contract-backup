@@ -6,7 +6,7 @@
 extern crate rocket;
 
 use rocket_contrib::json::Json;
-use rocket_contrib::json::JsonValue;
+//use rocket_contrib::json::JsonValue;
 
 use rocket::http::Status;
 use rocket::response::status::Custom;
@@ -92,8 +92,8 @@ pub fn get_batch_status(
         .and_then(|b| Ok(Json(b)))
 }
 
-fn map_error(err: error) -> Custom<Json> {
-//fn map_error(err: error) -> Custom<Json<String>> {
+//fn map_error(err: error) -> Custom<Json> {
+fn map_error(err: error) -> Custom<Json<String>> {
 //fn map_error(err: error) -> Custom<JsonValue> {
     let message = Json(
         json!({
