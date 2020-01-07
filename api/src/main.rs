@@ -122,12 +122,13 @@ fn main() -> Result<(), Error> {
 */
 
 #[get("/")]
-fn cors<'a>() -> &'a str {
+//fn cors<'a>() -> &'a str {
+fn hello<'a>() -> &'a str {
     "Hello, world!"
 }
 
 fn main() -> Result<(), Error> {
-    let allowed_origins = AllowedOrigins::some_exact(&["https://www.acme.com"]);
+    //let allowed_origins = AllowedOrigins::some_exact(&["https://www.acme.com"]);
 
     // You can also deserialize this
     let cors = rocket_cors::CorsOptions {
@@ -142,8 +143,17 @@ fn main() -> Result<(), Error> {
     }
     .to_cors()?;
 
-    rocket::ignite()
-        .mount("/", routes![cors])
+    let validator_url = if let Ok(s) = env::var("VALIDATOR_URL") {
+        s
+     } else {
+         "tcp://localhost:8004".into()
+     };
+ 
+     rocket::ignite()
+        .mount("/", routes![
+            //cors
+            hello
+        ])
         .attach(cors)
         .manage(ZmqMessageConnection::new(&validator_url))
         //.attach(options)
