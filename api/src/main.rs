@@ -32,12 +32,12 @@ use rocket_cors::{AllowedOrigins, AllowedHeaders, Error};
 //use routes::transactions;
 
 use sawtooth_sdk::messaging::zmq_stream::ZmqMessageConnection;
-
+/*
 #[get("/")]
 fn hello() -> &'static str {
     "Hello, world!"
 }
-
+*/
 use rocket::Request;
 
 #[catch(500)]
@@ -69,12 +69,13 @@ fn internal_server_error(_: &rocket::Request) -> Json {
     }))
 }
 */
+/*
 //fn main() {
 fn main() -> Result<(), Error> {
-        /*
-    let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
-    assert!(failed_origins.is_empty());
-*/
+
+    //let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
+    //assert!(failed_origins.is_empty());
+
     //let options = rocket_cors::Cors {
     let options = rocket_cors::CorsOptions {
         //allowed_origins: allowed_origins,
@@ -117,4 +118,31 @@ fn main() -> Result<(), Error> {
         //.catch(errors![not_found, internal_server_error])
         .register(catchers![internal_error, not_found])
         .launch();
+}
+*/
+
+#[get("/")]
+fn cors<'a>() -> &'a str {
+    "Hello CORS"
+}
+
+fn main() -> Result<(), Error> {
+    let allowed_origins = AllowedOrigins::some_exact(&["https://www.acme.com"]);
+
+    // You can also deserialize this
+    let cors = rocket_cors::CorsOptions {
+        allowed_origins,
+        allowed_methods: vec![Method::Get].into_iter().map(From::from).collect(),
+        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept"]),
+        allow_credentials: true,
+        ..Default::default()
+    }
+    .to_cors()?;
+
+    rocket::ignite()
+        .mount("/", routes![cors])
+        .attach(cors)
+        .launch();
+
+    Ok(())
 }
