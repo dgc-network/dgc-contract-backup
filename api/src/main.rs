@@ -73,10 +73,10 @@ fn main() {
     let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
     assert!(failed_origins.is_empty());
 */
-    let allowed_origins = AllowedOrigins::some(&["http://localhost:9002"]);
     //let options = rocket_cors::Cors {
     let options = rocket_cors::CorsOptions {
-        allowed_origins: allowed_origins,
+        //allowed_origins: allowed_origins,
+        allowed_origins: AllowedOrigins::some(&["http://localhost:9002", "^https://www.example-[A-z0-9]*.com$"]),
         allowed_methods: vec![Method::Get, Method::Post, Method::Options].into_iter().map(From::from).collect(),
         allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
         allow_credentials: true,
