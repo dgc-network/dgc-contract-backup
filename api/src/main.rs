@@ -24,7 +24,8 @@ mod submit;
 
 use std::env;
 use rocket::http::Method;
-use rocket_cors::{AllowedOrigins, AllowedHeaders};
+//use rocket_cors::{AllowedOrigins, AllowedHeaders};
+use rocket_cors::{AllowedOrigins, AllowedHeaders, Error};
 
 //use routes::{accounts, organizations};
 //use pike_db::pools;
@@ -68,8 +69,9 @@ fn internal_server_error(_: &rocket::Request) -> Json {
     }))
 }
 */
-fn main() {
-/*
+//fn main() {
+fn main() -> Result<(), Error> {
+        /*
     let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
     assert!(failed_origins.is_empty());
 */
