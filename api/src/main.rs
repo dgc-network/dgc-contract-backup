@@ -68,11 +68,10 @@ fn internal_server_error(_: &rocket::Request) -> Json {
 }
 */
 fn main() {
-/*    
+/*
     let (allowed_origins, failed_origins) = AllowedOrigins::some(&["http://localhost:9002"]);
     assert!(failed_origins.is_empty());
-*/
-/*
+
     let options = rocket_cors::Cors {
         //allowed_origins: allowed_origins,
         allowed_methods: vec![Method::Get, Method::Post, Method::Options].into_iter().map(From::from).collect(),
@@ -81,7 +80,7 @@ fn main() {
         //..Default::default()
     };
 */    
-    let options = rocket_cors::Cors::default();
+    let options = rocket_cors::CorsOptions::default();
 
     let database_url = if let Ok(s) = env::var("DATABASE_URL") {
         s
