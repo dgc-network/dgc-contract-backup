@@ -82,7 +82,7 @@ fn main() {
         allow_credentials: true,
         ..Default::default()
     }
-    .to_cors()?;
+    .to_cors();
    
     let database_url = if let Ok(s) = env::var("DATABASE_URL") {
         s
