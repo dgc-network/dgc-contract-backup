@@ -123,7 +123,7 @@ fn main() -> Result<(), Error> {
 
 #[get("/")]
 fn cors<'a>() -> &'a str {
-    "Hello CORS"
+    "Hello, world!"
 }
 
 fn main() -> Result<(), Error> {
@@ -131,9 +131,12 @@ fn main() -> Result<(), Error> {
 
     // You can also deserialize this
     let cors = rocket_cors::CorsOptions {
-        allowed_origins,
-        allowed_methods: vec![Method::Get].into_iter().map(From::from).collect(),
-        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept"]),
+        //allowed_origins,
+        //allowed_methods: vec![Method::Get].into_iter().map(From::from).collect(),
+        //allowed_headers: AllowedHeaders::some(&["Authorization", "Accept"]),
+        allowed_origins: AllowedOrigins::all(),
+        allowed_methods: vec![Method::Get, Method::Post, Method::Options].into_iter().map(From::from).collect(),
+        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
         allow_credentials: true,
         ..Default::default()
     }
@@ -142,6 +145,10 @@ fn main() -> Result<(), Error> {
     rocket::ignite()
         .mount("/", routes![cors])
         .attach(cors)
+        .manage(ZmqMessageConnection::new(&validator_url))
+        //.attach(options)
+        //.catch(errors![not_found, internal_server_error])
+        .register(catchers![internal_error, not_found])
         .launch();
 
     Ok(())
