@@ -45,8 +45,8 @@ pub fn submit_txns_wait(
         .map_err(map_error);
 
     if batch_status_list
-            .iter()
-            .all(|x| x.status == "COMMITTED") {
+        .iter()
+        .all(|x| x.status == "COMMITTED") {
 
         Ok(Custom(Status::Created, Json(batch_status_list)))
     } else {
@@ -94,7 +94,7 @@ pub fn get_batch_status(
 
 //fn map_error(err: error) -> Custom<Json> {
 //fn map_error(err: error) -> Custom<Json<String>> {
-fn map_error(err: error) -> Custom<Status, JsonValue> {
+fn map_error(err: error) -> Custom<JsonValue> {
     let message = Json(
         json!({
             "message": format!("{:?}", err)
