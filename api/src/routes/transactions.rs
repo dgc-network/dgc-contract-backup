@@ -6,7 +6,7 @@
 extern crate rocket;
 
 use rocket_contrib::json::Json;
-//use rocket_contrib::json::JsonValue;
+use rocket_contrib::json::JsonValue;
 
 use rocket::http::Status;
 use rocket::response::status::Custom;
