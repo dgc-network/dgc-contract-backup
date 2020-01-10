@@ -37,7 +37,7 @@ pub fn submit_txns_wait(
     conn: ValidatorConn,
     data: Vec<u8>,
     //query: TxnQuery) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json>> {
-    query: TxnQuery
+    query: TxnQuery ///the trait `rocket::request::FromFormValue<'_>` is not implemented for `routes::transactions::TxnQuery`
 ) -> Result<Custom<Json<Vec<BatchStatus>>>, Custom<Json<String>>> {
 
     let batch_status_list = submit_batches(&mut conn.clone(), &data, query.wait)
@@ -47,10 +47,10 @@ pub fn submit_txns_wait(
     if batch_status_list
         .iter()
         .all(|x| x.status == "COMMITTED") {
-
-        Ok(Custom(Status::Created, Json(batch_status_list)))
+            ///unknown field
+        Ok(Custom(Status::Created, Json(batch_status_list))) ///expected struct `std::vec::Vec`, found enum `std::result::Result`
     } else {
-        Ok(Custom(Status::Accepted, Json(batch_status_list)))
+        Ok(Custom(Status::Accepted, Json(batch_status_list))) ///expected struct `std::vec::Vec`, found enum `std::result::Result`
     }
 }
 
@@ -60,11 +60,11 @@ pub fn submit_txns(
     //data: Vec<u8>) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
     data: Vec<u8>
 ) -> Result<Json<Vec<BatchStatus>>, Custom<Json<String>>> {
-
+///expected `std::result::Result<rocket_contrib::json::Json<std::vec::Vec<submit::BatchStatus>>, rocket::response::status::Custom<rocket_contrib::json::Json<std::string::String>>>` because of return type
     submit_batches(&mut conn.clone(), &data, 0)
         .map_err(map_error)
         .and_then(|b| Ok(Json(b)))
-}
+}                       ///expected struct `rocket_contrib::json::Json`, found struct `rocket_contrib::json::JsonValue`
 /*
 #[get("/users/<id>")]
 fn user(
@@ -78,9 +78,9 @@ fn user(
 pub fn get_batch_status(
     conn: ValidatorConn,
     //query: StatusQuery) -> Result<Json<Vec<BatchStatus>>, Custom<Json>> {
-    query: StatusQuery
+    query: StatusQuery ///the trait `rocket::request::FromFormValue<'_>` is not implemented for `routes::transactions::StatusQuery`
 ) -> Result<Json<Vec<BatchStatus>>, Custom<Json<String>>> {
-
+///expected `std::result::Result<rocket_contrib::json::Json<std::vec::Vec<submit::BatchStatus>>, rocket::response::status::Custom<rocket_contrib::json::Json<std::string::String>>>` because of return type
     let wait = query.wait.unwrap_or(0);
     let ids: Vec<String> = query.ids
         .split(",")
@@ -90,7 +90,7 @@ pub fn get_batch_status(
     check_batch_status(&mut conn.clone(), ids, wait)
         .map_err(map_error)
         .and_then(|b| Ok(Json(b)))
-}
+}                           ///expected struct `rocket_contrib::json::Json`, found struct `rocket_contrib::json::JsonValue`
 
 //fn map_error(err: error) -> Custom<Json> {
 //fn map_error(err: error) -> Custom<Json<String>> {
@@ -105,7 +105,7 @@ fn map_error(err: error) -> Custom<JsonValue> {
         error::BatchParseError(_) |
         error::InvalidBatch(_) |
         error::NoResource(_) |
-        error::InvalidId(_) => Custom(Status::BadRequest, message),
-        _ => Custom(Status::InternalServerError, message)
+        error::InvalidId(_) => Custom(Status::BadRequest, message), ///expected struct `rocket_contrib::json::JsonValue`, found struct `rocket_contrib::json::Json`
+        _ => Custom(Status::InternalServerError, message) ///expected struct `rocket_contrib::json::JsonValue`, found struct `rocket_contrib::json::Json`
     }
 }
